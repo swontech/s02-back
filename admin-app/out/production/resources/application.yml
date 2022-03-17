@@ -1,7 +1,0 @@
-db:
-  datasource:
-    # primary datasource info
-    primaryurl: jdbc:log4jdbc:mariadb://swontech-webservice-database.cee5fuoc2j3u.ap-northeast-2.rds.amazonaws.com:3306/tb_s020
-    primaryusername: swontech
-    primarypassword: Car583242~
-    primarydriver: net.sf.log4jdbc.sql.jdbcapi.DriverSpy

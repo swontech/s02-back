@@ -1,0 +1,113 @@
+buildscript {
+    ext {
+        springBootVersion = '2.4.1'
+    }
+    repositories {
+        mavenCentral()
+        jcenter()
+    }
+
+    dependencies {
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
+    }
+}
+
+
+subprojects {
+    group 'com.swontech.s02'
+    version '1.0-SNAPSHOT'
+
+    apply plugin: 'java'
+    apply plugin: 'eclipse'
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'io.spring.dependency-management'
+
+    repositories {
+        mavenCentral()
+    }
+
+    bootJar.mainClassName('com.swontech.s02.Application')
+
+    dependencies {
+        // springboot && lombok
+        implementation 'org.springframework.boot:spring-boot-starter-web'
+        implementation 'org.projectlombok:lombok'
+        annotationProcessor 'org.projectlombok:lombok'
+
+        // javax validation
+        implementation 'javax.validation:validation-api:2.0.1.Final'
+
+        // security && jwt
+        implementation 'org.springframework.boot:spring-boot-starter-security'
+        implementation 'io.jsonwebtoken:jjwt-impl:0.11.2', 'io.jsonwebtoken:jjwt-jackson:0.11.2'
+
+        // swagger3.0
+        implementation "io.springfox:springfox-boot-starter:3.0.0"
+    }
+}
+
+project(":admin-app") {
+    dependencies {
+        implementation project(":client")
+        implementation project(":domain")
+        implementation project(":store")
+        implementation project(":core")
+
+        // aop
+        implementation 'org.springframework.boot:spring-boot-starter-aop'
+
+        // jdbc && hikari cp
+        implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
+        implementation 'com.zaxxer:HikariCP:2.3.2'
+        runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+
+        // log4j
+        implementation 'org.bgee.log4jdbc-log4j2:log4jdbc-log4j2-jdbc4:1.16'
+    }
+}
+
+project(":client") {
+    bootJar.enabled(false)
+    jar.enabled(true)
+    dependencies {
+        // domain 모듈
+        implementation project(":domain")
+        // store 모듈
+        implementation project(":store")
+        // core 모듈
+        implementation project(":core")
+    }
+}
+
+project(":domain") {
+    bootJar.enabled(false)
+    jar.enabled(true)
+
+    dependencies {
+        implementation project(":core")
+
+        // javax persistence
+        implementation 'javax.persistence:javax.persistence-api:2.2'
+    }
+}
+
+project(":store") {
+    bootJar.enabled(false)
+    jar.enabled(true)
+
+    dependencies {
+        implementation project(":core")
+        implementation project(":domain")
+
+        // mybatis
+        implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.1.4'
+
+        // redis
+        implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    }
+}
+
+project(":core") {
+    bootJar.enabled(false)
+    jar.enabled(true)
+}

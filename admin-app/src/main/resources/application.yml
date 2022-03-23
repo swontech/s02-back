@@ -5,3 +5,13 @@ db:
     primaryusername: swontech
     primarypassword: Car583242~
     primarydriver: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+
+jwt:
+  secretkey: VlwEyVBsYt9V7zq57TejMnVUyzblYcfPQye08f7MGVA9XkHN
+
+# actuator 설정
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, beans

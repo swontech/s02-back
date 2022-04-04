@@ -4,7 +4,7 @@ import lombok.Getter;
 
 @Getter
 public enum ErrorCode {
-    INVALID_PARAMETER(400, null, "Invalid Request Data")
+    INVALID_PARAMETER(400, null, "Invalid Request Data"),
     ;
 
     private final int status;

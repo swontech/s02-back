@@ -2,7 +2,6 @@ package com.swontech.s02.config;
 
 /**
  * swagger3.0 Configuration 클래스
- *
  * http://localhost:8080/swagger-ui/index.html
  */
 

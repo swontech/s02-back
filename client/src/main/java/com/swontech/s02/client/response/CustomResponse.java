@@ -2,52 +2,54 @@ package com.swontech.s02.client.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.apache.tomcat.jni.Local;
 import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 @Getter
 @NoArgsConstructor
-public class ErrorResponse {
+public class CustomResponse {
 
     private LocalDateTime timestamp = LocalDateTime.now();
     private int status;
     private String code;
     private String message;
+    private Object responseData;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @JsonProperty("errors")
     private List<CustomFieldError> customFieldErrors;
 
-    static public ErrorResponse create() {
-        return new ErrorResponse();
+    static public CustomResponse create() {
+        return new CustomResponse();
     }
 
-    public ErrorResponse status(int status) {
+    public CustomResponse status(int status) {
         this.status = status;
         return this;
     }
 
-    public ErrorResponse code(String code) {
+    public CustomResponse code(String code) {
         this.code = code;
         return this;
     }
 
-    public ErrorResponse message(String message) {
+    public CustomResponse message(String message) {
         this.message = message;
         return this;
     }
 
-    public ErrorResponse errors(Errors errors) {
+    public CustomResponse errors(Errors errors) {
         setCustomFieldErrors(errors.getFieldErrors());
+        return this;
+    }
+
+    public CustomResponse responseData(Object responseData) {
+        this.responseData = responseData;
         return this;
     }
 

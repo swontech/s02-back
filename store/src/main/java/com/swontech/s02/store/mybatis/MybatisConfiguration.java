@@ -1,4 +1,4 @@
-package com.swontech.s02.store.mybatis.config;
+package com.swontech.s02.store.mybatis;
 
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.type.JdbcType;

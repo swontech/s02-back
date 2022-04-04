@@ -2,8 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="S021100020">
-    <insert id="insertOrgVo">
-        INSERT INTO TB_S020.TB_S020_ORG010 (
+    <insert id="insertOrgVo" parameterType="com.swontech.s02.domain.vo.s021.S021100020Vo$InsertOrgVo">
+        <selectKey resultType="java.lang.Integer" keyProperty="orgId" order="AFTER">
+            SELECT  MAX(ORG_ID)
+            FROM    tb_s020.tb_s020_org010
+        </selectKey>
+
+        INSERT INTO tb_s020.tb_s020_org010 (
             /* S021300010단체 등록/수정 화면 S021100020.insertOrgVo Created By MSH */
             ORG_ID,
             ORG_NAME,
@@ -16,21 +21,44 @@
             UPDATE_TIMESTAMP,
             UPDATE_PROGRAM_ID
         ) VALUES (
-            SEQUENCE,
-            #{orgName},		    -- 단체명
-            #{zipCode},		    -- 우편번호
-            #{address},		    -- 주소
-            #{detailAddress},	-- 상세주소
-            #{firstTelNo}       -- 앞 번호
-            || '-' ||
-            #{midTelNo}         -- 중간 번호
-            || '-' ||
-            #{lastTelNo},       -- 마지막 번호
-            SYSDATE,
+            NEXTVAL(tb_s020.sq_org_id),
+            #{orgName},		            -- 단체명
+            #{zipCode},		            -- 우편번호
+            #{address},		            -- 주소
+            #{detailAddress},	        -- 상세주소
+            CONCAT(#{firstTelNo}, '-', #{middleTelNo}, '-', #{lastTelNo}),
+            SYSDATE(),
             's021100020',
-            SYSDATE,
+            SYSDATE(),
             's021100020'
         )
     </insert>
 
+    <insert id="insertMemberVo" parameterType="com.swontech.s02.domain.vo.s021.S021100020Vo$InsertMemberVo">
+        INSERT INTO tb_s020.tb_s020_member010 (
+            MEMBER_ID,
+            CREATE_TIMESTAMP,
+            CREATE_PROGRAM_ID,
+            UPDATE_TIMESTAMP,
+            UPDATE_PROGRAM_ID,
+            ORG_ID,
+            MEMBER_NAME,
+            HP_NO,
+            EMAIL,
+            MEMBER_TP,
+            PWD
+        ) VALUES (
+            NEXTVAL(sq_member_id),
+            SYSDATE(),
+            'S021100020',
+            SYSDATE(),
+            'S021100020',
+            #{orgId},
+            #{memberName},
+            CONCAT(#{firstHpNo}, '-', #{middleHpNo}, '-', #{lastHpNo}),
+            #{email},
+            'R',
+            #{pwd}
+        );
+    </insert>
 </mapper>

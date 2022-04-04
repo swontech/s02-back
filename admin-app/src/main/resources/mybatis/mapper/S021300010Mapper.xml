@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="S021300010">
-    <select id="selectCodeListVO" resultType="java.util.Map" parameterType="com.swontech.s02.domain.dto.S021.S021300010Dto$RetrieveWord">
+    <select id="selectCodeListVO" resultType="java.util.Map" parameterType="com.swontech.s02.domain.dto.s021.S021300010Dto$RetrieveWord">
         SELECT  /* S021300010코드관리화면 코드 조회 S021300010.selectCodeListVO Created By MSH */
                 CD_TP, 		                                                -- 코드
                 CD_TP_MEANING, 	                                            -- 코드명
@@ -26,7 +26,7 @@
         </if>
     </select>
 
-    <update id="deleteCodeVO" parameterType="com.swontech.s02.domain.dto.S021.S021300010Dto$PatchCodeStatus">
+    <update id="deleteCodeVO" parameterType="com.swontech.s02.domain.dto.s021.S021300010Dto$PatchCodeStatus">
         UPDATE  /* S021300010코드관리화면 코드삭제 S021300010.deleteCodeVO Created By MSH */
                 tb_s020.tb_s020_code010
         SET     DATA_END_STATUS = ‘*’,
@@ -41,7 +41,7 @@
                 </if>
     </update>
 
-    <update id="restoreCodeVO" parameterType="com.swontech.s02.domain.dto.S021.S021300010Dto$PatchCodeStatus">
+    <update id="restoreCodeVO" parameterType="com.swontech.s02.domain.dto.s021.S021300010Dto$PatchCodeStatus">
         UPDATE  /* S021300010코드관리화면 삭제코드복원 S021300010.restoreCodeVO Created By MSH */
                 tb_s020.tb_s020_code010
         SET     DATA_END_STATUS = NULL,

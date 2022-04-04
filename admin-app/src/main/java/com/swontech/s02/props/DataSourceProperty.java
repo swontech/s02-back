@@ -11,7 +11,7 @@ import javax.validation.constraints.NotEmpty;
 @Setter
 @Component
 @ConfigurationProperties(prefix = "db.datasource")
-public class DBProperty {
+public class DataSourceProperty {
     // primary datasource properties
     @NotEmpty
     private String primaryUrl;

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="S021200010">
+    <resultMap id="selectMemberVo" type="com.swontech.s02.domain.vo.s021.S021200010Vo$Member">
+        <result property="email" column="EMAIL" />
+        <result property="pwd" column="PWD" />
+        <result property="memberTp" column="MEMBER_TP" />
+    </resultMap>
+
+    <select id="selectMemberEmailVo" parameterType="com.swontech.s02.domain.vo.s021.S021200010Vo$SelectMemberEmailVo" resultType="java.lang.String">
+        SELECT  distinct EMAIL
+        FROM    tb_s020.tb_s020_member010
+        WHERE   EMAIL = #{email}
+    </select>
+
+    <select id="selectMemberVo" parameterType="java.lang.String" resultMap="selectMemberVo">
+        SELECT  EMAIL,
+                PWD,
+                MEMBER_TP
+        FROM    tb_s020.tb_s020_member010
+        WHERE   EMAIL = #{email}
+    </select>
+
+</mapper>

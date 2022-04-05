@@ -14,6 +14,8 @@ package com.swontech.s02.domain.security;
  * @lastmodify  : 2022.03.24 MSH
  *
  */
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -36,13 +38,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     public void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException, ServletException {
         //1. Request Header 에서 JWT 토큰 추출
         String accessToken = resolveAccessToken(request);
+
+        //TODO[Feat]: refresh & access 토큰 갱신 기능 추가
+        //2. AccessToken이 존재하고 유효하다면
         if(accessToken != null && jwtTokenProvider.validateToken(accessToken)) {
+            //3. Authentication생성
+            Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
 
+            //4. Security Context에 authentication 저장
+            SecurityContextHolder.getContext().setAuthentication(authentication);
         }
-
-         //2. access token이 존재하고
-
-
         filterChain.doFilter(request, response);
     }
 

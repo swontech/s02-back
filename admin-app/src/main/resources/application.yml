@@ -1,3 +1,10 @@
+server:
+  servlet:
+    # Response UTF-8 Encoding 설정
+    encoding:
+      charset: UTF-8
+      force: true
+
 db:
   datasource:
     # primary datasource info

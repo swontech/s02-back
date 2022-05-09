@@ -49,7 +49,7 @@ subprojects {
     }
 }
 
-project(":admin-app") {
+project(":app") {
     dependencies {
         implementation project(":client")
         implementation project(":domain")
@@ -79,11 +79,8 @@ project(":client") {
     bootJar.enabled(false)
     jar.enabled(true)
     dependencies {
-        // domain 모듈
         implementation project(":domain")
-        // store 모듈
         implementation project(":store")
-        // core 모듈
         implementation project(":core")
     }
 }

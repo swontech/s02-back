@@ -1,6 +1,6 @@
 rootProject.name = 's02-back'
 
-include 'admin-app'
+include 'app'
 include 'domain'
 include 'store'
 include 'client'

@@ -14,16 +14,15 @@ package com.swontech.s02.config;
  * @lastmodify  : 2022.03.23 MSH
  */
 import com.swontech.s02.client.service.comm.UserDetailsService;
-import com.swontech.s02.domain.security.JwtAuthenticationProvider;
-import com.swontech.s02.domain.security.JwtTokenProvider;
-import com.swontech.s02.domain.security.JwtAuthenticationFilter;
+import com.swontech.s02.domain.common.security.JwtAuthenticationProvider;
+import com.swontech.s02.domain.common.security.JwtTokenProvider;
+import com.swontech.s02.domain.common.security.JwtAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -66,11 +65,12 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 // 허용 url
-                .antMatchers("/rest/v1/s021200010/**").permitAll()
+//                .antMatchers("/rest/v1/s021200010/**", "/rest/v1/s021100020/**", "/rest/v1/s022300050/**").permitAll()
 //                .antMatchers("/rest/v1/s021200020/log-in").permitAll()
 //                .antMatchers("/api/v1/users/userTest").hasRole("USER")
 //                .antMatchers("/api/v1/users/adminTest").hasRole("ADMIN")
-                .anyRequest().authenticated()
+//                .anyRequest().authenticated()
+                .anyRequest().permitAll()
 
 
                 /**

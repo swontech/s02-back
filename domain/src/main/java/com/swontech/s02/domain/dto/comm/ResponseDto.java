@@ -12,6 +12,9 @@ package com.swontech.s02.domain.dto.comm;
  *
  */
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
@@ -19,6 +22,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import java.util.Collections;
+import java.util.List;
 
 @Component
 public class ResponseDto {
@@ -26,6 +30,7 @@ public class ResponseDto {
     @Getter
     @Builder
     private static class Body {
+        // private LocalDateTime timestamp = LocalDateTime.now();
         // HTTP 상태코드
         private int status;
         // 결과 (success or fail)
@@ -36,6 +41,19 @@ public class ResponseDto {
         private Object data;
         // 에러
         private Object error;
+
+        // ArgsFieldError
+        @JsonInclude(JsonInclude.Include.NON_NULL)
+        @JsonProperty("errors")
+        private List<CustomFieldError> customFieldErrorList;
+    }
+
+    @AllArgsConstructor
+    @Getter
+    private static class CustomFieldError {
+        private String field;
+        private Object value;
+        private String reason;
     }
 
     /**
@@ -99,7 +117,6 @@ public class ResponseDto {
                 .build();
         return ResponseEntity.ok(body);
     }
-
 
     public ResponseEntity<?> fail(String message, HttpStatus status) {
         return fail(Collections.emptyList(), message, status);

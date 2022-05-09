@@ -26,6 +26,8 @@ public class MybatisConfiguration {
         sqlSessionFactoryBean.setDataSource(dataSource);
         SqlSessionFactory sqlSessionFactory = sqlSessionFactoryBean.getObject();
         sqlSessionFactory.getConfiguration().setJdbcTypeForNull(JdbcType.NULL);
+        sqlSessionFactory.getConfiguration().setMapUnderscoreToCamelCase(true);
+        sqlSessionFactory.getConfiguration().setCallSettersOnNulls(true);
         return sqlSessionFactory;
     }
 

@@ -1,4 +1,4 @@
-package com.swontech.s02.client.controller.s021.s02130;
+package com.swontech.s02.client.controller.s021;
 
 /**
  *
@@ -19,7 +19,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/rest/v1/s021300010")
-@Api(tags = "S021300010 API", description = "코드관리화면의 코드리스트 검색, 코드삭제, 코드복원 기능 API")
+@Api(tags = "코드관리화면(S021300010) API", description = "코드관리화면의 코드리스트 검색, 코드삭제, 코드복원 기능 API")
 public class S021300010Controller {
     public final S021300010Spec s021300010Spec;
     public S021300010Controller(S021300010Spec s021300010Spec) {

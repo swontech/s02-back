@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="S021100020">
+    <select id="selectEmail" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT      EMAIL
+        FROM        tb_s020.tb_s020_member010
+        WHERE       EMAIL = #{email}
+    </select>
+
+    <insert id="insertOrg" parameterType="com.swontech.s02.domain.vo.s021.S021100020Vo$InsertOrgVo">
+        <selectKey resultType="java.lang.Integer" keyProperty="orgId" order="AFTER">
+            SELECT  MAX(ORG_ID)
+            FROM    tb_s020.tb_s020_org010
+        </selectKey>
+
+        INSERT INTO tb_s020.tb_s020_org010 (
+            /* S021300010단체 등록/수정 화면 S021100020.insertOrgVo Created By MSH */
+            ORG_ID,
+            ORG_NAME,
+            ZIP_CODE,
+            ADDRESS,
+            DETAIL_ADDRESS,
+            TEL_NO,
+            CREATE_TIMESTAMP,
+            CREATE_PROGRAM_ID,
+            UPDATE_TIMESTAMP,
+            UPDATE_PROGRAM_ID
+        ) VALUES (
+            NEXTVAL(tb_s020.sq_org_id),
+            #{orgName},		            -- 단체명
+            #{zipCode},		            -- 우편번호
+            #{address},		            -- 주소
+            #{detailAddress},	        -- 상세주소
+            CONCAT(#{firstTelNo}, '-', #{middleTelNo}, '-', #{lastTelNo}),
+            SYSDATE(),
+            's021100020',
+            SYSDATE(),
+            's021100020'
+        )
+    </insert>
+
+    <insert id="insertMember" parameterType="com.swontech.s02.domain.vo.s021.S021100020Vo$InsertMemberVo">
+        INSERT INTO tb_s020.tb_s020_member010 (
+            MEMBER_ID,
+            CREATE_TIMESTAMP,
+            CREATE_PROGRAM_ID,
+            UPDATE_TIMESTAMP,
+            UPDATE_PROGRAM_ID,
+            ORG_ID,
+            MEMBER_NAME,
+            HP_NO,
+            EMAIL,
+            MEMBER_TP,
+            PWD
+        ) VALUES (
+            NEXTVAL(sq_member_id),
+            SYSDATE(),
+            'S021100020',
+            SYSDATE(),
+            'S021100020',
+            #{orgId},
+            #{memberName},
+            CONCAT(#{firstHpNo}, '-', #{middleHpNo}, '-', #{lastHpNo}),
+            #{email},
+            'R',
+            #{pwd}
+        )
+    </insert>
+
+    <select id="selectOrg" parameterType="java.lang.Integer" resultType="com.swontech.s02.domain.dto.s021.S021100020Dto$OrgDetailInfo">
+        WITH
+            /* parameter */
+            PARAM AS (
+                SELECT #{orgId} AS ORG_ID
+                FROM    DUAL
+            ),
+
+            /* 단체테이블 tb_s020_org010 */
+            ORG AS (
+                SELECT	A.ORG_ID,
+                        A.ORG_NAME,
+                        A.ZIP_CODE,
+                        A.ADDRESS,
+                        A.DETAIL_ADDRESS,
+                        SUBSTRING_INDEX(A.TEL_NO, '-', 1) AS FRIST_TEL_NO,
+                        SUBSTRING_INDEX(SUBSTRING_INDEX(A.TEL_NO, '-', 2), '-', -1) AS MIDDLE_TEL_NO,
+                        SUBSTRING_INDEX(A.TEL_NO, '-', -1) AS LAST_TEL_NO
+                FROM 	tb_s020_org010 A,
+                        PARAM
+                WHERE 	A.ORG_ID = PARAM.ORG_ID
+            ),
+
+            /* 단체테이블 tb_s020_org010 join with 회원테이블 tb_s020_member010(대표자 정보 조회)*/
+            JOIN_WITH_MEMBER AS (
+                SELECT 	A.*,
+                        B.MEMBER_ID,
+                        B.MEMBER_NAME,
+                        B.EMAIL,
+                        SUBSTRING_INDEX(B.HP_NO, '-', 1) AS FIRST_HP_NO,
+                        SUBSTRING_INDEX(SUBSTRING_INDEX(B.HP_NO, '-', 2), '-', -1) AS MIDDLE_HP_NO,
+                        SUBSTRING_INDEX(B.HP_NO, '-', -1) AS LAST_HP_NO,
+                        B.MEMBER_TP
+                FROM	ORG A,
+                        tb_s020_member010 B
+                WHERE	A.ORG_ID = B.ORG_ID
+                AND     B.MEMBER_TP = 'R'
+            )
+
+        SELECT 	*
+        FROM 	JOIN_WITH_MEMBER
+    </select>
+
+    <update id="updateOrg" parameterType="com.swontech.s02.domain.vo.s021.S021100020Vo$UpdateOrgVo">
+        UPDATE
+            tb_s020_org010 ORG010
+        INNER JOIN
+            tb_s020_member010 MEMBER010 ON ORG010.ORG_ID = MEMBER010.ORG_ID
+        SET
+
+            ORG010.ORG_NAME = #{orgName},
+            ORG010.ZIP_CODE = #{zipCode},
+            ORG010.ADDRESS = #{address},
+            ORG010.DETAIL_ADDRESS = #{detailAddress},
+            ORG010.TEL_NO = CONCAT(#{firstTelNo}, '-', #{middleTelNo}, '-', #{lastTelNo}),
+
+            MEMBER010.MEMBER_NAME = #{memberName},
+            MEMBER010.HP_NO = CONCAT(#{firstHpNo}, '-', #{middleHpNo}, '-', #{lastHpNo}),
+
+            ORG010.UPDATE_TIMESTAMP = SYSDATE(),
+            ORG010.UPDATE_PROGRAM_ID = 's021100020',
+            MEMBER010.UPDATE_TIMESTAMP = SYSDATE(),
+            MEMBER010.UPDATE_PROGRAM_ID = 's021100020'
+
+        WHERE	ORG010.ORG_ID = #{orgId}
+        AND 	MEMBER010.MEMBER_TP = 'R'
+    </update>
+</mapper>

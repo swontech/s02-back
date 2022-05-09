@@ -81,7 +81,13 @@
 ````
 
 ## 
-            
+        
+crud naming rule
+등록: register
+조회: retrieve
+수정: patch
+삭제: delete
+
             
         
             

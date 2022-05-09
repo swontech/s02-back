@@ -1,6 +1,6 @@
 package com.swontech.s02.domain.logic.comm;
 
-import com.swontech.s02.domain.security.JwtTokenProvider;
+import com.swontech.s02.domain.common.security.JwtTokenProvider;
 import com.swontech.s02.domain.dto.comm.AuthDto;
 import com.swontech.s02.domain.dto.comm.ResponseDto;
 import com.swontech.s02.domain.spec.comm.AuthSpec;

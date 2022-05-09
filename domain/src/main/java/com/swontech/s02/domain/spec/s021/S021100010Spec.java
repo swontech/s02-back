@@ -1,11 +1,10 @@
 package com.swontech.s02.domain.spec.s021;
 
+import org.springframework.http.ResponseEntity;
+
 public interface S021100010Spec {
-    void retrieveOrgList();
-
-    void registerOrgList();
-
-    void modifyOrgList();
-
-    void deleteOrgList();
+    ResponseEntity<?> retrieveOrgList();
+    ResponseEntity<?> registerOrgList();
+    ResponseEntity<?> patchOrgList();
+    ResponseEntity<?> deleteOrgList();
 }

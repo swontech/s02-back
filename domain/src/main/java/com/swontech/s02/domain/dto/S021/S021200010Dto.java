@@ -1,17 +1,16 @@
 package com.swontech.s02.domain.dto.s021;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 
 public class S021200010Dto {
+
     @Builder
     @Getter
+    @Setter
     @AllArgsConstructor
     @NoArgsConstructor
     public static class LogIn {

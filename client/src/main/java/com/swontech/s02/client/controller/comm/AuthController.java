@@ -15,12 +15,12 @@ public class AuthController {
         this.authSpec = authSpec;
     }
 
-    @PatchMapping("/reissue-token")
+    @PatchMapping("/reissue")
     public ResponseEntity<?> reIssueToken(@Valid AuthDto.ReIssue reIssue) {
         return authSpec.reIssueToken(reIssue);
     }
 
-    @DeleteMapping("/delete-token")
+    @DeleteMapping("/logout")
     public ResponseEntity<?> deleteToken() {
         return authSpec.deleteToken();
     }

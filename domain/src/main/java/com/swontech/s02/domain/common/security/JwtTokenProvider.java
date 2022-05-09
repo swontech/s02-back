@@ -1,4 +1,4 @@
-package com.swontech.s02.domain.security;
+package com.swontech.s02.domain.common.security;
 
 /**
  * @desc    : Jwt 토큰을 관리하는 유틸성 클래스 파일
@@ -120,7 +120,6 @@ public class JwtTokenProvider {
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .build();
-
     }
 
     /**
@@ -151,7 +150,7 @@ public class JwtTokenProvider {
      * </p>
      * @param   {String}타입의 토큰 문자열
      * @return  {boolean}타입의 유효성 검증 결과
-     * {@see    {@link com.swontech.s02.domain.security.JwtAuthenticationFilter#doFilter(ServletRequest, ServletResponse, FilterChain)}
+     * {@see    {@link JwtAuthenticationFilter#doFilter(ServletRequest, ServletResponse, FilterChain)}
      */
     public boolean validateToken(String token) {
         try {
@@ -178,7 +177,7 @@ public class JwtTokenProvider {
      * </p>
      * @param   {String}타입의 토큰 문자열
      * @return  {boolean}타입의 유효성 검증 결과
-     * {@see    {@link com.swontech.s02.domain.security.JwtAuthenticationFilter#doFilter(ServletRequest, ServletResponse, FilterChain)}
+     * {@see    {@link JwtAuthenticationFilter#doFilter(ServletRequest, ServletResponse, FilterChain)}
      */
     private Claims parseClaims(String accessToken) {
         try {

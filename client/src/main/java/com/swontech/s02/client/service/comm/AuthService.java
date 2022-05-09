@@ -1,6 +1,6 @@
 package com.swontech.s02.client.service.comm;
 
-import com.swontech.s02.domain.security.JwtTokenProvider;
+import com.swontech.s02.domain.common.security.JwtTokenProvider;
 import com.swontech.s02.domain.dto.comm.ResponseDto;
 import com.swontech.s02.domain.logic.comm.AuthLogic;
 import com.swontech.s02.domain.store.comm.AuthRedisStore;

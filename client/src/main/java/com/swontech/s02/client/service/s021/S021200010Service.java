@@ -2,7 +2,7 @@ package com.swontech.s02.client.service.s021;
 
 import com.swontech.s02.domain.dto.comm.ResponseDto;
 import com.swontech.s02.domain.logic.s021.S021200010Logic;
-import com.swontech.s02.domain.security.JwtTokenProvider;
+import com.swontech.s02.domain.common.security.JwtTokenProvider;
 import com.swontech.s02.domain.store.comm.AuthRedisStore;
 import com.swontech.s02.domain.store.s021.S021200010Store;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;

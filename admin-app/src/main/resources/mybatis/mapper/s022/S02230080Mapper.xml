@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="S022300080">
+    <select id="selectEnterList" resultType="com.swontech.s02.domain.dto.s022.S022300080Dto$RetrieveAttendList" parameterType="com.swontech.s02.domain.vo.s022.S022300080Vo$SelectEnterListVo">
+        SELECT 	MEMBER010.MEMBER_ID,
+                MEMBER010.MEMBER_NAME,
+                MEMBER010.HP_NO,
+                MEMBER010.EVENT_ID,
+                MEMBER010.EVENT_NM,
+                MEMBER010.EVENT_START_DATE,
+                MEMBER010.EVENT_END_DATE,
+                MEMBER010.EVENT_ID,
+                MEMBER010.ORG_ID,
+                MEMBER010.ORG_NAME,
+                ENTER010.ENTER_FLAG,
+                ENTER010.ENTER_DATE
+
+        FROM	(SELECT	A.EVENT_NM,
+                        A.EVENT_START_DATE,
+                        A.EVENT_END_DATE,
+                        A.EVENT_ID,
+                        A.ORG_ID,
+                        B.MEMBER_ID,
+                        B.MEMBER_NAME,
+                        B.HP_NO,
+                        C.ORG_NAME
+                FROM 	tb_s020_event010 A,
+                        tb_s020_member010 B,
+                        tb_s020_org010 C
+                WHERE  	C.ORG_ID = B.ORG_ID
+                AND     A.ORG_ID = C.ORG_ID) MEMBER010
+
+                LEFT OUTER JOIN tb_s020_enter010 ENTER010
+                ON 	MEMBER010.MEMBER_ID = ENTER010.MEMBER_ID
+                AND MEMBER010.EVENT_ID = ENTER010.EVENT_ID
+        WHERE	1 = 1
+        <if test='eventId != null and eventId != ""'>
+        AND     MEMBER010.EVENT_ID = #{eventId}
+        </if>
+        <if test='memberName != null and memberName != ""'>
+        AND     MEMBER010.MEMBER_NAME LIKE CONCAT('%', #{memberName}, '%')
+        </if>
+        <if test='hpNo != null and hpNo != ""'>
+        AND     MEMBER010.HP_NO LIKE CONCAT('%', #{hpNo}, '%')
+        </if>
+        <if test='enterFlag != null and enterFlag != ""'>
+        AND     IFNULL(ENTER010.ENTER_FLAG, 'N') = #{enterFlag}
+        </if>
+    </select>
+
+    <insert id="insertEnter" parameterType="java.util.List">
+        INSERT INTO tb_s020_enter010 (
+            EVENT_ID,
+            MEMBER_ID,
+            ENTER_DATE,
+            ENTER_FLAG
+        ) VALUES
+        <foreach collection="list" item="vo" separator=", ">
+        (
+            #{vo.eventId},
+            #{vo.memberId},
+            SYSDATE(),
+            'Y'
+        )
+        </foreach>
+    </insert>
+
+    <delete id="deleteEnter" parameterType="java.util.List">
+        DELETE  FROM tb_s020_enter010
+        WHERE   EVENT_ID IN (
+            <foreach collection="list" item="vo" separator=", ">
+                #{vo.eventId}
+            </foreach>
+            )
+        AND     MEMBER_ID IN (
+            <foreach collection="list" item="vo" separator=", ">
+                #{vo.memberId}
+            </foreach>
+            )
+    </delete>
+
+</mapper>

@@ -10,7 +10,6 @@ import javax.validation.constraints.*;
 public class S021100020Dto {
 
     @Getter
-    @Builder
     @AllArgsConstructor
     @NoArgsConstructor
     public static class RegisterOrg {
@@ -51,4 +50,40 @@ public class S021100020Dto {
         private String email;
     }
 
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class PatchOrg {
+        private int orgId;
+        private String orgName;
+        private String zipCode;
+        private String address;
+        private String detailAddress;
+        private String firstTelNo;
+        private String middleTelNo;
+        private String lastTelNo;
+        private String memberName;
+        private String firstHpNo;
+        private String middleHpNo;
+        private String lastHpNo;
+    }
+
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class OrgDetailInfo {
+        private String orgId;
+        private String orgName;
+        private String zipCode;
+        private String address;
+        private String detailAddress;
+        private String firstTelNo;
+        private String middleTelNo;
+        private String lastTelNo;
+        private String firstHpNo;
+        private String middleHpNo;
+        private String lastHpNo;
+        private String email;
+        private String memberTp;
+    }
 }

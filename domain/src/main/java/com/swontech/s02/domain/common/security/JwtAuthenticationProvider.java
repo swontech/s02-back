@@ -1,4 +1,4 @@
-package com.swontech.s02.domain.security;
+package com.swontech.s02.domain.common.security;
 /**
  * AuthenticationProvider를 상속받은 커스텀 AuthenticationProvider 클래스 파일
  * <p>

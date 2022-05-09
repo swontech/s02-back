@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="S022300050">
+    <insert id="insertEvent" parameterType="com.swontech.s02.domain.vo.s022.S022300050Vo$InsertEventVo">
+        INSERT INTO tb_s020_event010 (
+            EVENT_ID,
+            EVENT_NM,
+            EVENT_START_DATE,
+            EVENT_END_DATE,
+            EVENT_LOC,
+            EVENT_HOST_ID,
+            EVENT_COMMENT,
+            EVENT_STATUS,
+            CREATE_TIMESTAMP,
+            CREATE_PROGRAM_ID
+        ) VALUES (
+            NEXTVAL(sq_event_id),
+            '행사명',
+            STR_TO_DATE('2022-02-05 09:00:00', <include refid="CommInc.dateFormat"></include>),
+            STR_TO_DATE('2022-02-06 17:00:00', <include refid="CommInc.dateFormat"></include>),
+            '부산',
+            1,
+            '테스트용 행사',
+            'N',
+            SYSDATE(),
+            's022300050'
+        )
+    </insert>
+
+    <select id="selectEvent" parameterType="java.lang.String" resultType="com.swontech.s02.domain.dto.s022.S022300050Dto$RetrieveEventResponse">
+        SELECT  E010.EVENT_ID,			-- 행사ID (HIDDEN KEY 사용할 ID)
+                E010.EVENT_NM,			-- 행사명
+                E010.EVENT_START_DATE,	-- 행사시작일자
+                E010.EVENT_END_DATE,	-- 행사종료일자
+                E010.EVENT_LOC,			-- 행사장소
+                E010.EVENT_COMMENT,		-- 행사내용
+                E010.EVENT_STATUS,  	-- 진행상태
+                NULL EVENT_FLAG,		-- 참석여부
+                E010.ORG_ID,            -- 단체 ID
+                (SELECT     MEMBER_NAME
+                FROM        TB_S020.TB_S020_MEMBER010 M010
+                WHERE       M010.MEMBER_ID = E010.EVENT_HOST_ID) EVENT_HOST_NM, -- 행사 운영자명
+        FROM    TB_S020.TB_S020_EVENT010  E010
+        WHERE   EVENT_ID = #{eventId}
+    </select>
+</mapper>

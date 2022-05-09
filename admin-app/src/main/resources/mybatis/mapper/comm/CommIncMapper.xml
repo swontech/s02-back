@@ -6,4 +6,8 @@
         ,CREATE_TIMESTAMP
         ,CREATE_PROGRAM_ID
     </sql>
+
+    <sql id="dateFormat">
+        '%Y-%m-%d %H:%i:%S'
+    </sql>
 </mapper>

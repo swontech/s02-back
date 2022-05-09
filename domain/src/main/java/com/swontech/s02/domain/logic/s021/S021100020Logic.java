@@ -27,9 +27,9 @@ public class S021100020Logic implements S021100020Spec {
     @Override
     public ResponseEntity<?> duplicationCheckEmail(String email) {
         if(s021100020Store.selectMemberEmail(email) == null) {
-            return responseDto.success(Map.of("isExist", false), "사용 가능한 이메일 주소입니다.", HttpStatus.OK);
+            return responseDto.success(true, "사용 가능한 이메일 주소입니다.", HttpStatus.OK);
         }
-        return responseDto.success(Map.of("isExist", true), "이미 사용중인 이메일 주소입니다.", HttpStatus.OK);
+        return responseDto.success(false, "이미 사용중인 이메일 주소입니다.", HttpStatus.OK);
     }
 
     @Override

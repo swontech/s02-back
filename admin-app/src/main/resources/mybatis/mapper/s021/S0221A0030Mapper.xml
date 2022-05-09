@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="S0221A0030">
+    <select id="selectMemberId" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT  MEMBER_ID
+        FROM    tb_s020_member010
+        WHERE   HP_NO = #{hpNo}
+    </select>
+
+    <update id="updateMobileId" parameterType="com.swontech.s02.domain.vo.s022.S0221A0030Vo$UpdateMobileIdVo">
+        UPDATE
+            tb_s020_member010
+        SET
+            MOBILE_ID           = #{mobileId},
+            MOBILE_LOGIN_DATE   = SYSDATE(),
+            UPDATE_TIMESTAMP    = SYSDATE(),
+            UPDATE_PROGRAM_ID   = 'S0221A0030'
+        WHERE
+            MEMBER_ID = #{memberId}
+    </update>
+
+    <insert id="insertMemberInfo" parameterType="com.swontech.s02.domain.vo.s022.S0221A0030Vo$InsertMemberInfoVo">
+        <selectKey resultType="java.lang.Integer" keyProperty="memberId" order="AFTER">
+            SELECT  MAX(MEMBER_ID)
+            FROM    tb_s020.tb_s020_member010
+        </selectKey>
+        INSERT INTO tb_s020.tb_s020_member010 (
+            MEMBER_ID,
+            MEMBER_NAME,
+            HP_NO,
+            MOBILE_ID,
+            MOBILE_LOGIN_DATE,
+            MEMBER_TP,
+            CREATE_TIMESTAMP,
+            CREATE_PROGRAM_ID,
+            UPDATE_TIMESTAMP,
+            UPDATE_PROGRAM_ID
+        ) VALUES (
+            NEXTVAL(tb_s020.sq_member_id),  -- 멤버아이디
+            #{memberName},		            -- 단체명
+            #{hpNo},		                -- 우편번호
+            #{mobileId},	                -- 상세주소
+            SYSDATE(),                      -- 모바일 로그인 일자
+            'R',
+            SYSDATE(),
+            's021100020',
+            SYSDATE(),
+            's021100020'
+        )
+    </insert>
+
+    <select id="selectSignupResponse" parameterType="java.lang.String" resultType="com.swontech.s02.domain.dto.s022.S0221A0030Dto$SignUpResponse">
+        SELECT  MEMBER010.MEMBER_ID,
+                MEMBER010.MEMBER_NAME,
+                MEMBER010.ORG_ID,
+                MEMBER010.HP_NO,
+                MEMBER010.MOBILE_ID,
+                MEMBER010.MEMBER_TP,
+                (SELECT     CONCAT(ORG010.ORG_NAME, '@', EVENT_ID, '@', EVENT_NM)
+                FROM        tb_s020.tb_s020_org010      ORG010,
+                            tb_s020.tb_s020_event010    EVENT010
+                WHERE       ORG010.ORG_ID = MEMBER010.ORG_ID
+                AND         ORG010.ORG_ID = EVENT010.ORG_ID
+                AND         EVENT010.DEFAULT_EVENT_FLAG = 'Y') ORG_EVENT_NAME
+        FROM    tb_s020.tb_s020_member010 MEMBER010
+        WHERE   MEMBER010.HP_NO = #{hpNo}
+    </select>
+</mapper>

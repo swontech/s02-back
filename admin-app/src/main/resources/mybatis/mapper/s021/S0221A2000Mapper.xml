@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="S0221A2000">
+    <select id="selectEventList" resultType="com.swontech.s02.domain.dto.s022.S0221A2000Dto$EventListResponse" parameterType="com.swontech.s02.domain.vo.s022.S0221A2000Vo$SelectEventListVo">
+        SELECT 	EVENT_ID,       -- 행사ID
+                EVENT_NM,       -- 행사명
+                CONCAT(DATE_FORMAT(EVENT_START_DATE, '%Y-%m-%d'), ' ~ ', DATE_FORMAT(EVENT_END_DATE, '%Y-%m-%d')) EVENT_PERIOD, -- 행사기간
+                (SELECT 	MEMBER_NAME
+                FROM 		tb_s020_member010
+                WHERE 		MEMBER_ID = EVENT_REG_ID) REG_MEMBER_NAME,    -- 운영자명
+                ORG_ID                                                    -- 단체ID
+        FROM    tb_s020_event010
+        WHERE   SYSDATE() BETWEEN EVENT_START_DATE AND EVENT_END_DATE
+        AND     ORG_ID = #{orgId}
+        <if test='eventName != null and eventName != ""'>
+        AND     EVENT_NM = #{eventName}
+        </if>
+    </select>
+</mapper>

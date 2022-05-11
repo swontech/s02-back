@@ -13,7 +13,14 @@ public class S0221A0020Repository implements S0221A0020Store {
     }
 
     @Override
-    public int insertEnter(S0221A0020Vo.insertEnterVo insertEnterVo) {
+    public int selectMobileId(S0221A0020Vo.SelectMobileId selectMobileId) {
+        return sqlSessionTemplate.selectOne("S0221A0020.selectMobileId", selectMobileId);
+    }
+
+    @Override
+    public int insertEnter(S0221A0020Vo.InsertEnterVo insertEnterVo) {
         return sqlSessionTemplate.insert("S0221A0020.insertEnter", insertEnterVo);
     }
+
+
 }

@@ -8,8 +8,9 @@ public class S0221A0020Dto {
     @Setter
     @Getter
     public static class QrInfo {
+        private Integer orgId;
         private Integer memberId;
         private Integer eventId;
-        private String hpNo;
+        private String mobileId;
     }
 }

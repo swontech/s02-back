@@ -2,20 +2,20 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="S0221A0020">
+    <select id="selectEventId" resultType="java.lang.Integer" parameterType="com.swontech.s02.domain.vo.s022.S0221A0020Vo$SelectEventId">
+        SELECT 	COUNT(*)
+        FROM	tb_s020_org010 ORG010,
+        tb_s020_event010 EVENT010
+        WHERE 	ORG010.ORG_ID = EVENT010.ORG_ID
+        AND 	ORG010.ORG_ID = #{orgId}
+        AND 	EVENT010.EVENT_ID = #{eventId}
+    </select>
+
     <select id="selectMobileId" resultType="java.lang.Integer" parameterType="com.swontech.s02.domain.vo.s022.S0221A0020Vo$SelectMobileId">
         SELECT  COUNT(*)
         FROM    tb_s020_member010
         WHERE   MOBILE_ID = #{mobileId}
         AND     MEMBER_ID = ${memberId}
-    </select>
-
-    <select id="selectEventID" resultType="java.lang.Integer" parameterType="com.swontech.s02.domain.vo.s022.S0221A0020Vo$SelectEventId">
-        SELECT 	COUNT(*)
-        FROM	tb_s020_org010 ORG010,
-                tb_s020_event010 EVENT010
-        WHERE 	ORG010.ORG_ID = EVENT010.ORG_ID
-        AND 	ORG010.ORG_ID = #{orgId}
-        AND 	EVENT010.EVENT_ID = #{eventId}
     </select>
 
     <select id="insertEnter" parameterType="com.swontech.s02.domain.vo.s022.S0221A0020Vo$InsertEnterVo">

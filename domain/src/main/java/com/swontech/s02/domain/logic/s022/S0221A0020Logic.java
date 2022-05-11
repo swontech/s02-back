@@ -40,6 +40,7 @@ public class S0221A0020Logic implements S0221A0020Spec {
             return response.fail("유효하지 않은 mobileId입니다.", HttpStatus.FORBIDDEN);
         }
 
+
         return response.success(s0221A0020Store.insertEnter(
             S0221A0020Vo.InsertEnterVo
                     .builder()

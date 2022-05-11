@@ -20,16 +20,34 @@ public class S0221A0020Logic implements S0221A0020Spec {
 
     @Override
     public ResponseEntity<?> scanQrInfo(S0221A0020Dto.QrInfo qrInfo) {
-        if(s0221A0020Store.selectMobileId(S0221A0020Vo.SelectMobileId.builder().mobileId(qrInfo.getMobileId()).build()) > 0) {
-            return response.success(s0221A0020Store.insertEnter(
-                    S0221A0020Vo.InsertEnterVo
-                            .builder()
-                            .orgId(qrInfo.getOrgId())
-                            .memberId(qrInfo.getMemberId())
+        boolean isVaildEventId = s0221A0020Store.selectEventId(
+                S0221A0020Vo.SelectEventId
+                        .builder()
                             .eventId(qrInfo.getEventId())
-                            .build())
-            );
+                            .orgId(qrInfo.getOrgId())
+                .build()) > 0;
+        if(!isVaildEventId) {
+            return response.fail("유효하지 않은 orgId와 eventId입니다.", HttpStatus.BAD_REQUEST);
         }
-        return response.fail("유효하지 않은 모바일-ID 입니다.", HttpStatus.FORBIDDEN);
+
+        boolean isValidMobileId = s0221A0020Store.selectMobileId(
+                S0221A0020Vo.SelectMobileId
+                        .builder()
+                            .mobileId(qrInfo.getMobileId())
+                            .memberId(qrInfo.getMemberId())
+                        .build()) > 0;
+        if(!isValidMobileId) {
+            return response.fail("유효하지 않은 mobileId입니다.", HttpStatus.FORBIDDEN);
+        }
+
+        return response.success(s0221A0020Store.insertEnter(
+            S0221A0020Vo.InsertEnterVo
+                    .builder()
+                    .orgId(qrInfo.getOrgId())
+                    .memberId(qrInfo.getMemberId())
+                    .eventId(qrInfo.getEventId())
+                    .build()
+            )
+        );
     }
 }

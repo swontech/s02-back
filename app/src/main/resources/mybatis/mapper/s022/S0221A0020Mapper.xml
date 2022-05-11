@@ -6,6 +6,16 @@
         SELECT  COUNT(*)
         FROM    tb_s020_member010
         WHERE   MOBILE_ID = #{mobileId}
+        AND     MEMBER_ID = ${memberId}
+    </select>
+
+    <select id="selectEventID" resultType="java.lang.Integer" parameterType="com.swontech.s02.domain.vo.s022.S0221A0020Vo$SelectEventId">
+        SELECT 	COUNT(*)
+        FROM	tb_s020_org010 ORG010,
+                tb_s020_event010 EVENT010
+        WHERE 	ORG010.ORG_ID = EVENT010.ORG_ID
+        AND 	ORG010.ORG_ID = #{orgId}
+        AND 	EVENT010.EVENT_ID = #{eventId}
     </select>
 
     <select id="insertEnter" parameterType="com.swontech.s02.domain.vo.s022.S0221A0020Vo$InsertEnterVo">
@@ -15,12 +25,16 @@
             EVENT_ID,
             ENTER_FLAG,
             CREATE_TIMESTAMP,
-            CREATE_PROGRAM_ID
+            CREATE_PROGRAM_ID,
+            UPDATE_TIMESTAMP,
+            UPDATE_PROGRAM_ID
         ) VALUES (
-            #{memberId}
+            #{memberId},
             SYSDATE(),
-            #{eventId}
+            #{eventId},
             'Y',
+            SYSDATE(),
+            'S0221A0020',
             SYSDATE(),
             'S0221A0020'
         )

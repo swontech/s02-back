@@ -13,6 +13,11 @@ public class S0221A0020Repository implements S0221A0020Store {
     }
 
     @Override
+    public int selectEventId(S0221A0020Vo.SelectEventId selectEventId) {
+        return sqlSessionTemplate.selectOne("S0221A0020.selectEventId", selectEventId);
+    }
+
+    @Override
     public int selectMobileId(S0221A0020Vo.SelectMobileId selectMobileId) {
         return sqlSessionTemplate.selectOne("S0221A0020.selectMobileId", selectMobileId);
     }

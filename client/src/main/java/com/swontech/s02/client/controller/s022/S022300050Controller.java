@@ -25,7 +25,7 @@ public class S022300050Controller {
 
     @Operation(summary = "행사 상세 정보 조회", description = "기등록행사의 수정을 위한 정보를 조회한다.")
     @GetMapping("/event")
-    public ResponseEntity<?> retrieveEvent(@RequestParam("event-id") String eventId) {
+    public ResponseEntity<?> retrieveEvent(@RequestParam("eventId") String eventId) {
         return s022300050Spec.retrieveEvent(eventId);
     }
 

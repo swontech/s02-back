@@ -1,7 +1,6 @@
 package com.swontech.s02.domain.dto.s022;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 

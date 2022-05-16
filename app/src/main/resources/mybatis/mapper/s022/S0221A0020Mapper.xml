@@ -5,7 +5,7 @@
     <select id="selectEventId" resultType="java.lang.Integer" parameterType="com.swontech.s02.domain.vo.s022.S0221A0020Vo$SelectEventId">
         SELECT 	COUNT(*)
         FROM	tb_s020_org010 ORG010,
-        tb_s020_event010 EVENT010
+                tb_s020_event010 EVENT010
         WHERE 	ORG010.ORG_ID = EVENT010.ORG_ID
         AND 	ORG010.ORG_ID = #{orgId}
         AND 	EVENT010.EVENT_ID = #{eventId}

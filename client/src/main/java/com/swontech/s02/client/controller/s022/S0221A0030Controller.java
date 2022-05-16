@@ -18,7 +18,7 @@ public class S0221A0030Controller {
     }
 
     @GetMapping("/sign-up")
-    public ResponseEntity<?> signUp(@RequestParam("member-name") String memberName, @RequestParam("hp-no") String hpNo) throws NoSuchAlgorithmException {
+    public ResponseEntity<?> signUp(@RequestParam("memberName") String memberName, @RequestParam("hpNo") String hpNo) throws NoSuchAlgorithmException {
         return s0221A0030Spec.signUp(memberName, hpNo);
     }
 

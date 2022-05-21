@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="S022300080">
-    <select id="selectEnterList" resultType="com.swontech.s02.domain.dto.s022.S022300080Dto$RetrieveAttendList" parameterType="com.swontech.s02.domain.vo.s022.S022300080Vo$SelectEnterListVo">
+    <select id="selectEnterList" resultType="com.swontech.s02.domain.dto.s022.S022300080Dto$AttendListResponse" parameterType="com.swontech.s02.domain.vo.s022.S022300080Vo$SelectEnterListVo">
         SELECT 	MEMBER010.MEMBER_ID,
                 MEMBER010.MEMBER_NAME,
                 MEMBER010.HP_NO,

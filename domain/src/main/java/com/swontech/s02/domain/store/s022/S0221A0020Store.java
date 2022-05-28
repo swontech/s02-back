@@ -6,4 +6,5 @@ public interface S0221A0020Store {
     int selectEventId(S0221A0020Vo.SelectEventId selectEventId);
     int selectMobileId(S0221A0020Vo.SelectMobileId selectMobileId);
     int insertEnter(S0221A0020Vo.InsertEnterVo insertEnterVo);
+    String selectEnterFlag(S0221A0020Vo.SelectEnterFlag selectEnterFlag);
 }

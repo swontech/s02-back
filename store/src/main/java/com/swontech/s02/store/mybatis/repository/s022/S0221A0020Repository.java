@@ -27,5 +27,10 @@ public class S0221A0020Repository implements S0221A0020Store {
         return sqlSessionTemplate.insert("S0221A0020.insertEnter", insertEnterVo);
     }
 
+    @Override
+    public String selectEnterFlag(S0221A0020Vo.SelectEnterFlag selectEnterFlag) {
+        return sqlSessionTemplate.selectOne("S0221A0020.selectEnterFlag", selectEnterFlag);
+    }
+
 
 }

@@ -18,6 +18,13 @@
         AND     MEMBER_ID = ${memberId}
     </select>
 
+    <select id="selectEnterFlag" parameterType="com.swontech.s02.domain.vo.s022.S0221A0020Vo$SelectEnterFlag" resultType="java.lang.String">
+        SELECT 	ENTER_FLAG
+        FROM 	tb_s020_enter010
+        WHERE 	MEMBER_ID = #{memberId}
+        AND 	EVENT_ID = #{eventId}
+    </select>
+
     <select id="insertEnter" parameterType="com.swontech.s02.domain.vo.s022.S0221A0020Vo$InsertEnterVo">
         INSERT INTO tb_s020_enter010 (
             MEMBER_ID,

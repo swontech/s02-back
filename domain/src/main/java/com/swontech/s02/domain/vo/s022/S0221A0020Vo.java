@@ -16,6 +16,12 @@ public class S0221A0020Vo {
     }
 
     @Builder
+    public static class SelectEnterFlag {
+        private int memberId;
+        private int eventId;
+    }
+
+    @Builder
     public static class InsertEnterVo {
         private int orgId;
         private int memberId;

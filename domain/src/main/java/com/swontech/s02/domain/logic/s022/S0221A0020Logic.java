@@ -40,6 +40,16 @@ public class S0221A0020Logic implements S0221A0020Spec {
             return response.fail("유효하지 않은 mobileId입니다.", HttpStatus.FORBIDDEN);
         }
 
+        String enterFlag = s0221A0020Store.selectEnterFlag(
+            S0221A0020Vo.SelectEnterFlag
+                    .builder()
+                        .eventId(qrInfo.getEventId())
+                        .memberId(qrInfo.getMemberId())
+                    .build()
+        );
+        if("Y".equals(enterFlag)) {
+            return response.fail("이미 출석한 회원입니다.", HttpStatus.OK);
+        }
 
         return response.success(s0221A0020Store.insertEnter(
             S0221A0020Vo.InsertEnterVo

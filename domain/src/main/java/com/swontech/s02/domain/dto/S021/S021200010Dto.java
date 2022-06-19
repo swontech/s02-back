@@ -13,7 +13,7 @@ public class S021200010Dto {
     @Setter
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class LogIn {
+    public static class LogInReqDto {
         @NotEmpty(message = "이메일은 필수 입력값입니다.")
         @Email
         private String email;

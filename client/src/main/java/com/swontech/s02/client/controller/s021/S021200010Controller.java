@@ -15,7 +15,7 @@ public class S021200010Controller {
     }
 
     @GetMapping("/login")
-    public ResponseEntity<?> logIn(@Validated S021200010Dto.LogIn reqDto) throws Exception {
+    public ResponseEntity<?> logIn(@Validated S021200010Dto.LogInReqDto reqDto) throws Exception {
         return s021200010Spec.logIn(reqDto);
     }
 }

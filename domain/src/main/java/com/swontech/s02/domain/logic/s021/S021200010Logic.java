@@ -1,6 +1,11 @@
 package com.swontech.s02.domain.logic.s021;
 
-import com.swontech.s02.domain.dto.comm.ResponseDto;
+/**
+ * @desc: 로그인 로직
+ * @Author: MSH
+ */
+
+import com.swontech.s02.domain.dto.comm.CustomResponse;
 import com.swontech.s02.domain.dto.s021.S021200010Dto;
 import com.swontech.s02.domain.common.security.JwtTokenProvider;
 import com.swontech.s02.domain.spec.s021.S021200010Spec;
@@ -24,10 +29,10 @@ public class S021200010Logic implements S021200010Spec {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final JwtTokenProvider jwtTokenProvider;
     private final AuthRedisStore authRedisStore;
-    private final ResponseDto responseDto;
+    private final CustomResponse responseDto;
     private Logger logger = LoggerFactory.getLogger(S021200010Logic.class);
 
-    public S021200010Logic(S021200010Store s021200010Store, AuthenticationManagerBuilder authenticationManagerBuilder, JwtTokenProvider jwtTokenProvider, AuthRedisStore authRedisStore, ResponseDto responseDto) {
+    public S021200010Logic(S021200010Store s021200010Store, AuthenticationManagerBuilder authenticationManagerBuilder, JwtTokenProvider jwtTokenProvider, AuthRedisStore authRedisStore, CustomResponse responseDto) {
         this.s021200010Store = s021200010Store;
         this.authenticationManagerBuilder = authenticationManagerBuilder;
         this.jwtTokenProvider = jwtTokenProvider;
@@ -36,13 +41,14 @@ public class S021200010Logic implements S021200010Spec {
     }
 
     @Override
-    public ResponseEntity<?> logIn(S021200010Dto.LogIn logIn) {
+    public ResponseEntity<?> logIn(S021200010Dto.LogInReqDto logIn) {
         // 회원가입된 정보가 없을 경우 UsernameNotFoundException을 발생시킨다.
         String memberEmail = s021200010Store.selectMemberEmail(
                 S021200010Vo.SelectMemberEmailVo.builder()
                         .email(logIn.getEmail())
                         .build());
         if(memberEmail == null) {
+            logger.info("회원가입된 이메일 정보가 없습니다");
             throw new UsernameNotFoundException("회원가입된 이메일 정보가 없습니다");
         }
 
@@ -51,18 +57,21 @@ public class S021200010Logic implements S021200010Spec {
          * authentication 는 인증 여부를 확인하는 authenticated 값이 false
          */
         UsernamePasswordAuthenticationToken authenticationToken = logIn.toAuthentication();
+        logger.info("authenticationToken:" + authenticationToken);
 
         /**
          * 실제 검증 (사용자 비밀번호 체크)이 이루어지는 부분
          * authenticate 매서드가 실행될 때 CustomUserDetailsService 에서 만든 loadUserByUsername 메서드가 실행
          */
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+        logger.info("authentication:" + authentication);
 
         /**
          * 토큰 생성
          * 인증되어 생성된 authentication 객채로 accessToken, refreshToken 정보를 생성한다.
          */
         AuthVo.JwtTokenInfo jwtTokenInfo = jwtTokenProvider.generateToken(authentication);
+        logger.info("jwtTokenInfo:" + jwtTokenInfo);
 
         /**
          * Redis 저장

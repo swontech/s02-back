@@ -1,19 +1,15 @@
 package com.swontech.s02.aop;
 
-import com.swontech.s02.domain.dto.comm.ResponseDto;
+import com.swontech.s02.domain.dto.comm.CustomResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
 public class ControllerExceptionHandler {
    private final Logger logger = LoggerFactory.getLogger(ControllerExceptionHandler.class);
-   private final ResponseDto reponse;
-   public ControllerExceptionHandler(ResponseDto response) {
+   private final CustomResponse reponse;
+   public ControllerExceptionHandler(CustomResponse response) {
       this.reponse = response;
    }
 

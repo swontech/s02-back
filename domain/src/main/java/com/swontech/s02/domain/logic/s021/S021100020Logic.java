@@ -1,6 +1,6 @@
 package com.swontech.s02.domain.logic.s021;
 
-import com.swontech.s02.domain.dto.comm.ResponseDto;
+import com.swontech.s02.domain.dto.comm.CustomResponse;
 import com.swontech.s02.domain.dto.s021.S021100020Dto;
 import com.swontech.s02.domain.spec.s021.S021100020Spec;
 import com.swontech.s02.domain.store.s021.S021100020Store;
@@ -9,13 +9,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.Map;
-
 public class S021100020Logic implements S021100020Spec {
     private final S021100020Store s021100020Store;
     private final PasswordEncoder passwordEncoder;
-    private final ResponseDto responseDto;
-    public S021100020Logic(S021100020Store s021100020Store, PasswordEncoder passwordEncoder, ResponseDto responseDto) {
+    private final CustomResponse responseDto;
+    public S021100020Logic(S021100020Store s021100020Store, PasswordEncoder passwordEncoder, CustomResponse responseDto) {
         this.s021100020Store = s021100020Store;
         this.passwordEncoder = passwordEncoder;
         this.responseDto = responseDto;
@@ -42,7 +40,7 @@ public class S021100020Logic implements S021100020Spec {
      * @param "S021100020Dto.RegisterOrg"
      */
     @Override
-    public ResponseEntity<?> registerOrg(S021100020Dto.RegisterOrg reqDto) {
+    public ResponseEntity<?> registerOrg(S021100020Dto.RegisterOrgReqDto reqDto) {
         /**
          * 단체 등록 메소드
          * 컨트롤러로부터 전달받은 request dto parameter를 InsertOrgVo에 담아 DML처리한다.
@@ -84,7 +82,7 @@ public class S021100020Logic implements S021100020Spec {
      * 단체 상세정보 수정 메소드
      */
     @Override
-    public ResponseEntity<?> patchOrgDetail(S021100020Dto.PatchOrg reqDto) {
+    public ResponseEntity<?> patchOrgDetail(S021100020Dto.PatchOrgReqDto reqDto) {
         s021100020Store.updateOrg(S021100020Vo.UpdateOrgVo
                 .builder()
                         .orgId(reqDto.getOrgId())

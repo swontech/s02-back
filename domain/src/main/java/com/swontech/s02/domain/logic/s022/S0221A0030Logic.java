@@ -3,7 +3,7 @@ package com.swontech.s02.domain.logic.s022;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-import com.swontech.s02.domain.dto.comm.ResponseDto;
+import com.swontech.s02.domain.dto.comm.CustomResponse;
 import com.swontech.s02.domain.spec.s022.S0221A0030Spec;
 import com.swontech.s02.domain.store.s022.S0221A0030Store;
 import com.swontech.s02.domain.vo.s022.S0221A0030Vo;
@@ -13,8 +13,8 @@ import org.springframework.http.ResponseEntity;
 
 public class S0221A0030Logic implements S0221A0030Spec {
     private final S0221A0030Store s0221A0030Store;
-    private final ResponseDto response;
-    public S0221A0030Logic(S0221A0030Store s0221A0030Store, ResponseDto response) {
+    private final CustomResponse response;
+    public S0221A0030Logic(S0221A0030Store s0221A0030Store, CustomResponse response) {
         this.s0221A0030Store = s0221A0030Store;
         this.response = response;
     }

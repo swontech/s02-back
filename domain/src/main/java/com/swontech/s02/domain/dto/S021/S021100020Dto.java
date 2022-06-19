@@ -12,28 +12,21 @@ public class S021100020Dto {
     @Getter
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class RegisterOrg {
+    public static class RegisterOrgReqDto {
         @NotNull
         private String orgName;
-
         @NotBlank
         private String zipCode;
-
         @NotBlank
         private String address;
-
         @NotBlank
         private String detailAddress;
-
         @NotBlank
         private String firstTelNo;
-
         @NotBlank
         private String middleTelNo;
-
         @NotBlank
         private String lastTelNo;
-
         @NotBlank
         private String memberName;
 
@@ -53,7 +46,7 @@ public class S021100020Dto {
     @Getter
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class PatchOrg {
+    public static class PatchOrgReqDto {
         private int orgId;
         private String orgName;
         private String zipCode;

@@ -25,7 +25,7 @@ import java.util.Collections;
 import java.util.List;
 
 @Component
-public class ResponseDto {
+public class CustomResponse {
 
     @Getter
     @Builder

@@ -1,6 +1,6 @@
 package com.swontech.s02.domain.logic.s022;
 
-import com.swontech.s02.domain.dto.comm.ResponseDto;
+import com.swontech.s02.domain.dto.comm.CustomResponse;
 import com.swontech.s02.domain.dto.s022.S022300080Dto;
 import com.swontech.s02.domain.spec.s022.S022300080Spec;
 import com.swontech.s02.domain.store.s022.S022300080Store;
@@ -11,14 +11,12 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Slf4j
 public class S022300080Logic implements S022300080Spec {
-    private final ResponseDto response;
+    private final CustomResponse response;
     private final S022300080Store s022300080Store;
-    public S022300080Logic(ResponseDto response, S022300080Store s022300080Store) {
+    public S022300080Logic(CustomResponse response, S022300080Store s022300080Store) {
         this.response = response;
         this.s022300080Store = s022300080Store;
     }

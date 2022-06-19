@@ -27,20 +27,20 @@ public class S021100020Controller {
 
     @Operation(summary = "단체 신규 등록")
     @PostMapping("/org")
-    public ResponseEntity<?> registerOrg(final @Valid @RequestBody S021100020Dto.RegisterOrg reqDto) {
+    public ResponseEntity<?> registerOrg(final @Valid @RequestBody S021100020Dto.RegisterOrgReqDto reqDto) {
         return s021100020Spec.registerOrg(reqDto);
     }
 
     @Operation(summary = "단체 정보 조회", description = "단체 정보를 수정하기 위해 기등록된 단체 정보를 조회한다.")
     @GetMapping("/org")
-    public ResponseEntity<?> retrieveOrg(@RequestParam("org-id")int orgId) {
+    public ResponseEntity<?> retrieveOrg(@RequestParam("orgId")int orgId) {
         return s021100020Spec.retrieveOrg(orgId);
 
     }
 
     @Operation(summary = "단체 정보 수정", description = "기등록된 단체 정보를 수정한다.")
     @PostMapping("/patch-org")
-    public ResponseEntity<?> patchOrg() {
+    public ResponseEntity<?> patchOrg(final @Valid @RequestBody S021100020Dto.PatchOrgReqDto reqDto) {
         return null;
     }
 }

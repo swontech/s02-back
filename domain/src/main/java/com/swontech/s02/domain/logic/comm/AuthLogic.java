@@ -2,7 +2,7 @@ package com.swontech.s02.domain.logic.comm;
 
 import com.swontech.s02.domain.common.security.JwtTokenProvider;
 import com.swontech.s02.domain.dto.comm.AuthDto;
-import com.swontech.s02.domain.dto.comm.ResponseDto;
+import com.swontech.s02.domain.dto.comm.CustomResponse;
 import com.swontech.s02.domain.spec.comm.AuthSpec;
 import com.swontech.s02.domain.store.comm.AuthRedisStore;
 import org.springframework.http.HttpStatus;
@@ -13,9 +13,9 @@ import org.springframework.util.ObjectUtils;
 public class AuthLogic implements AuthSpec {
     private final JwtTokenProvider jwtTokenProvider;
     private final AuthRedisStore authRedisStore;
-    private final ResponseDto responseDto;
+    private final CustomResponse responseDto;
 
-    public AuthLogic(JwtTokenProvider jwtTokenProvider, AuthRedisStore authRedisStore, ResponseDto responseDto) {
+    public AuthLogic(JwtTokenProvider jwtTokenProvider, AuthRedisStore authRedisStore, CustomResponse responseDto) {
         this.jwtTokenProvider = jwtTokenProvider;
         this.authRedisStore = authRedisStore;
         this.responseDto = responseDto;

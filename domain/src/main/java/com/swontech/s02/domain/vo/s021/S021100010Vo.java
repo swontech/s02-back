@@ -10,17 +10,14 @@ public class S021100010Vo {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class SelectOrgListVo {
-        // 단체명
         private String orgName;
-        // 대표자 이름
         private String memberName;
     }
 
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class DeleteOrgListVo {
-        // 단체 ID
+    public static class UpdateOrgListVo {
         private String orgId;
     }
 }

@@ -2,5 +2,29 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="S021100010">
+    <select id="selectOrgList" parameterType="com.swontech.s02.domain.vo.s021.S021100010Vo$SelectOrgListVo" resultType="com.swontech.s02.domain.dto.s021.S021100010Dto$OrgListResponse">
+        SELECT  ORG010.ORG_ID,
+                ORG010.ORG_NAME,
+                ORG010.TEL_NO,
+                MEM010.MEMBER_NAME,
+                MEM010.EMAIL,
+                (SELECT COUNT(MEMBER_ID)
+                FROM    tb_s020.tb_s020_member010 TB
+                WHERE   TB.ORG_ID = ORG010.ORG_ID) AS MEMBER_CNT
+        FROM    tb_s020.tb_s020_org010 ORG010,
+                tb_s020.tb_s020_member010 MEM010
+        WHERE   ORG010.ORG_ID = MEM010.ORG_ID
+        AND     MEM010.MEMBER_TP = 'R'
+        AND     ORG010.DATA_END_STATUS IS NULL
+        AND     ORG010.ORG_NAME LIKE CONCAT('%', #{orgName}, '%')
+        AND     MEM010.MEMBER_NAME LIKE CONCAT('%', #{memberName}, '%')
+    </select>
 
+    <update id="updateOrgStatus" parameterType="java.lang.Integer">
+        UPDATE  tb_s020.tb_s020_org010
+        SET     DATA_END_STATUS = '*',
+                DATA_END_PROGRAM_ID = 'S021100010',
+                DATA_END_TIMESTAMP = SYSDATE()
+        WHERE   ORG_ID = #{orgId}
+    </update>
 </mapper>

@@ -64,6 +64,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                  */
                 .and()
                 .authorizeRequests()
+//                    .antMatchers("/rest/v1/s021200010/**").permitAll()
                 // 허용 url
 //                .antMatchers("/rest/v1/s021200010/**", "/rest/v1/s021100020/**", "/rest/v1/s022300050/**").permitAll()
 //                .antMatchers("/rest/v1/s021200020/log-in").permitAll()

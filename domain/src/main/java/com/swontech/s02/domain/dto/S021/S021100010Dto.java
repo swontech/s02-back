@@ -12,14 +12,12 @@ public class S021100010Dto {
     @Builder
     @Getter
     @AllArgsConstructor
-    public static class RegisterOrg {
-
-    }
-
-    @Builder
-    @Getter
-    @AllArgsConstructor
-    public static class Org {
-
+    public static class OrgListResponse {
+        private int orgId;
+        private String orgName;
+        private String telNo;
+        private String memberName;
+        private String email;
+        private String memberCnt;
     }
 }

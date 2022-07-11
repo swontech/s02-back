@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="S0221A0060">
+    <select id="selectEventCost" parameterType="java.lang.Integer" resultType="com.swontech.s02.domain.dto.s022.S0221A0060Dto$SelectEventCostResponse">
+        SELECT  EVENT030.EVENT_USE_ID,
+                EVENT030.EVENT_ID,
+                EVENT030.EVENT_USER_ID,
+                EVENT030.USED_DATE,
+                EVENT030.USE_AMOUNT,
+                EVENT030.USE_COMMENT,
+                EVENT030.USE_RECEIPT_ID,
+                EVENT030.USE_PRO_STATUS,
+                EVENT030.USE_SUBJECT
+        FROM   tb_s020.tb_s020_event030 EVENT030
+        WHERE  EVENT_USE_ID = #{eventUseId}
+    </select>
+
+    <update id="updateEventCost" parameterType="com.swontech.s02.domain.vo.s022.S0221A0060Vo$UpdateEventCostVo">
+        UPDATE
+            tb_s020.tb_s020_event030
+        SET
+            EVENT_ID = #{eventId},
+            EVENT_USER_ID = #{eventUserId},
+            USED_DATE = STR_TO_DATE(#{usedDate}, '%Y-%m-%d'),
+            USE_AMOUNT = #{useAmount},
+            USE_COMMENT = #{useComment},
+            USE_RECEIPT_ID = #{useReceiptId},
+            USE_PRO_STATUS = #{useProStatus},
+            USE_SUBJECT = #{useSubject},
+            UPDATE_TIMESTAMP = SYSDATE(),
+            UPDATE_PROGRAM_ID = 'S0221A0060'
+        WHERE
+            EVENT_USE_ID = #{eventUseId}
+    </update>
+
+    <insert id="insertEventCost" parameterType="com.swontech.s02.domain.vo.s022.S0221A0060Vo$InsertEventCostVo">
+        INSERT INTO tb_s020.tb_s020_event030 (
+            EVENT_USE_ID,
+            EVENT_ID,
+            EVENT_USER_ID,
+            USED_DATE,
+            USE_AMOUNT,
+            USE_COMMENT,
+            USE_RECEIPT_ID,
+            USE_PRO_STATUS,
+            USE_SUBJECT,
+            CREATE_TIMESTAMP,
+            CREATE_PROGRAM_ID
+        ) VALUES (
+            NEXTVAL(tb_s020.sq_s020_event010),
+            #{eventId},
+            #{eventUserId},
+            STR_TO_DATE(#{usedDate}, '%Y-%m-%d'),
+            #{useAmount},
+            #{useComment},
+            #{useReceiptId},
+            #{useProStatus},
+            #{useSubject},
+            SYSDATE(),
+            'S0221A0060'
+        )
+    </insert>
+
+    <delete id="deleteEventCost" parameterType="java.lang.Integer">
+        DELETE FROM tb_s020.tb_s020_event030 WHERE EVENT_USE_ID = #{eventUseId}
+    </delete>
+</mapper>

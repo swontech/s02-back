@@ -1,5 +1,6 @@
 package com.swontech.s02.domain.dto.s021;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import lombok.*;
 
 import javax.validation.constraints.*;
@@ -64,18 +65,15 @@ public class S021100020Dto {
     @Setter
     @NoArgsConstructor
     @AllArgsConstructor
+    @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
     public static class OrgDetailInfo {
-        private String orgId;
+        private Integer orgId;
         private String orgName;
         private String zipCode;
         private String address;
         private String detailAddress;
-        private String firstTelNo;
-        private String middleTelNo;
-        private String lastTelNo;
-        private String firstHpNo;
-        private String middleHpNo;
-        private String lastHpNo;
+        private String telNo;
+        private String hpNo;
         private String email;
         private String memberTp;
     }

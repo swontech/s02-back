@@ -83,9 +83,7 @@
                         A.ZIP_CODE,
                         A.ADDRESS,
                         A.DETAIL_ADDRESS,
-                        SUBSTRING_INDEX(A.TEL_NO, '-', 1) AS FRIST_TEL_NO,
-                        SUBSTRING_INDEX(SUBSTRING_INDEX(A.TEL_NO, '-', 2), '-', -1) AS MIDDLE_TEL_NO,
-                        SUBSTRING_INDEX(A.TEL_NO, '-', -1) AS LAST_TEL_NO
+                        A.TEL_NO
                 FROM 	tb_s020_org010 A,
                         PARAM
                 WHERE 	A.ORG_ID = PARAM.ORG_ID
@@ -97,9 +95,7 @@
                         B.MEMBER_ID,
                         B.MEMBER_NAME,
                         B.EMAIL,
-                        SUBSTRING_INDEX(B.HP_NO, '-', 1) AS FIRST_HP_NO,
-                        SUBSTRING_INDEX(SUBSTRING_INDEX(B.HP_NO, '-', 2), '-', -1) AS MIDDLE_HP_NO,
-                        SUBSTRING_INDEX(B.HP_NO, '-', -1) AS LAST_HP_NO,
+                        B.HP_NO,
                         B.MEMBER_TP
                 FROM	ORG A,
                         tb_s020_member010 B
@@ -117,7 +113,6 @@
         INNER JOIN
             tb_s020_member010 MEMBER010 ON ORG010.ORG_ID = MEMBER010.ORG_ID
         SET
-
             ORG010.ORG_NAME = #{orgName},
             ORG010.ZIP_CODE = #{zipCode},
             ORG010.ADDRESS = #{address},

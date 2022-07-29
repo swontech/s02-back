@@ -29,6 +29,6 @@ public class S0221A0060Repository implements S0221A0060Store {
 
     @Override
     public int deleteEventCost(int eventUseId) {
-        return sqlSessionTemplate.delete("S0221A0060.deleteEventCost", eventUseId);
+        return sqlSessionTemplate.update("S0221A0060.deleteEventCost", eventUseId);
     }
 }

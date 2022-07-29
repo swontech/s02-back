@@ -59,7 +59,11 @@
         )
     </insert>
 
-    <delete id="deleteEventCost" parameterType="java.lang.Integer">
-        DELETE FROM tb_s020.tb_s020_event030 WHERE EVENT_USE_ID = #{eventUseId}
-    </delete>
+    <update id="deleteEventCost" parameterType="java.lang.Integer">
+        UPDATE tb_s020.tb_s020_event030 SET
+            UPDATE_TIMESTAMP = SYSDATE(),
+            UPDATE_PROGRAM_ID = 'S0221A0060',
+            USE_PRO_STATUS = 'F'
+        WHERE EVENT_USE_ID = #{eventUseId}
+    </update>
 </mapper>

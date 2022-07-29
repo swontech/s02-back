@@ -3,7 +3,6 @@ package com.swontech.s02.client.controller.s022;
 import com.swontech.s02.domain.dto.s022.S0221A0060Dto;
 import com.swontech.s02.domain.spec.s022.S0221A0060Spec;
 import org.springframework.http.ResponseEntity;
-import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

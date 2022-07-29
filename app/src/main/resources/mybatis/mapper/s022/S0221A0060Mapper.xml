@@ -26,7 +26,6 @@
             USE_AMOUNT = #{useAmount},
             USE_COMMENT = #{useComment},
             USE_RECEIPT_ID = #{useReceiptId},
-            USE_PRO_STATUS = #{useProStatus},
             USE_SUBJECT = #{useSubject},
             UPDATE_TIMESTAMP = SYSDATE(),
             UPDATE_PROGRAM_ID = 'S0221A0060'
@@ -43,7 +42,6 @@
             USE_AMOUNT,
             USE_COMMENT,
             USE_RECEIPT_ID,
-            USE_PRO_STATUS,
             USE_SUBJECT,
             CREATE_TIMESTAMP,
             CREATE_PROGRAM_ID
@@ -55,7 +53,6 @@
             #{useAmount},
             #{useComment},
             #{useReceiptId},
-            #{useProStatus},
             #{useSubject},
             SYSDATE(),
             'S0221A0060'

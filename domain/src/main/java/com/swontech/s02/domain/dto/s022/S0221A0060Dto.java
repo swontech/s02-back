@@ -16,7 +16,6 @@ public class S0221A0060Dto {
         private int useAmount;
         private String useReceiptId;
         private String useComment;
-        private String useProStatus;
     }
 
     @Getter
@@ -29,7 +28,6 @@ public class S0221A0060Dto {
         private int useAmount;
         private String useReceiptId;
         private String useComment;
-        private String useProStatus;
     }
 
     @Getter

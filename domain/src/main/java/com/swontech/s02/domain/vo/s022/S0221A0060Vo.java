@@ -14,7 +14,6 @@ public class S0221A0060Vo {
         private int useAmount;
         private String useReceiptId;
         private String useComment;
-        private String useProStatus;
     }
 
     @Builder
@@ -26,7 +25,6 @@ public class S0221A0060Vo {
         private int useAmount;
         private String useReceiptId;
         private String useComment;
-        private String useProStatus;
     }
 
 }

@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
+import java.util.Map;
 
 public class S0221A0060Logic implements S0221A0060Spec {
     private final S0221A0060Store s0221A0060Store;
@@ -44,6 +45,23 @@ public class S0221A0060Logic implements S0221A0060Spec {
 
     @Override
     public ResponseEntity<?> insertEventCost(S0221A0060Dto.InsertEventCostDto eventCostDto) {
+        String useProStatus = "";
+        Integer payCurrentStep = null;
+        Integer eventPayDept = null;
+
+        Map<String, Object> payInfo = s0221A0060Store.selectPayInfo(eventCostDto.getEventId());
+
+        eventPayDept = (int)payInfo.get("EVENT_PAY_DEPT");
+
+        String payFlag = (String)payInfo.get("PAY_FLAG");
+        if("N".equals(payFlag)) {
+            useProStatus = "C";
+            payCurrentStep = null;
+        } else if("Y".equals(payFlag)) {
+            useProStatus = "A";
+            payCurrentStep = 1;
+        }
+
         int result = s0221A0060Store.insertEventCost(S0221A0060Vo.InsertEventCostVo
                 .builder()
                         .eventId(eventCostDto.getEventId())
@@ -52,7 +70,11 @@ public class S0221A0060Logic implements S0221A0060Spec {
                         .useAmount(eventCostDto.getUseAmount())
                         .useComment(eventCostDto.getUseComment())
                         .useReceiptId(eventCostDto.getUseReceiptId())
+                        .useReceiptName(eventCostDto.getUseReceiptName())
                         .useSubject(eventCostDto.getUseSubject())
+                        .useProStatus(useProStatus)
+                        .payStepCnt(eventPayDept)
+                        .payCurrentStep(payCurrentStep)
                 .build()
         );
         if(result > 0) {

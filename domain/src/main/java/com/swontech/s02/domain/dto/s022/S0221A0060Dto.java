@@ -15,6 +15,7 @@ public class S0221A0060Dto {
         private String usedDate;
         private int useAmount;
         private String useReceiptId;
+        private String useReceiptName;
         private String useComment;
     }
 
@@ -27,6 +28,7 @@ public class S0221A0060Dto {
         private String usedDate;
         private int useAmount;
         private String useReceiptId;
+        private String useReceiptName;
         private String useComment;
     }
 

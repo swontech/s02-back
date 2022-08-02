@@ -14,5 +14,4 @@ public interface S0221A0060Spec {
     ResponseEntity<?> insertEventCost(S0221A0060Dto.InsertEventCostDto eventCostDto);
     /** 기존에 등록된 행사 비용을 삭제한다 */
     ResponseEntity<?> deleteEventCost(List<Integer> eventUseIdList);
-
 }

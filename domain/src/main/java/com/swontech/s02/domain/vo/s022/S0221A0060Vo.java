@@ -13,6 +13,7 @@ public class S0221A0060Vo {
         private String usedDate;
         private int useAmount;
         private String useReceiptId;
+        private String useReceiptName;
         private String useComment;
     }
 
@@ -24,7 +25,11 @@ public class S0221A0060Vo {
         private String usedDate;
         private int useAmount;
         private String useReceiptId;
+        private String useReceiptName;
         private String useComment;
+        private String useProStatus;
+        private int payStepCnt;
+        private int payCurrentStep;
     }
 
 }

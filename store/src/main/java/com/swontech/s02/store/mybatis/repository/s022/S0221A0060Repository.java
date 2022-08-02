@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.util.Map;
+
 @Repository
 @RequiredArgsConstructor
 public class S0221A0060Repository implements S0221A0060Store {
@@ -30,5 +32,10 @@ public class S0221A0060Repository implements S0221A0060Store {
     @Override
     public int deleteEventCost(int eventUseId) {
         return sqlSessionTemplate.update("S0221A0060.deleteEventCost", eventUseId);
+    }
+
+    @Override
+    public Map<String, Object> selectPayInfo(int eventId) {
+        return sqlSessionTemplate.selectOne("S0221A0060.selectPayInfo", eventId);
     }
 }

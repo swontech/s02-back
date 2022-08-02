@@ -42,7 +42,11 @@
             USE_AMOUNT,
             USE_COMMENT,
             USE_RECEIPT_ID,
+            USE_RECEIPT_NAME,
             USE_SUBJECT,
+            PAY_STEP_CNT,
+            PAY_CURRENT_STEP,
+            USE_PRO_STATUS,
             CREATE_TIMESTAMP,
             CREATE_PROGRAM_ID
         ) VALUES (
@@ -53,7 +57,11 @@
             #{useAmount},
             #{useComment},
             #{useReceiptId},
+            #{useReceiptName},
             #{useSubject},
+            #{payStepCnt},
+            #{payCurrentStep},
+            #{useProStatus},
             SYSDATE(),
             'S0221A0060'
         )

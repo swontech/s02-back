@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 public class S0221A0060Dto {
-
     @Getter
     @Setter
     public static class UpdateEventCostDto {
@@ -35,6 +34,7 @@ public class S0221A0060Dto {
     @Getter
     @Setter
     public static class SelectEventCostResponse {
+        private String payFlag;
         private int eventUseId;
         private int eventId;
         private int eventUserId;

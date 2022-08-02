@@ -47,12 +47,15 @@ public class S0221A0060Logic implements S0221A0060Spec {
     public ResponseEntity<?> insertEventCost(S0221A0060Dto.InsertEventCostDto eventCostDto) {
         String useProStatus = "";
         Integer payCurrentStep = null;
-        Integer eventPayDept = null;
+        Integer eventPayDept = 0;
 
         Map<String, Object> payInfo = s0221A0060Store.selectPayInfo(eventCostDto.getEventId());
+        if(payInfo == null) {
+            return response.fail("비용요청등록이 가능한 event가 아니거나 등록된 event가 없습니다.", HttpStatus.BAD_REQUEST);
+        }
+
 
         eventPayDept = (int)payInfo.get("EVENT_PAY_DEPT");
-
         String payFlag = (String)payInfo.get("PAY_FLAG");
         if("N".equals(payFlag)) {
             useProStatus = "C";

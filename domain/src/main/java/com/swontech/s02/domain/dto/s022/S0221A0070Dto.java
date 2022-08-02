@@ -6,11 +6,21 @@ public class S0221A0070Dto {
 
     @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
     public static class CostReqResponse {
+        private int eventId;
+        private String eventNm;
+        private int eventPayUserId;
         private int eventUseId;
-        private String useSubject;
+        private int eventUserId;
         private String usedDate;
         private int useAmount;
+        private String useComment;
+        private String useReceiptId;
         private String useProStatus;
-        private String payId;
+        private String useSubject;
+        private int payStepCnt;
+        private int payCurrentStep;
+        private String useProStatusNm;
+        private String memberName;
+        private String userMemberName;
     }
 }

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="common">
+    <select id="selectCodeList" resultType="com.swontech.s02.domain.dto.comm.CommonDto$SelectCodeResponse" parameterType="com.swontech.s02.domain.dto.comm.CommonDto$SelectCodeResponse">
+        SELECT 	CD_V,
+                CD_V_MEANING
+        FROM 	tb_s020.tb_s020_code010
+        WHERE 	CATEGORY = #{category}
+        AND 	CD_TP = #{cdTp}
+        AND 	ORG_ID = #{orgId}
+    </select>
+</mapper>

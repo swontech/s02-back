@@ -19,8 +19,8 @@ public class S0221A0080Repository implements S0221A0080Store {
 
 
     @Override
-    public Map<String, Object> selectCostReqInfo(int eventUseId) {
-        return sqlSessionTemplate.selectOne("S0221A0080.selectCostReqInfo", eventUseId);
+    public S0221A0080Dto.SelectCostReqCurrInfoDto selectCostReqCurrInfo(int eventUseId) {
+        return sqlSessionTemplate.selectOne("S0221A0080.selectCostReqCurrInfo", eventUseId);
     }
 
     @Override

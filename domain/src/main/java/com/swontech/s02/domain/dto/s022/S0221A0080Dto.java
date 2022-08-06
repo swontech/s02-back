@@ -6,9 +6,16 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
-import java.util.Map;
 
 public class S0221A0080Dto {
+
+    @Setter
+    @Getter
+    public static class SelectCostReqCurrInfoDto {
+        private int payStepCnt;
+        private int payCurrentStep;
+        private String useProStatus;
+    }
 
     @Setter
     @Getter

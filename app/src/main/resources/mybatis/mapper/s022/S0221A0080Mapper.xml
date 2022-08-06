@@ -2,6 +2,14 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="S0221A0080">
+    <select id="selectCostReqCurrInfo" resultType="com.swontech.s02.domain.dto.s022.S0221A0080Dto$SelectCostReqCurrInfoDto" parameterType="java.lang.Integer">
+        SELECT	PAY_CURRENT_STEP,
+                USE_PRO_STATUS,
+                PAY_STEP_CNT
+        FROM 	tb_s020.tb_s020_event030
+        WHERE   EVENT_USE_ID = #{eventUseId}
+    </select>
+
     <insert id="insertCostReqProcess" parameterType="com.swontech.s02.domain.vo.s022.S0221A0080Vo$InsertCostReqProcessVo">
         INSERT INTO tb_s020.tb_s020_event040 (
             EVENT_USE_PAY_ID,
@@ -36,14 +44,6 @@
             PAY_CURRENT_STEP = #{payCurrentStep}
         WHERE EVENT_USE_ID = #{eventUseId}
     </update>
-
-    <select id="selectCostReqInfo" resultType="java.util.Map" parameterType="java.lang.Integer">
-        SELECT	PAY_CURRENT_STEP,
-                USE_PRO_STATUS,
-                PAY_STEP_CNT
-        FROM 	tb_s020.tb_s020_event030
-        WHERE   EVENT_USE_ID = #{eventUseId}
-    </select>
 
     <select id="selectCostReqDetailHeader" parameterType="java.lang.Integer" resultType="com.swontech.s02.domain.dto.s022.S0221A0080Dto$CostReqDetailHeader">
         SELECT	EVENT010.EVENT_ID,				-- 행사ID

@@ -7,8 +7,9 @@ import java.util.List;
 import java.util.Map;
 
 public interface S0221A0080Store {
-    List<S0221A0080Dto.RetrieveCostReqDetailResponse> selectCostReqDetail(int eventUseId);
     Map<String, Object> selectCostReqInfo(int eventUseId);
+    S0221A0080Dto.CostReqDetailHeader selectCostReqDetailHeader(int eventUseId);
+    List<S0221A0080Dto.CostReqDetailTail> selectCostReqDetailTail(int eventUseId);
     int insertCostReqProcess(S0221A0080Vo.InsertCostReqProcessVo insertCostReqProcessVo);
     int updateCostReqProcess(S0221A0080Vo.UpdateCostReqProcessVo updateCostReqProcessVo);
 }

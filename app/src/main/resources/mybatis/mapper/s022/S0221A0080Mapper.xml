@@ -45,8 +45,8 @@
         WHERE   EVENT_USE_ID = #{eventUseId}
     </select>
 
-    <select id="selectCostReqDetail" parameterType="java.lang.Integer" resultType="com.swontech.s02.domain.dto.s022.S0221A0080Dto$RetrieveCostReqDetailResponse">
-        SELECT 	EVENT010.EVENT_ID,				-- 행사ID
+    <select id="selectCostReqDetailHeader" parameterType="java.lang.Integer" resultType="com.swontech.s02.domain.dto.s022.S0221A0080Dto$CostReqDetailHeader">
+        SELECT	EVENT010.EVENT_ID,				-- 행사ID
                 EVENT010.EVENT_NM,				-- 행사명
                 EVENT010.PAY_FLAG,				-- 행사 비용 사용 결제여부
                 EVENT030.EVENT_USE_ID,			-- 행사 비용 사용ID
@@ -59,7 +59,16 @@
                 EVENT030.USE_SUBJECT,			-- 행사 비용 사용 제목
                 EVENT030.PAY_STEP_CNT,			-- 행사 비용 사용 결제단계
                 EVENT030.PAY_CURRENT_STEP,		-- 행사 비용 사용 현재 결제단계
-                EVENT030.USE_RECEIPT_NAME,		-- 행사 비용 사용 영수증첨부파일명
+                EVENT030.USE_RECEIPT_NAME		-- 행사 비용 사용 영수증첨부파일명
+        FROM 	tb_s020.tb_s020_event010 EVENT010,
+                tb_s020.tb_s020_event030 EVENT030
+        WHERE 	EVENT010.EVENT_ID = EVENT030.EVENT_ID
+        AND 	EVENT030.EVENT_USE_ID = #{eventUseId}
+    </select>
+
+    <select id="selectCostReqDetailTail" parameterType="java.lang.Integer" resultType="com.swontech.s02.domain.dto.s022.S0221A0080Dto$CostReqDetailTail">
+        SELECT 	EVENT030.EVENT_ID,              -- 행사 ID
+                EVENT030.EVENT_USE_ID,			-- 행사 비용 사용ID
                 EVENT040.EVENT_USE_PAY_ID,		-- 행사 비용 사용 결제ID
                 EVENT040.PAY_STEP,				-- 행사 비용 사용 결제 단계
                 EVENT040.PAY_MEMBER_ID,			-- 행사 비용 사용 결제자 ID
@@ -73,12 +82,14 @@
                 WHERE	EVENT030.EVENT_USER_ID= MEMBER010.MEMBER_ID) USER_NAME,
 
                 -- 행상비용사용진행상태명
-                (SELECT CD_V_MEANING
-                FROM	tb_s020.tb_s020_code010
-                WHERE	CD_TP = 'USE_PRO_STATUS'
-                AND		CD_V = EVENT030.USE_PRO_STATUS
-                AND		CATEGORY = '000'
-                AND		ORG_ID = EVENT010.ORG_ID) USE_PRO_STATUS_NM,
+                (SELECT CODE010.CD_V_MEANING
+                FROM	tb_s020.tb_s020_code010 CODE010
+                WHERE	CODE010.CD_TP = 'USE_PRO_STATUS'
+                AND		CODE010.CD_V = EVENT030.USE_PRO_STATUS
+                AND		CODE010.CATEGORY = '000'
+                AND		CODE010.ORG_ID = (SELECT 	ORG_ID
+                                            FROM 	tb_s020.tb_s020_event010 EVENT010
+                                           WHERE 	EVENT010.EVENT_ID = EVENT030.EVENT_ID)) USE_PRO_STATUS_NM,
 
                 -- 행사 비용 사용 결제자명
                 (SELECT MEMBER010.MEMBER_NAME
@@ -88,7 +99,7 @@
                 -- 행사 비용 사용 현재단계 결제자명
                 (SELECT MEMBER010.MEMBER_NAME
                 FROM	tb_s020.tb_s020_event020 EVENT020,
-                tb_s020.tb_s020_member010 MEMBER010
+                        tb_s020.tb_s020_member010 MEMBER010
                 WHERE	EVENT030.PAY_CURRENT_STEP = EVENT020.EVENT_PAY_LEVEL
                 AND 	EVENT030.EVENT_ID = EVENT020.EVENT_ID
                 AND		EVENT020.EVENT_PAY_USER_ID = MEMBER010.MEMBER_ID) CURRENT_PAY_NAME,
@@ -96,12 +107,12 @@
                 -- 행사 비용 사용 결제결과코드명
                 CASE 	WHEN EVENT040.PAY_RESULT_FLAG = 'Y' THEN '승인'
                         WHEN EVENT040.PAY_RESULT_FLAG = 'N' THEN '반려'
+                        ELSE ''
                         END	 PAY_RESULT_FLAG_NM
-
-        FROM 	tb_s020.tb_s020_event010 EVENT010,
-                tb_s020.tb_s020_event030 EVENT030 LEFT OUTER JOIN
-                tb_s020.tb_s020_event040 EVENT040 ON EVENT030.EVENT_USE_ID = EVENT040.EVENT_USE_ID
-        WHERE 	EVENT010.EVENT_ID = EVENT030.EVENT_ID
+        FROM 	tb_s020.tb_s020_event030 EVENT030,
+                tb_s020.tb_s020_event040 EVENT040
+        WHERE 	EVENT030.EVENT_USE_ID = EVENT040.EVENT_USE_ID
         AND 	EVENT030.EVENT_USE_ID = #{eventUseId}
+        ORDER BY EVENT_USE_PAY_ID
     </select>
 </mapper>

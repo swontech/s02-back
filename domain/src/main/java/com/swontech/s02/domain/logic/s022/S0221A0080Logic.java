@@ -8,6 +8,8 @@ import com.swontech.s02.domain.vo.s022.S0221A0080Vo;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class S0221A0080Logic implements S0221A0080Spec {
@@ -20,7 +22,17 @@ public class S0221A0080Logic implements S0221A0080Spec {
 
     @Override
     public ResponseEntity<?> retrieveCostReqDetail(int eventUseId) {
-        return response.success(s0221A0080Store.selectCostReqDetail(eventUseId));
+        S0221A0080Dto.CostReqDetailHeader header = s0221A0080Store.selectCostReqDetailHeader(eventUseId);
+        if(header == null) {
+            return response.fail("등록된 행사비용 사용 내역이 없습니다.", HttpStatus.BAD_REQUEST);
+        }
+        return response.success(
+            S0221A0080Dto.CostReqDetailResponse
+                    .builder()
+                        .header(header)
+                        .detail(s0221A0080Store.selectCostReqDetailTail(eventUseId))
+                    .build()
+        );
     }
 
     @Override
@@ -50,7 +62,7 @@ public class S0221A0080Logic implements S0221A0080Spec {
         int payStepCnt = (int)costReqInfo.get("PAY_STEP_CNT");
         String useProStatus = (String)costReqInfo.get("USE_PRO_STATUS");
 
-        String paramUseProStatus = null;
+        String paramUseProStatus = useProStatus;
         int updateResult = 0;
 
         /** 1.승인처리인 경우 */

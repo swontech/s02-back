@@ -1,8 +1,12 @@
 package com.swontech.s02.domain.dto.s022;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
+import java.util.Map;
 
 public class S0221A0080Dto {
 
@@ -16,8 +20,15 @@ public class S0221A0080Dto {
         private String payComment;
     }
 
+    @Builder
     @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
-    public static class RetrieveCostReqDetailResponse {
+    public static class CostReqDetailResponse {
+        private CostReqDetailHeader header;
+        private List<CostReqDetailTail> detail;
+    }
+
+    @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
+    public static class CostReqDetailHeader {
         private int eventId;
         private String eventNm;
         private String payFlag;
@@ -32,6 +43,12 @@ public class S0221A0080Dto {
         private int payStepCnt;
         private int payCurrentStep;
         private String useReceiptName;
+    }
+
+    @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
+    public static class CostReqDetailTail {
+        private int eventId;
+        private int eventUseId;
         private int eventUsePayId;
         private int payStep;
         private int payMemberId;
@@ -44,5 +61,4 @@ public class S0221A0080Dto {
         private String currentPayName;
         private String payResultFlagNm;
     }
-
 }

@@ -29,7 +29,6 @@ public class S0221A0060Vo {
         private String useComment;
         private String useProStatus;
         private int payStepCnt;
-        private int payCurrentStep;
+        private Integer payCurrentStep;
     }
-
 }

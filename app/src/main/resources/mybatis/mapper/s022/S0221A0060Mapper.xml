@@ -2,15 +2,16 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="S0221A0060">
-    <select id="selectPayInfo" parameterType="java.lang.Integer" resultType="java.util.Map">
-        SELECT      EVENT010.PAY_FLAG,
-                    IFNULL(MAX(EVENT020.EVENT_PAY_LEVEL), 1) -1 EVENT_PAY_DEPT
-        FROM        tb_s020.tb_s020_event010 EVENT010 LEFT OUTER JOIN tb_s020.tb_s020_event020 EVENT020
-        ON          EVENT010.EVENT_ID = EVENT020.EVENT_ID
-        WHERE       EVENT010.EVENT_ID = #{eventId}
+    <select id="selectPayInfo" parameterType="java.lang.Integer" resultType="com.swontech.s02.domain.dto.s022.S0221A0060Dto$PayInfo">
+        SELECT   EVENT010.PAY_FLAG,
+                ifnull(max(EVENT020.EVENT_PAY_LEVEL), 1)-1 EVENT_PAY_DEPT
+        FROM   tb_s020.tb_s020_event010 EVENT010
+                left outer join  tb_s020.tb_s020_event020 EVENT020
+        on    EVENT010.EVENT_ID = EVENT020.EVENT_ID
+        WHERE      EVENT010.EVENT_ID = 4
         GROUP BY    EVENT010.EVENT_ID,
-                    EVENT010.PAY_FLAG,
-                    EVENT010.EVENT_BUDGET_AMOUNT
+        EVENT010.PAY_FLAG,
+        EVENT010.EVENT_BUDGET_AMOUNT ;
     </select>
     <select id="selectEventCost" parameterType="java.lang.Integer" resultType="com.swontech.s02.domain.dto.s022.S0221A0060Dto$SelectEventCostResponse">
         SELECT  EVENT010.PAY_FLAG,

@@ -1,9 +1,16 @@
 package com.swontech.s02.domain.dto.s022;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import lombok.Getter;
 import lombok.Setter;
 
 public class S0221A0060Dto {
+    @Getter
+    public static class PayInfo {
+        private String payFlag;
+        private int eventPayDept;
+    }
+
     @Getter
     @Setter
     public static class UpdateEventCostDto {
@@ -33,6 +40,7 @@ public class S0221A0060Dto {
 
     @Getter
     @Setter
+    @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
     public static class SelectEventCostResponse {
         private String payFlag;
         private int eventUseId;

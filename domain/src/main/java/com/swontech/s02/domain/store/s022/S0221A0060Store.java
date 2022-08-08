@@ -15,5 +15,5 @@ public interface S0221A0060Store {
     /** 기존에 등록된 행사정보를 삭제한다. */
     int deleteEventCost(int eventUseId);
     /** 비용 등록 전 행사비용 정보를 조회한다. */
-    Map<String, Object> selectPayInfo(int eventId);
+    S0221A0060Dto.PayInfo selectPayInfo(int eventId);
 }

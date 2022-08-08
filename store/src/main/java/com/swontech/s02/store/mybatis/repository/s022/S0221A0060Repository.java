@@ -35,7 +35,7 @@ public class S0221A0060Repository implements S0221A0060Store {
     }
 
     @Override
-    public Map<String, Object> selectPayInfo(int eventId) {
+    public S0221A0060Dto.PayInfo selectPayInfo(int eventId) {
         return sqlSessionTemplate.selectOne("S0221A0060.selectPayInfo", eventId);
     }
 }

@@ -35,6 +35,11 @@ public class S0221A0060Repository implements S0221A0060Store {
     }
 
     @Override
+    public String selectAvailableFlag(int eventUseId) {
+        return sqlSessionTemplate.selectOne("S0221A0060.selectAvailableFlag", eventUseId);
+    }
+
+    @Override
     public S0221A0060Dto.PayInfo selectPayInfo(int eventId) {
         return sqlSessionTemplate.selectOne("S0221A0060.selectPayInfo", eventId);
     }

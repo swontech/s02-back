@@ -37,7 +37,7 @@
             UPDATE_TIMESTAMP,
             UPDATE_PROGRAM_ID
         ) VALUES (
-            NEXTVAL(tb_s020.sq_member_id),  -- 멤버아이디
+            NEXTVAL(tb_s020.sq_s020_member010),  -- 멤버아이디
             #{memberName},		            -- 단체명
             #{hpNo},		                -- 우편번호
             #{mobileId},	                -- 상세주소

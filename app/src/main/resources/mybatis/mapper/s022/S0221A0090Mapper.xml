@@ -16,7 +16,7 @@
                 EVENT030.USE_SUBJECT,		-- 행사비용사용제목
                 EVENT030.PAY_STEP_CNT,		-- 행사비용사용결제총단계수
                 EVENT030.PAY_CURRENT_STEP,	-- 행사비용사용결제현재단계
-                -- 행상비용사용진행상태명
+                -- 행사비용사용진행상태명
                 (SELECT	CD_V_MEANING
                 FROM	tb_s020.tb_s020_code010
                 WHERE	CD_TP = 'USE_PRO_STATUS'

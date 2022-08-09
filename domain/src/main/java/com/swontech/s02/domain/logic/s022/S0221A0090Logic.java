@@ -1,7 +1,6 @@
 package com.swontech.s02.domain.logic.s022;
 
 import com.swontech.s02.domain.dto.comm.CustomResponse;
-import com.swontech.s02.domain.dto.s022.S0221A0090Dto;
 import com.swontech.s02.domain.spec.s022.S0221A0090Spec;
 import com.swontech.s02.domain.store.s022.S0221A0090Store;
 import com.swontech.s02.domain.vo.s022.S0221A0090Vo;

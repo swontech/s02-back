@@ -35,7 +35,7 @@
             'S0221A0080',
             SYSDATE(),
             'S0221A0080'
-        );
+        )
     </insert>
 
     <update id="updateCostReqProcess" parameterType="com.swontech.s02.domain.vo.s022.S0221A0080Vo$UpdateCostReqProcessVo">

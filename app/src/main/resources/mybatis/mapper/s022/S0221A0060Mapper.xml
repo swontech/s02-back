@@ -48,6 +48,7 @@
             USE_AMOUNT = #{useAmount},
             USE_COMMENT = #{useComment},
             USE_RECEIPT_ID = #{useReceiptId},
+            USE_RECEIPT_NAME = #{useReceiptName},
             USE_SUBJECT = #{useSubject},
             UPDATE_TIMESTAMP = SYSDATE(),
             UPDATE_PROGRAM_ID = 'S0221A0060'

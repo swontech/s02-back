@@ -36,6 +36,7 @@ public class S0221A0060Logic implements S0221A0060Spec {
                         .useAmount(eventCostDto.getUseAmount())
                         .useComment(eventCostDto.getUseComment())
                         .useReceiptId(eventCostDto.getUseReceiptId())
+                        .useReceiptName(eventCostDto.getUseReceiptName())
                         .useSubject(eventCostDto.getUseSubject())
                         .eventUseId(eventCostDto.getEventUseId())
                 .build());

@@ -25,7 +25,7 @@ public class S0221A0060Logic implements S0221A0060Spec {
 
     @Override
     public ResponseEntity<?> updateEventCost(S0221A0060Dto.UpdateEventCostDto eventCostDto) {
-        if("Y".equals(s0221A0060Store.selectAvailableFlag(eventCostDto.getEventUseId()))) {
+        if("N".equals(s0221A0060Store.selectAvailableFlag(eventCostDto.getEventUseId()))) {
             return response.success("이미 지급이 완료된 건으로 수정이 불가합니다.");
         }
         int result = s0221A0060Store.updateEventCost(S0221A0060Vo.UpdateEventCostVo

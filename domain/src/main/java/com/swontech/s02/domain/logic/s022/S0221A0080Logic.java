@@ -97,7 +97,7 @@ public class S0221A0080Logic implements S0221A0080Spec {
                     // 최종결제완료(C)로 상태를 update하지만
                     // 그렇지 않다면 결제진행상태(B)로 update한다.
                     case "A":
-                        if(payStepCnt == nextPayCurrentStep) {
+                        if(payStepCnt < nextPayCurrentStep) {
                             nextUseProStatus = "C";    // 최종 결제완료
                         } else {
                             nextUseProStatus = "B";    // 진행 중 결제완료
@@ -108,7 +108,7 @@ public class S0221A0080Logic implements S0221A0080Spec {
                     // 최종결제완료(C)로 상태를 update하지만
                     // 그렇지 않다면 결제진행상태(B)로 유지한다.
                     case "B":
-                        if(payStepCnt == nextPayCurrentStep) {
+                        if(payStepCnt < nextPayCurrentStep) {
                             nextUseProStatus = "C";                 // 최종 결제 완료
                         } else {
                             nextUseProStatus = currentUseProStatus; // 현상태로 유지
@@ -119,11 +119,7 @@ public class S0221A0080Logic implements S0221A0080Spec {
                     // 최종결제완료(C)로 상태를 update하지만
                     // 그렇지 않다면 결제진행상태(B)로 유지한다.
                     case "E":
-                        if(payStepCnt == nextPayCurrentStep) {
                             nextUseProStatus = "A";    // 비용요청
-                        } else {
-                            nextUseProStatus = "C";    // 최종결제완료
-                        }
                         break;
                     default:
                         // case C(결제완료)/D(지급완료)/F(요청취소)

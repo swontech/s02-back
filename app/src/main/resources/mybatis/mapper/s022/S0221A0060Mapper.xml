@@ -8,7 +8,7 @@
         FROM    tb_s020.tb_s020_event010 EVENT010
                 LEFT OUTER JOIN tb_s020.tb_s020_event020 EVENT020
                              ON EVENT010.EVENT_ID = EVENT020.EVENT_ID
-        WHERE       EVENT010.EVENT_ID = 4
+        WHERE       EVENT010.EVENT_ID = #{eventId}
         GROUP BY    EVENT010.EVENT_ID,
                     EVENT010.PAY_FLAG,
                     EVENT010.EVENT_BUDGET_AMOUNT

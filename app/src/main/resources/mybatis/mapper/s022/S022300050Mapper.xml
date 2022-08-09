@@ -15,7 +15,7 @@
             CREATE_TIMESTAMP,
             CREATE_PROGRAM_ID
         ) VALUES (
-            NEXTVAL(sq_event_id),
+            NEXTVAL(sq_s020_event010),
             '행사명',
             STR_TO_DATE('2022-02-05 09:00:00', <include refid="CommInc.dateFormat"></include>),
             STR_TO_DATE('2022-02-06 17:00:00', <include refid="CommInc.dateFormat"></include>),

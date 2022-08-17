@@ -56,6 +56,9 @@ project(":app") {
         implementation project(":store")
         implementation project(":core")
 
+        // guava
+        implementation group: 'com.google.guava', name: 'guava', version: '31.1-jre'
+
         // aop
         implementation 'org.springframework.boot:spring-boot-starter-aop'
 

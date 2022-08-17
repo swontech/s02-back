@@ -14,7 +14,7 @@
         WHERE   SYSDATE() BETWEEN EVENT_START_DATE AND EVENT_END_DATE
         AND     ORG_ID = #{orgId}
         <if test='eventName != null and eventName != ""'>
-        AND     EVENT_NM = #{eventName}
+        AND     EVENT_NM LIKE CONCAT('%', #{eventName}, '%')
         </if>
     </select>
 </mapper>

@@ -16,7 +16,7 @@ public class S0221A2000Controller {
     }
 
     @GetMapping("/event-list")
-    public ResponseEntity<?> retrieveEventList(@RequestParam("eventName")String eventName, @RequestParam("orgId")String orgId) {
+    public ResponseEntity<?> retrieveEventList(@RequestParam(value = "eventName", required = false)String eventName, @RequestParam("orgId")String orgId) {
         return s0221A2000Spec.retrieveEventList(eventName, orgId);
     }
 

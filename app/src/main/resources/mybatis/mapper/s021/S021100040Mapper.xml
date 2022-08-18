@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="S021100040">
+    <insert id="insertMember" parameterType="com.swontech.s02.domain.vo.s021.S021100040Vo$InsertMemberVo">
+        INSERT INTO tb_s020.tb_s020_member010 (
+            MEMBER_ID,
+            CREATE_TIMESTAMP,
+            CREATE_PROGRAM_ID,
+            UPDATE_TIMESTAMP,
+            UPDATE_PROGRAM_ID,
+            ORG_ID,
+            MEMBER_NAME,
+            BIRTH,
+            HP_NO,
+            ZIP_CODE,
+            ADDRESS,
+            DETAIL_ADDRESS,
+            EMAIL,
+            PWD,
+            MEMBER_TP,
+            ACCOUNT_NO,
+            BANK_NM
+        ) VALUES (
+            NEXTVAL(tb_s020.sq_s020_member010),
+            SYSDATE(),
+            #{createProgramId},			-- 화면 사용자 member_1d
+            SYSDATE(),
+            #{updateProgramId},			-- 화면 사용자 member_1d
+            #{orgId}, 		            -- 화면 사용자 ORG_ID
+            #{memberName},			    -- 화면 입력한 성명
+            #{birth},			        -- 화면의 생년월일
+            #{hpNo},			        -- 화면이 입력한 핸드폰번호,
+            #{zipCode},			        -- 화면의 우편번호
+            #{address},			        -- 화면의 주소
+            #{detailAddress},			-- 화면의 상세주소
+            #{email},		            -- 화면의 email주소
+            #{pwd},                     -- 초기 비밀번호
+            #{memberTp},                -- 회원구분
+            #{accountNo}, 		        -- 화면의 입력한 계좌번호
+            #{bankNm}                   -- 화면의 입력한 은행
+        )
+    </insert>
+
+    <update id="updateMemberInfo" parameterType="com.swontech.s02.domain.vo.s021.S021100040Vo$UpdateMemberInfoVo">
+        UPDATE  tb_s020.tb_s020_member010
+        SET		UPDATE_TIMESTAMP    = SYSDATE(),
+                UPDATE_PROGRAM_ID   = #{updateProgramId},		-- 프로그램ID
+                MEMBER_NAME         = #{memberName}, 			-- 화면의 성명
+                BIRTH               = #{birth},					-- 화면의 생년월일
+                HP_NO               = #{hpNo}, 				    -- 화면의 Hp 번호
+                ZIP_CODE            = #{zipCode},				-- 화면의 우편번호
+                ADDRESS             = #{address},				-- 화면의 주소
+                DETAIL_ADDRESS      = #{detailAddress},		    -- 화면의 상세주소
+                EMAIL               = #{email},					-- 화면의 e-mail
+                ACCOUNT_NO          = #{accountNo},			    -- 화면의 계좌번호
+                BANK_NM             = #{bankNm}				    -- 화면의 은행
+        WHERE   MEMBER_ID           = #{memberId}   			-- 화면 사용자ID
+    </update>
+</mapper>

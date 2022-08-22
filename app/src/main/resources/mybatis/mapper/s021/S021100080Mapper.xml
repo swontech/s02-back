@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="S021100080">
+    <select id="selectList" parameterType="com.swontech.s02.domain.vo.s021.S021100080Vo$SelectListVo" resultType="com.swontech.s02.domain.dto.s021.S021100080Dto$SelectListResponse">
+        WITH RECURSIVE CTE AS (
+            SELECT			EVENT010.EVENT_ID,
+                            EVENT010.EVENT_NM,
+                            GROUP_CONCAT(IF(EVENT020.EVENT_PAY_LEVEL = 1, EVENT020.EVENT_PAY_USER_ID, NULL)) AS PAY_LEVEL_1,
+                            GROUP_CONCAT(IF(EVENT020.EVENT_PAY_LEVEL = 1, EVENT020.EVENT_PAY_ROLE_CD, NULL)) AS PAY_NM_1,
+                            GROUP_CONCAT(IF(EVENT020.EVENT_PAY_LEVEL = 2, EVENT020.EVENT_PAY_USER_ID, NULL)) AS PAY_LEVEL_2,
+                            GROUP_CONCAT(IF(EVENT020.EVENT_PAY_LEVEL = 2, EVENT020.EVENT_PAY_ROLE_CD, NULL)) AS PAY_NM_2,
+                            GROUP_CONCAT(IF(EVENT020.EVENT_PAY_LEVEL = 3, EVENT020.EVENT_PAY_USER_ID, NULL)) AS PAY_LEVEL_3,
+                            GROUP_CONCAT(IF(EVENT020.EVENT_PAY_LEVEL = 3, EVENT020.EVENT_PAY_ROLE_CD, NULL)) AS PAY_NM_3,
+                            GROUP_CONCAT(IF(EVENT020.EVENT_PAY_LEVEL = 4, EVENT020.EVENT_PAY_USER_ID, NULL)) AS PAY_LEVEL_4,
+                            GROUP_CONCAT(IF(EVENT020.EVENT_PAY_LEVEL = 4, EVENT020.EVENT_PAY_ROLE_CD, NULL)) AS PAY_NM_4,
+                            EVENT010.EVENT_BUDGET_AMOUNT,
+                            EVENT010.EVENT_LEVEL AS LEV,
+                            EVENT010.EVENT_NM AS MENU_PATH,
+                            EVENT010.EVENT_HOST_ID,
+                            EVENT010.PAY_FLAG,
+                            EVENT010.HIGH_EVENT_ID,
+                            EVENT010.EVENT_ID AS ID_PATH
+            FROM 			tb_s020.tb_s020_event010 EVENT010
+            LEFT OUTER JOIN tb_s020.tb_s020_event020 EVENT020
+            ON 				EVENT010.EVENT_ID = EVENT020.EVENT_ID
+            WHERE 			EVENT010.ORG_ID = #{orgId}
+            AND				EVENT010.EVENT_NM LIKE CONCAT('%', #{eventNm}, '%')
+            AND				EVENT010.EVENT_LEVEL = 0
+            GROUP BY 		EVENT010.EVENT_ID,
+                            EVENT010.EVENT_NM,
+                            EVENT010.EVENT_BUDGET_AMOUNT,
+                            EVENT010.EVENT_FINAL_FLAG,
+                            EVENT010.EVENT_HOST_ID,
+                            EVENT010.EVENT_LEVEL,
+                            EVENT010.PAY_FLAG
+            UNION ALL
+
+            SELECT			EVENT010_2.EVENT_ID,
+                            EVENT010_2.EVENT_NM,
+                            NULL AS PAY_LEVEL_1,
+                            NULL AS PAY_NM_1,
+                            NULL AS PAY_LEVEL_2,
+                            NULL AS PAY_NM_2,
+                            NULL AS PAY_LEVEL_3,
+                            NULL AS PAY_NM_3,
+                            NULL AS PAY_LEVEL_4,
+                            NULL AS PAY_NM_4,
+                            EVENT010_2.EVENT_BUDGET_AMOUNT,
+                            TEMP.LEV + 1 AS LEV,
+                            CONCAT(TEMP.MENU_PATH, ' > ', EVENT010_2.EVENT_NM) AS MENU_PATH,
+                            EVENT010_2.EVENT_HOST_ID,
+                            EVENT010_2.PAY_FLAG,
+                            EVENT010_2.HIGH_EVENT_ID,
+                            CONCAT(TEMP.ID_PATH, ' > ', EVENT010_2.EVENT_ID, ' > ', TEMP.LEV + 1) ID_PATH_LEV
+            FROM			tb_s020.tb_s020_event010 EVENT010_2
+            INNER JOIN 		CTE TEMP
+            ON 				EVENT010_2.HIGH_EVENT_ID = TEMP.EVENT_ID
+        )
+
+        SELECT		EVENT_ID,													-- 행사id
+                    EVENT_NM,													-- 행사명
+                    PAY_NM_4,													-- 4Level 직책영
+                    PAY_LEVEL_4,												-- 4Level 결제자ID
+                    (SELECT MEMBER010.MEMBER_NAME
+                    FROM 	tb_s020.tb_s020_member010 MEMBER010
+                    WHERE	MEMBER010.MEMBER_ID = PAY_LEVEL_4) AS PAYER_NM_4,	-- 4Level 결제자영
+                    PAY_NM_3,													-- 3Level 직책영
+                    PAY_LEVEL_3,												-- 3Level 결제자ID
+                    (SELECT MEMBER010.MEMBER_NAME
+                    FROM 	tb_s020.tb_s020_member010 MEMBER010
+                    WHERE	MEMBER010.MEMBER_ID = PAY_LEVEL_3) AS PAYER_NM_3,	-- 3Level 결제자영
+                    PAY_NM_2,													-- 2Level 직책영
+                    PAY_LEVEL_2,												-- 2Level 결제자ID
+                    (SELECT MEMBER010.MEMBER_NAME
+                    FROM 	tb_s020.tb_s020_member010 MEMBER010
+                    WHERE	MEMBER010.MEMBER_ID = PAY_LEVEL_2) AS PAYER_NM_2,	-- 2Level 결제자영
+                    PAY_NM_1,													-- 1Level 직책영
+                    PAY_LEVEL_1,												-- 1Level 결제자ID
+                    (SELECT MEMBER010.MEMBER_NAME
+                    FROM 	tb_s020.tb_s020_member010 MEMBER010
+                    WHERE	MEMBER010.MEMBER_ID = PAY_LEVEL_1) AS PAYER_NM_1,	-- 1Level 결제자영
+                    EVENT_BUDGET_AMOUNT,										-- 예산액
+                    LEV,														-- Level
+                    MENU_PATH,													-- menu path
+                    EVENT_HOST_ID,												-- 사역 책임자 ID
+                    (SELECT MEMBER010.MEMBER_NAME
+                    FROM 	tb_s020.tb_s020_member010 MEMBER010
+                    WHERE	MEMBER010.MEMBER_ID = EVENT_HOST_ID) AS CHARGE_NM,	-- 사역 책임자명
+                    PAY_FLAG,													-- 결제여부
+                    HIGH_EVENT_ID,												-- 상위 event_id
+                    ID_PATH														-- 최상위 ID
+        FROM		CTE
+        ORDER BY	LEV,
+                    EVENT_ID,
+                    HIGH_EVENT_ID
+    </select>
+</mapper>

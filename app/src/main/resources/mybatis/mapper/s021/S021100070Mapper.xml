@@ -8,8 +8,8 @@
                         EVENT010.EVENT_NM,
                         EVENT010.HIGH_EVENT_ID,
                         EVENT010.EVENT_LEVEL,
-                        EVENT010.EVENT_TP
-                        CAST(EVENT010.EVENT_ID AS CHAR(100) CHARACTER SET UTF8) AS ID_PATH,
+                        EVENT010.EVENT_TP,
+                        CAST(EVENT010.EVENT_ID AS CHAR(100) CHARACTER SET UTF8) AS ID_PATH
             FROM 	    tb_s020.tb_s020_event010 EVENT010
             WHERE	    EVENT_LEVEL = 0
             AND         EVENT010.ORG_ID = #{orgId}

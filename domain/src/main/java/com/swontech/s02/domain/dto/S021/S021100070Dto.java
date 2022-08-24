@@ -3,6 +3,16 @@ package com.swontech.s02.domain.dto.s021;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 
 public class S021100070Dto {
+    @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
+    public static class DeptLevel {
+        private String eventNm;
+        private int highEventId;
+        private String idPath;
+        private int mostHighId;
+        private int eventLevel;
+        private String eventTp;
+        private int eventId;
+    }
 
     @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
     public static class DeptDetailInfo {

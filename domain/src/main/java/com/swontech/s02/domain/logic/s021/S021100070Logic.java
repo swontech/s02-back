@@ -14,6 +14,11 @@ public class S021100070Logic implements S021100070Spec {
     }
 
     @Override
+    public ResponseEntity<?> retrieveDeptLevel(int orgId) {
+        return response.success(s021100070Store.selectDeptLevel(orgId));
+    }
+
+    @Override
     public ResponseEntity<?> retrieveDeptInfo(int eventId) {
         return response.success(s021100070Store.selectDeptDetailInfo(eventId));
     }

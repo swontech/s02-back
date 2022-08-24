@@ -15,6 +15,11 @@ public class S021100070Repository implements S021100070Store {
     }
 
     @Override
+    public List<S021100070Dto.DeptLevel> selectDeptLevel(int orgId) {
+        return sqlSessionTemplate.selectList("S021100070.selectDeptLevel", orgId);
+    }
+
+    @Override
     public S021100070Dto.DeptDetailInfo selectDeptDetailInfo(int eventId) {
         return sqlSessionTemplate.selectOne("S021100070.selectDeptDetailInfo", eventId);
     }

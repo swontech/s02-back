@@ -15,6 +15,11 @@ public class S021100070Controller {
         this.s021100070Spec = s021100070Spec;
     }
 
+    @GetMapping
+    public ResponseEntity<?> retrieveDeptLevel(@RequestParam("orgId") int orgId) {
+        return s021100070Spec.retrieveDeptLevel(orgId);
+    }
+
     @GetMapping("/dept-info")
     public ResponseEntity<?> retrieveDeptInfo(@RequestParam("eventId")int eventId) {
         return s021100070Spec.retrieveDeptInfo(eventId);

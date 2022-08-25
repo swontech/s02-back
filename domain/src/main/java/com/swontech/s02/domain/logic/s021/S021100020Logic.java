@@ -93,6 +93,7 @@ public class S021100020Logic implements S021100020Spec {
                         .firstHpNo(reqDto.getFirstHpNo())
                         .middleHpNo(reqDto.getMiddleHpNo())
                         .lastHpNo(reqDto.getLastHpNo())
+                        .email(reqDto.getEmail())
                         .memberName(reqDto.getMemberName())
                         .firstHpNo(reqDto.getFirstHpNo())
                         .middleHpNo(reqDto.getMiddleHpNo())

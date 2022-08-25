@@ -6,6 +6,7 @@
         SELECT  ORG010.ORG_ID,
                 ORG010.ORG_NAME,
                 ORG010.TEL_NO,
+                MEM010.HP_NO,
                 MEM010.MEMBER_NAME,
                 MEM010.EMAIL,
                 (SELECT COUNT(MEMBER_ID)

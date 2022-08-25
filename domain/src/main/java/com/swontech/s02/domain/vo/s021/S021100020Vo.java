@@ -52,6 +52,7 @@ public class S021100020Vo {
         private String firstTelNo;
         private String middleTelNo;
         private String lastTelNo;
+        private String email;
         private String memberName;
         private String firstHpNo;
         private String middleHpNo;

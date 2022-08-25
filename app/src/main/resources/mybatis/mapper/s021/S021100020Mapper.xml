@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="S021100020">
-    <select id="selectEmail" parameterType="java.lang.String" resultType="java.lang.String">
+    <select id="selectMemberEmail" parameterType="java.lang.String" resultType="java.lang.String">
         SELECT      EMAIL
         FROM        tb_s020.tb_s020_member010
         WHERE       EMAIL = #{email}
@@ -27,7 +27,7 @@
             UPDATE_TIMESTAMP,
             UPDATE_PROGRAM_ID
         ) VALUES (
-            NEXTVAL(tb_s020.sq_org_id),
+            NEXTVAL(tb_s020.sq_s020_org010),
             #{orgName},		            -- 단체명
             #{zipCode},		            -- 우편번호
             #{address},		            -- 주소
@@ -54,7 +54,7 @@
             MEMBER_TP,
             PWD
         ) VALUES (
-            NEXTVAL(sq_member_id),
+            NEXTVAL(tb_s020.sq_s020_member010),
             SYSDATE(),
             'S021100020',
             SYSDATE(),
@@ -119,6 +119,7 @@
             ORG010.DETAIL_ADDRESS = #{detailAddress},
             ORG010.TEL_NO = CONCAT(#{firstTelNo}, '-', #{middleTelNo}, '-', #{lastTelNo}),
 
+            MEMBER010.EMAIL = #{email},
             MEMBER010.MEMBER_NAME = #{memberName},
             MEMBER010.HP_NO = CONCAT(#{firstHpNo}, '-', #{middleHpNo}, '-', #{lastHpNo}),
 

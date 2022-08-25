@@ -56,6 +56,7 @@ public class S021100020Dto {
         private String firstTelNo;
         private String middleTelNo;
         private String lastTelNo;
+        private String email;
         private String memberName;
         private String firstHpNo;
         private String middleHpNo;
@@ -76,5 +77,6 @@ public class S021100020Dto {
         private String hpNo;
         private String email;
         private String memberTp;
+        private String memberName;
     }
 }

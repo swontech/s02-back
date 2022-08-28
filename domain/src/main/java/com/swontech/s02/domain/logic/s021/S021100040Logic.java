@@ -30,7 +30,7 @@ public class S021100040Logic implements S021100040Spec {
                                     .detailAddress(reqDto.getDetailAddress())
                                     .email(reqDto.getEmail())
                                     .pwd(reqDto.getPwd())
-                                    .account(reqDto.getAccountNo())
+                                    .accountNo(reqDto.getAccountNo())
                                     .bankNm(reqDto.getBackNm())
                                 .build()
                     );
@@ -42,24 +42,29 @@ public class S021100040Logic implements S021100040Spec {
 
     @Override
     public ResponseEntity<?> updateMemberInfo(S021100040Dto.UpdateMemberInfoDto reqDto) {
-        int result = s021100040Store.updateMemberInfo(
-            S021100040Vo.UpdateMemberInfoVo
-                .builder()
-                    .memberName(reqDto.getMemberName())
-                    .birth(reqDto.getBirth())
-                    .hpNo(reqDto.getHpNo())
-                    .zipCode(reqDto.getZipCode())
-                    .address(reqDto.getAddress())
-                    .detailAddress(reqDto.getDetailAddress())
-                    .email(reqDto.getEmail())
-                    .accountNo(reqDto.getAccountNo())
-                    .bankNm(reqDto.getBankNm())
-                .build()
-        );
-        if(result > 0) {
-            return response.success("회원정보 수정에 성공했습니다.");
+        try {
+            int result = s021100040Store.updateMemberInfo(
+                    S021100040Vo.UpdateMemberInfoVo
+                            .builder()
+                                .memberName(reqDto.getMemberName())
+                                .memberId(reqDto.getMemberId())
+                                .birth(reqDto.getBirth())
+                                .hpNo(reqDto.getHpNo())
+                                .zipCode(reqDto.getZipCode())
+                                .address(reqDto.getAddress())
+                                .detailAddress(reqDto.getDetailAddress())
+                                .email(reqDto.getEmail())
+                                .accountNo(reqDto.getAccountNo())
+                                .bankNm(reqDto.getBankNm())
+                            .build()
+            );
+            if(result > 0) {
+                return response.success("회원정보 수정에 성공했습니다.");
+            }
+            return response.fail("회원정보를 수정하는 중 오류가 발생했습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return response.fail("회원정보를 수정하는 중 오류가 발생했습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return response.fail("회원정보를 수정하는 중 오류가 발생했습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
-
     }
 }

@@ -11,4 +11,10 @@ public class S021100030Vo {
         private String memberName;
         private String memberTp;
     }
+
+    @Builder
+    public static class UpdateMemberTp {
+        private int memberId;
+        private String memberTp;
+    }
 }

@@ -26,22 +26,22 @@
         BETWEEN     STR_TO_DATE(#{fromDt}, '%Y-%m-%d %H:%i%S')
         AND         DATE_ADD(STR_TO_DATE(#{toDt}, '%Y-%m-%d %H:%i%S'), INTERVAL 1 DAY)
         AND			MEMBER010.MEMBER_NAME LIKE CONCAT('%', #{memberName}, '%')
-        AND			MEMBER010.MEMBER_TP = #{memberTp}
+        AND			MEMBER010.MEMBER_TP LIKE CONCAT('%', #{memberTp}, '%')
     </select>
 
     <update id="deleteMember" parameterType="java.lang.Integer">
         UPDATE	tb_s020.tb_s020_member010
         SET		DATA_END_STATUS     = ‘*’,
-                DATA_END_PROGRAM_ID = 'S021100030'
+                DATA_END_PROGRAM_ID = 'S021100030',
                 DATA_END_TIMESTAMP  = SYSDATE()
         WHERE	MEMBER_ID           = #{memberId}
     </update>
 
-    <update id="updateMemberTp" parameterType="java.lang.Integer">
+    <update id="updateMemberTp" parameterType="com.swontech.s02.domain.vo.s021.S021100030Vo$UpdateMemberTp">
         UPDATE	tb_s020.tb_s020_member010
-        SET		MEMBER_TP = 'R'
+        SET		MEMBER_TP = #{memberTp},
+                UPDATE_TIMESTAMP = SYSDATE(),
+                UPDATE_PROGRAM_ID = 'S021100030'
         WHERE	MEMBER_ID = #{memberId}
     </update>
-
-
 </mapper>

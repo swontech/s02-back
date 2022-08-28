@@ -26,7 +26,7 @@ public class S021100030Repository implements S021100030Store {
     }
 
     @Override
-    public int updateMemberTp(int memberId) {
-        return sqlSessionTemplate.update("S021100030.updateMemberTp", memberId);
+    public int updateMemberTp(S021100030Vo.UpdateMemberTp updateMemberTpVo) {
+        return sqlSessionTemplate.update("S021100030.updateMemberTp", updateMemberTpVo);
     }
 }

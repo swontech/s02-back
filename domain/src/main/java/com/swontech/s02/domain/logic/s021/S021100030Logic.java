@@ -43,7 +43,13 @@ public class S021100030Logic implements S021100030Spec {
 
     @Override
     public ResponseEntity<?> updateMember(S021100030Dto.UpdateMemberTp reqDto) {
-        int result = s021100030Store.updateMemberTp(reqDto.getMemberId());
+        int result = s021100030Store.updateMemberTp(
+                S021100030Vo.UpdateMemberTp
+                    .builder()
+                        .memberId(reqDto.getMemberId())
+                        .memberTp(reqDto.getMemberTp())
+                    .build());
+
         if(result > 0) {
             return response.success("회원구분을 정상적으로 update했습니다.");
         }

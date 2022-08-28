@@ -18,7 +18,7 @@ public class S021100040Vo {
         private String email;
         private String pwd;
         private final String memberTp = "C";
-        private String account;
+        private String accountNo;
         private String bankNm;
     }
 

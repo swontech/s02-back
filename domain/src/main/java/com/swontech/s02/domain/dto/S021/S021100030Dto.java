@@ -24,6 +24,7 @@ public class S021100030Dto {
     @Getter
     public static class UpdateMemberTp {
         private int memberId;
+        private String memberTp;
     }
 
     @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)

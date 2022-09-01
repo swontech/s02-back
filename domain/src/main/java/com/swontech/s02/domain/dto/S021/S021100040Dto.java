@@ -16,7 +16,7 @@ public class S021100040Dto {
         private String email;
         private String pwd;
         private String accountNo;
-        private String backNm;
+        private String bankNm;
     }
 
     @Getter

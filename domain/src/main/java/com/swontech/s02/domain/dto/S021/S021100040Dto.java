@@ -5,7 +5,7 @@ import lombok.Getter;
 public class S021100040Dto {
 
     @Getter
-    public class RegisterMemberDto {
+    public static class RegisterMemberDto {
         private int orgId;
         private String memberName;
         private String birth;
@@ -20,7 +20,7 @@ public class S021100040Dto {
     }
 
     @Getter
-    public class UpdateMemberInfoDto {
+    public static class UpdateMemberInfoDto {
         private String memberName;
         private String birth;
         private String hpNo;

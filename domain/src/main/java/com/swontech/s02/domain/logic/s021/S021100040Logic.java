@@ -61,7 +61,7 @@ public class S021100040Logic implements S021100040Spec {
             if(result > 0) {
                 return response.success("회원정보 수정에 성공했습니다.");
             }
-            return response.fail("회원정보를 수정하는 중 오류가 발생했습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
+            return response.success("수정된 내역이 없습니다.");
         } catch (Exception e) {
             e.printStackTrace();
             return response.fail("회원정보를 수정하는 중 오류가 발생했습니다.", HttpStatus.INTERNAL_SERVER_ERROR);

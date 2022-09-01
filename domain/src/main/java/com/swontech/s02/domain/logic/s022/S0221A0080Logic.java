@@ -92,7 +92,7 @@ public class S0221A0080Logic implements S0221A0080Spec {
                  *  payCurrentStep  = 현재 결제진행상태
                  *  --------------------------------------------------------------------------------
                  * */
-                switch (currentUseProStatus) {
+                switch(currentUseProStatus) {
                     // 현재 결제 진행상태가 비용요청상태인 경우 전제결제진행단계가 현재결제진행상태의 다음단계와 같다면
                     // 최종결제완료(C)로 상태를 update하지만
                     // 그렇지 않다면 결제진행상태(B)로 update한다.

@@ -8,13 +8,17 @@
         <result property="memberTp" column="MEMBER_TP" />
     </resultMap>
 
-    <select id="selectMemberEmailVo" parameterType="com.swontech.s02.domain.vo.s021.S021200010Vo$SelectMemberEmailVo" resultType="java.lang.String">
-        SELECT  distinct EMAIL
+    <select id="selectMemberInfo" parameterType="com.swontech.s02.domain.vo.s021.S021200010Vo$SelectMemberEmailVo" resultType="com.swontech.s02.domain.dto.s021.S021200010Dto$MemberInfoDto">
+        SELECT  MEMBER_ID,
+                EMAIL,
+                MEMBER_NAME,
+                MEMBER_TP,
+                ORG_ID
         FROM    tb_s020.tb_s020_member010
         WHERE   EMAIL = #{email}
     </select>
 
-    <select id="selectMemberVo" parameterType="java.lang.String" resultMap="selectMemberVo">
+    <select id="selectMember" parameterType="java.lang.String" resultMap="selectMemberVo">
         SELECT  EMAIL,
                 PWD,
                 MEMBER_TP

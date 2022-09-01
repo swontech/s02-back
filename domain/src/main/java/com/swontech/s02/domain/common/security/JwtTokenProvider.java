@@ -19,6 +19,8 @@ package com.swontech.s02.domain.common.security;
  *
  ================================================================================================================================================ */
 
+import com.swontech.s02.domain.common.exception.CustomException;
+import com.swontech.s02.domain.common.exception.ExceptionEnum;
 import com.swontech.s02.domain.dto.s021.S021200010Dto;
 import com.swontech.s02.domain.store.comm.AuthRedisStore;
 import com.swontech.s02.domain.vo.comm.AuthVo;
@@ -49,10 +51,12 @@ import java.util.stream.Collectors;
 public class JwtTokenProvider {
     private Logger logger = LoggerFactory.getLogger(JwtTokenProvider.class);
 
+    private static final Integer durationDays = 7;
     private static final String AUTHORITIES_KEY = "auth";
     private static final String BEARER_TYPE = "Bearer";
-    private static final long ACCESS_TOKEN_EXPIRE_TIME = 30 * 60 * 1000L;              // 30분
-    private static final long REFRESH_TOKEN_EXPIRE_TIME = 7 * 24 * 60 * 60 * 1000L;    // 7일
+    private static final long ACCESS_TOKEN_EXPIRE_TIME = 30 * 60 * 1000L;                 // 30분
+    private static final long REFRESH_TOKEN_EXPIRE_TIME = durationDays * 24 * 60 * 60 * 1000L;    // 7일
+
 
     private final Key key;
     private final AuthRedisStore authRedisStore;
@@ -92,7 +96,6 @@ public class JwtTokenProvider {
          * 현재시간
          */
         long now = (new Date()).getTime();
-
         /**
          * Access Token 생성
          */
@@ -115,7 +118,7 @@ public class JwtTokenProvider {
 
         return AuthVo.JwtTokenInfo.builder()
                 .grantType(BEARER_TYPE)
-                .refreshTokenExpirationTime(REFRESH_TOKEN_EXPIRE_TIME)
+                .refreshTokenDurationDays(REFRESH_TOKEN_EXPIRE_TIME)
                 .email(email)
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
@@ -158,17 +161,18 @@ public class JwtTokenProvider {
             return true;
         } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
             logger.info("INVALID JWT");
+            throw new CustomException(ExceptionEnum.INVALID_JWT);
         } catch (ExpiredJwtException e) {
             logger.info("EXPIRED JWT");
+            throw new CustomException(ExceptionEnum.EXPIRED_JWT);
         } catch (UnsupportedJwtException e) {
             logger.info("UNSUPPORTED JWT");
+            throw new CustomException(ExceptionEnum.UNSUPPORTED_JWT);
         } catch (IllegalArgumentException e) {
             logger.info("JWT CLAIMS STRING IS EMPTY");
+            throw new CustomException(ExceptionEnum.CLAIMS_EMPTY_JWT);
         }
-        return false;
     }
-
-
 
     /**
      *  access token을 파싱하여

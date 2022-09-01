@@ -16,6 +16,6 @@ public class AuthVo {
         private String grantType;
         private String accessToken;
         private String refreshToken;
-        private Long refreshTokenExpirationTime;
+        private Long refreshTokenDurationDays;
     }
 }

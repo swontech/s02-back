@@ -14,6 +14,10 @@ package com.swontech.s02.domain.common.security;
  * @lastmodify  : 2022.03.24 MSH
  *
  */
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.swontech.s02.domain.common.exception.CustomException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
@@ -25,6 +29,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+@Slf4j
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private static final String AUTHORIZATION_HEADER = "Authorization";
     private static final String BEARER_TYPE = "Bearer ";
@@ -38,17 +43,33 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     public void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException, ServletException {
         //1. Request Header 에서 JWT 토큰 추출
         String accessToken = resolveAccessToken(request);
+        log.info(accessToken);
 
-        //TODO[Feat]: refresh & access 토큰 갱신 기능 추가
-        //2. AccessToken이 존재하고 유효하다면
-        if(accessToken != null && jwtTokenProvider.validateToken(accessToken)) {
-            //3. Authentication생성
-            Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
+        try {
+            //2. AccessToken이 존재하고 유효하다면
+            if(accessToken != null && jwtTokenProvider.validateToken(accessToken)) {
+                //3. Authentication생성
+                Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
 
-            //4. Security Context에 authentication 저장
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+                //4. Security Context에 authentication 저장
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            }
+            filterChain.doFilter(request, response);
+        } catch (CustomException jwtException) {
+            log.info(jwtException.getExceptionEnum().getCode());
+            log.info(jwtException.getExceptionEnum().getMessage());
+            log.info(jwtException.getExceptionEnum().getStatus() + "");
+
+            log.info(request.getRequestURI());
+
+            if("/rest/v1/auth/re-issue".equals(request.getRequestURI()) || "/rest/v1/s021200010/login".equals(request.getRequestURI())) {
+                filterChain.doFilter(request, response);
+            } else {
+                response.setContentType("application/json; charset=UTF-8");
+                response.setStatus(jwtException.getExceptionEnum().getStatus());
+                response.getWriter().write(convertToJson(jwtException));
+            }
         }
-        filterChain.doFilter(request, response);
     }
 
     /**
@@ -65,5 +86,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return bearerAccessToken.substring(7);
         }
         return null;
+    }
+
+    public String convertToJson(Object object) throws JsonProcessingException {
+        if (object == null) {
+            return null;
+        }
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.writeValueAsString(object);
     }
 }

@@ -10,11 +10,8 @@ public class AuthDto {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class ReIssue {
-
+    public static class ReIssueRefreshToken {
         private String refreshToken;
         private String accessToken;
     }
-
-
 }

@@ -1,9 +1,14 @@
 package com.swontech.s02.aop;
 
+import com.swontech.s02.domain.common.exception.CustomException;
 import com.swontech.s02.domain.dto.comm.CustomResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
 public class ControllerExceptionHandler {
@@ -22,7 +27,7 @@ public class ControllerExceptionHandler {
 //      logger.info("=======================================");
 //      logger.error("해당 컨트롤러는 '{}' 메소드를 지원하지 않습니다.", e.getMethod());
 //      logger.info("=======================================");
-//      final CustomException  = CustomResponse
+//      final CustomException = response
 //              .create()
 //              .status(HttpStatus.METHOD_NOT_ALLOWED.value())
 //              .message(e.getMessage());

@@ -15,6 +15,7 @@ package com.swontech.s02.domain.common.security;
  */
 
 import com.swontech.s02.domain.dto.s021.S021200010Dto;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -25,6 +26,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Component
 public class JwtAuthenticationProvider implements AuthenticationProvider {
     private final UserDetailsService userDetailsService;
@@ -49,6 +51,8 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
      */
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+        log.info("JwtAuthenticationProvider 실행");
+
         /**
          * 화면에서 사용자가 입력한 이메일 및 비밀번호 정보.
          */
@@ -64,6 +68,7 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
          * 입력한 패스워드가 올바른지 검증하며 일치하지 않을 경우 BadCredentialsException을 발생시킨다.
          */
         if(!passwordEncoder.matches(password, member.getPassword())) {
+            log.info("비밀번호가 일치하지 않습니다.");
             throw new BadCredentialsException("비밀번호가 일치하지 않습니다.");
         }
 

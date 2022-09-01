@@ -23,7 +23,6 @@ public class S021200010Vo {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class Member implements UserDetails {
-
         private String email;
         private String pwd;
         private String memberTp;
@@ -38,12 +37,12 @@ public class S021200010Vo {
 
         @Override
         public String getPassword() {
-            return pwd;
+            return this.pwd;
         }
 
         @Override
         public String getUsername() {
-            return email;
+            return this.email;
         }
 
         @Override

@@ -1,5 +1,6 @@
 package com.swontech.s02.domain.dto.s021;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import lombok.*;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
@@ -24,5 +25,19 @@ public class S021200010Dto {
         public UsernamePasswordAuthenticationToken toAuthentication() {
             return new UsernamePasswordAuthenticationToken(email, pwd);
         }
+    }
+
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
+    public static class MemberInfoDto {
+        private int memberId;
+        private String email;
+        private String memberName;
+        private String memberTp;
+        private int orgId;
+        private String refreshToken;
+        private String accessToken;
     }
 }

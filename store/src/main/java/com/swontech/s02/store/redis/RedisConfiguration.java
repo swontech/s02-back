@@ -12,6 +12,7 @@ package com.swontech.s02.store.redis;
  * @lastmodify  : 2022.03.23 MSH
  *
  */
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,10 +25,10 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 @Configuration
 @EnableRedisRepositories
 public class RedisConfiguration {
-    private final RedisProperties redisProperties;
-    public RedisConfiguration(RedisProperties redisProperties) {
-        this.redisProperties = redisProperties;
-    }
+    @Value("${redis.host}")
+    private String redisHost;
+    @Value("${redis.port}")
+    private int redisPort;
 
     /**
      * lettuce이용하여 Redis저장소와의 연결을 위한 RedisConnectionFactory 빈 생성
@@ -35,7 +36,7 @@ public class RedisConfiguration {
      */
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {
-        return new LettuceConnectionFactory(redisProperties.getHost(), redisProperties.getPort());
+        return new LettuceConnectionFactory(redisHost, redisPort);
     }
 
     /**

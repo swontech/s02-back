@@ -28,13 +28,13 @@ public class AuthRedisRepository implements AuthRedisStore {
      * {@link com.swontech.s02.domain.vo.s021.S021100020Vo}
      */
     @Override
-    public void setRefreshToken(AuthVo.JwtTokenInfo jwtTokenInfo, TimeUnit timeUnit) {
-        redisTemplate.opsForValue().set(jwtTokenInfo.getRefreshToken(), jwtTokenInfo.getEmail(), Duration.ofMinutes(3));
+    public void setRefreshToken(AuthVo.JwtTokenInfo jwtTokenInfo) {
+        redisTemplate.opsForValue().set(jwtTokenInfo.getEmail(), jwtTokenInfo.getRefreshToken(), Duration.ofDays(jwtTokenInfo.getRefreshTokenDurationDays()));
     }
 
     @Override
-    public String isExistsToken(String refreshToken) {
-        return null;
+    public String getRefreshToken(String email) {
+        return (String)redisTemplate.opsForValue().get(email);
     }
 
     @Override
@@ -43,7 +43,7 @@ public class AuthRedisRepository implements AuthRedisStore {
     }
 
     @Override
-    public void deleteRefreshToken(String refreshToken) {
-        redisTemplate.delete(refreshToken);
+    public void deleteRefreshToken(String email) {
+        redisTemplate.delete(email);
     }
 }

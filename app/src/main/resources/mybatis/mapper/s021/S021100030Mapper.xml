@@ -31,7 +31,7 @@
 
     <update id="deleteMember" parameterType="java.lang.Integer">
         UPDATE	tb_s020.tb_s020_member010
-        SET		DATA_END_STATUS     = ‘*’,
+        SET		DATA_END_STATUS     = '*',
                 DATA_END_PROGRAM_ID = 'S021100030',
                 DATA_END_TIMESTAMP  = SYSDATE()
         WHERE	MEMBER_ID           = #{memberId}

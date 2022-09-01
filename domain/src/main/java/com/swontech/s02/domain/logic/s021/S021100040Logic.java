@@ -31,7 +31,7 @@ public class S021100040Logic implements S021100040Spec {
                                     .email(reqDto.getEmail())
                                     .pwd(reqDto.getPwd())
                                     .accountNo(reqDto.getAccountNo())
-                                    .bankNm(reqDto.getBackNm())
+                                    .bankNm(reqDto.getBankNm())
                                 .build()
                     );
         if(result > 0) {

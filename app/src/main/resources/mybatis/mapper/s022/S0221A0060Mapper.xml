@@ -34,8 +34,10 @@
                 EVENT030.USE_RECEIPT_ID,
                 EVENT030.USE_PRO_STATUS,
                 EVENT030.USE_SUBJECT
-        FROM    tb_s020.tb_s020_event030 EVENT030
-        WHERE   EVENT_USE_ID = #{eventUseId}
+        FROM    tb_s020.tb_s020_event010 EVENT010,
+                tb_s020.tb_s020_event030 EVENT030
+        WHERE   EVENT010.EVENT_ID = EVENT030.EVENT_ID
+        AND     EVENT030.EVENT_USE_ID = #{eventUseId}
     </select>
 
     <update id="updateEventCost" parameterType="com.swontech.s02.domain.vo.s022.S0221A0060Vo$UpdateEventCostVo">

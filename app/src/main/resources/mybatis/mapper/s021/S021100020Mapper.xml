@@ -34,9 +34,9 @@
             #{detailAddress},	        -- 상세주소
             CONCAT(#{firstTelNo}, '-', #{middleTelNo}, '-', #{lastTelNo}),
             SYSDATE(),
-            's021100020',
+            'S021100020',
             SYSDATE(),
-            's021100020'
+            'S021100020'
         )
     </insert>
 

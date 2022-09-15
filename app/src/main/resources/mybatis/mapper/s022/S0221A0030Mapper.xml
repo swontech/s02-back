@@ -2,53 +2,96 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="S0221A0030">
-    <select id="selectMemberId" parameterType="java.lang.String" resultType="java.lang.String">
-        SELECT  MEMBER_ID
-        FROM    tb_s020_member010
-        WHERE   HP_NO = #{hpNo}
+    <select id="selectMemberExistFlag" parameterType="com.swontech.s02.domain.vo.s022.S0221A0030Vo$SelectMemberExistFlagVo" resultType="com.swontech.s02.domain.dto.s022.S0221A0030Dto$MobileMemberExistFlag">
+        SElECT  MEMBER010.MEMBER_ID,
+                MEMBER010.MEMBER_NAME,
+                MEMBER010.HP_NO,
+                MEMBER010.MOBILE_ID,
+                MEMBER010.MEMBER_TP,
+                MEMBER010.MOBILE_LOGIN_DATE,
+                CONCAT(ORG010.ORG_NAME, '@', EVENT010.EVENT_ID, '@', EVENT010.EVENT_NM) AS ORG_EVENT_NAME,
+                EVENT010.EVENT_ID,
+                EVENT010.ORG_ID
+        FROM	tb_s020.tb_s020_event010 EVENT010
+                INNER JOIN tb_s020.tb_s020_org010 ORG010
+                ON ORG010.ORG_ID = EVENT010.ORG_ID
+                LEFT OUTER JOIN tb_s020.tb_s020_member010 MEMBER010
+                ON	ORG010.ORG_ID = MEMBER010.ORG_ID
+                AND HP_NO = #{hpNo}
+        WHERE	EVENT010.EVENT_CODE = #{eventCode}
     </select>
 
-    <update id="updateMobileId" parameterType="com.swontech.s02.domain.vo.s022.S0221A0030Vo$UpdateMobileIdVo">
-        UPDATE
-            tb_s020_member010
-        SET
-            MOBILE_ID           = #{mobileId},
-            MOBILE_LOGIN_DATE   = SYSDATE(),
-            UPDATE_TIMESTAMP    = SYSDATE(),
-            UPDATE_PROGRAM_ID   = 'S0221A0030'
-        WHERE
-            MEMBER_ID = #{memberId}
-    </update>
-
-    <insert id="insertMemberInfo" parameterType="com.swontech.s02.domain.vo.s022.S0221A0030Vo$InsertMemberInfoVo">
+    <insert id="insertNewMobileMember" parameterType="com.swontech.s02.domain.vo.s022.S0221A0030Vo$InsertNewMobileMemberVo">
+        INSERT INTO tb_s020.tb_s020_member010 (
+            MEMBER_ID,
+            CREATE_OBJECT_ID,
+            LAST_OBJECT_ID,
+            ORG_ID,
+            MEMBER_NAME,
+            HP_NO,
+            MEMBER_TP,
+            MOBILE_LOGIN_DATE,
+            CREATE_TIMESTAMP,
+            UPDATE_TIMESTAMP,
+            CREATE_PROGRAM_ID,
+            UPDATE_PROGRAM_ID
+        ) VALUES (
+            NEXTVAL(tb_s020.sq_s020_member010),
+            LASTVAL(tb_s020.sq_s020_member010),
+            LASTVAL(tb_s020.sq_s020_member010),
+            #{orgId}, 		        -- MemberExistFlagVO.org_id
+            #{memberName},			-- 화면의 성명
+            #{hpNo},			    -- 화면의 전화번호
+            'A',                    -- 신규회원 권한
+            SYSDATE(),
+            SYSDATE(),
+            SYSDATE(),
+            'S0221A0030',
+            'S0221A0030'
+        )
         <selectKey resultType="java.lang.Integer" keyProperty="memberId" order="AFTER">
             SELECT  MAX(MEMBER_ID)
             FROM    tb_s020.tb_s020_member010
         </selectKey>
-        INSERT INTO tb_s020.tb_s020_member010 (
-            MEMBER_ID,
-            MEMBER_NAME,
-            HP_NO,
-            MOBILE_ID,
-            MOBILE_LOGIN_DATE,
-            MEMBER_TP,
+    </insert>
+
+    <update id="updateMobileId" parameterType="com.swontech.s02.domain.vo.s022.S0221A0030Vo$UpdateMobileIdVo">
+        UPDATE	tb_s020.tb_s020_member010
+        SET		MOBILE_ID           = #{mobileId},
+                MOBILE_LOGIN_DATE   = SYSDATE()
+        WHERE	MEMBER_ID           = #{memberId}
+    </update>
+
+    <insert id="insertNewMobileEventMember" parameterType="com.swontech.s02.domain.vo.s022.S0221A0030Vo$InsertNewMobileEventMemberVo">
+        INSERT INTO tb_s020.tb_s020_event020 (
+            EVENT_ID,
+            EVENT_PAY_USER_ID,
+            CREATE_OBJECT_ID,
+            LAST_OBJECT_ID,
             CREATE_TIMESTAMP,
             CREATE_PROGRAM_ID,
             UPDATE_TIMESTAMP,
             UPDATE_PROGRAM_ID
         ) VALUES (
-            NEXTVAL(tb_s020.sq_s020_member010),  -- 멤버아이디
-            #{memberName},		            -- 단체명
-            #{hpNo},		                -- 우편번호
-            #{mobileId},	                -- 상세주소
-            SYSDATE(),                      -- 모바일 로그인 일자
-            'R',
+            #{eventId},		-- MemberExistFlagVO.event_id,
+            #{memberId},	-- tb_s020_member010 에 저장한 member_id
+            #{memberId},
+            #{memberId},
             SYSDATE(),
             'S0221A0030',
             SYSDATE(),
             'S0221A0030'
         )
     </insert>
+
+    <update id="updateMobileMember" parameterType="com.swontech.s02.domain.vo.s022.S0221A0030Vo$UpdateMobileMemberVo">
+        UPDATE	tb_s020.tb_s020_member010
+        SET		MOBILE_ID           = #{newMobileId},
+                MOBILE_LOGIN_DATE   = SYSDATE()
+        WHERE	MOBILE_ID           = #{mobileId}   -- MemberExistFlagVO.mobile_id
+    </update>
+
+
 
     <select id="selectSignupResponse" parameterType="java.lang.String" resultType="com.swontech.s02.domain.dto.s022.S0221A0030Dto$SignUpResponse">
         SELECT  MEMBER010.MEMBER_ID,

@@ -14,8 +14,18 @@ public class S0221A0030Repository implements S0221A0030Store {
     }
 
     @Override
-    public String selectMemberId(String hpNo) {
-        return sqlSessionTemplate.selectOne("S0221A0030.selectMemberId", hpNo);
+    public S0221A0030Dto.MobileMemberExistFlag selectMemberExistFlag(S0221A0030Vo.SelectMemberExistFlagVo selectMemberExistFlagVo) {
+        return sqlSessionTemplate.selectOne("S0221A0030.selectMemberExistFlag", selectMemberExistFlagVo);
+    }
+
+    @Override
+    public int insertNewMobileMember(S0221A0030Vo.InsertNewMobileMemberVo insertNewMobileMemberVo) {
+        return sqlSessionTemplate.insert("S0221A0030.insertNewMobileMember", insertNewMobileMemberVo);
+    }
+
+    @Override
+    public int insertNewMobileEventMember(S0221A0030Vo.InsertNewMobileEventMemberVo insertNewMobileEventMemberVo) {
+        return sqlSessionTemplate.insert("S0221A0030.insertNewMobileEventMember", insertNewMobileEventMemberVo);
     }
 
     @Override
@@ -24,14 +34,13 @@ public class S0221A0030Repository implements S0221A0030Store {
     }
 
     @Override
-    public int insertMemberInfo(S0221A0030Vo.InsertMemberInfoVo insertMemberInfoVo) {
-        return sqlSessionTemplate.insert("S0221A0030.insertMemberInfo", insertMemberInfoVo);
+    public int updateMobileMember(S0221A0030Vo.UpdateMobileMemberVo updateMobileMemberVo) {
+        return sqlSessionTemplate.update("S0221A0030.updateMobileMember", updateMobileMemberVo);
     }
+
 
     @Override
     public S0221A0030Dto.SignUpResponse selectSignUpInfo(String hpNo) {
         return sqlSessionTemplate.selectOne("S0221A0030.selectSignupResponse", hpNo);
     }
-
-
 }

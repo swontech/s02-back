@@ -37,10 +37,4 @@ public class S0221A0030Repository implements S0221A0030Store {
     public int updateMobileMember(S0221A0030Vo.UpdateMobileMemberVo updateMobileMemberVo) {
         return sqlSessionTemplate.update("S0221A0030.updateMobileMember", updateMobileMemberVo);
     }
-
-
-    @Override
-    public S0221A0030Dto.SignUpResponse selectSignUpInfo(String hpNo) {
-        return sqlSessionTemplate.selectOne("S0221A0030.selectSignupResponse", hpNo);
-    }
 }

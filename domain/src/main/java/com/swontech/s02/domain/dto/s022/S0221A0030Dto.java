@@ -7,6 +7,7 @@ import lombok.Setter;
 public class S0221A0030Dto {
 
     @Getter
+    @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
     public static class MobileMemberExistFlag {
         private Integer memberId;
         private String memberName;
@@ -16,17 +17,5 @@ public class S0221A0030Dto {
         private String orgEventName;
         private Integer eventId;
         private Integer orgId;
-    }
-
-    @Setter
-    @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
-    public static class SignUpResponse {
-        private Integer memberId;
-        private String memberName;
-        private Integer orgId;
-        private String hpNo;
-        private String mobileId;
-        private String memberTp;
-        private String orgEventName;
     }
 }

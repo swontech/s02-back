@@ -88,25 +88,6 @@
         UPDATE	tb_s020.tb_s020_member010
         SET		MOBILE_ID           = #{newMobileId},
                 MOBILE_LOGIN_DATE   = SYSDATE()
-        WHERE	MOBILE_ID           = #{mobileId}   -- MemberExistFlagVO.mobile_id
+        WHERE	MOBILE_ID           = #{mobileId}
     </update>
-
-
-
-    <select id="selectSignupResponse" parameterType="java.lang.String" resultType="com.swontech.s02.domain.dto.s022.S0221A0030Dto$SignUpResponse">
-        SELECT  MEMBER010.MEMBER_ID,
-                MEMBER010.MEMBER_NAME,
-                MEMBER010.ORG_ID,
-                MEMBER010.HP_NO,
-                MEMBER010.MOBILE_ID,
-                MEMBER010.MEMBER_TP,
-                (SELECT     CONCAT(ORG010.ORG_NAME, '@', EVENT_ID, '@', EVENT_NM)
-                FROM        tb_s020.tb_s020_org010      ORG010,
-                            tb_s020.tb_s020_event010    EVENT010
-                WHERE       ORG010.ORG_ID = MEMBER010.ORG_ID
-                AND         ORG010.ORG_ID = EVENT010.ORG_ID
-                AND         EVENT010.DEFAULT_EVENT_FLAG = 'Y') ORG_EVENT_NAME
-        FROM    tb_s020.tb_s020_member010 MEMBER010
-        WHERE   MEMBER010.HP_NO = #{hpNo}
-    </select>
 </mapper>

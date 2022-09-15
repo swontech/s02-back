@@ -10,5 +10,4 @@ public interface S0221A0030Store {
     int insertNewMobileEventMember(S0221A0030Vo.InsertNewMobileEventMemberVo insertNewMobileEventMemberVo);
     int updateMobileId(S0221A0030Vo.UpdateMobileIdVo updateMobileIdVo);
     int updateMobileMember(S0221A0030Vo.UpdateMobileMemberVo updateMobileMemberVo);
-    S0221A0030Dto.SignUpResponse selectSignUpInfo(String hpNo);
 }

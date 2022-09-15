@@ -11,7 +11,8 @@
                 MEMBER010.MOBILE_LOGIN_DATE,
                 CONCAT(ORG010.ORG_NAME, '@', EVENT010.EVENT_ID, '@', EVENT010.EVENT_NM) AS ORG_EVENT_NAME,
                 EVENT010.EVENT_ID,
-                EVENT010.ORG_ID
+                EVENT010.ORG_ID,
+                EVENT010.EVENT_CODE
         FROM	tb_s020.tb_s020_event010 EVENT010
                 INNER JOIN tb_s020.tb_s020_org010 ORG010
                 ON ORG010.ORG_ID = EVENT010.ORG_ID

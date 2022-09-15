@@ -35,8 +35,6 @@ public class S0221A0030Logic implements S0221A0030Spec {
         if(memberExistFlag == null) return response.success("등록되지 않은 부서코드입니다.");
 
         try {
-
-
             /** 등록된 memberId가 없다면 신규 등록 */
             if(memberExistFlag.getMemberId() == null) {
                 S0221A0030Vo.InsertNewMobileMemberVo vo

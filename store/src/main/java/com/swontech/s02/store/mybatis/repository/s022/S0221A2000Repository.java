@@ -16,7 +16,7 @@ public class S0221A2000Repository implements S0221A2000Store {
     }
 
     @Override
-    public List<S0221A2000Dto.EventListResponse> selectEventList(S0221A2000Vo.SelectEventListVo selectEventListVo) {
-        return sqlSessionTemplate.selectList("S0221A2000.selectEventList", selectEventListVo);
+    public List<S0221A2000Dto.MoblieQRScanEventList> selectEventList(S0221A2000Vo.MoblieQRScanEventListVo moblieQRScanEventListVo) {
+        return sqlSessionTemplate.selectList("S0221A2000.moblieQRScanEventList", moblieQRScanEventListVo);
     }
 }

@@ -15,10 +15,11 @@ public class S0221A0070Logic implements S0221A0070Spec {
     }
 
     @Override
-    public ResponseEntity<?> selectCostReqList(Integer mobileMemberId, String fromDate, String toDate) {
+    public ResponseEntity<?> selectCostReqList(String eventCode, Integer mobileMemberId, String fromDate, String toDate) {
         return response.success(s0221A0070Store.selectCostReqList(
                 S0221A0070Vo.SelectCostReqVo
                         .builder()
+                            .eventCode(eventCode)
                             .mobileMemberId(mobileMemberId)
                             .fromDate(fromDate)
                             .toDate(toDate)

@@ -16,11 +16,11 @@ public class S0221A2000Logic implements S0221A2000Spec {
     }
 
     @Override
-    public ResponseEntity<?> retrieveEventList(String eventName, String orgId) {
-        return response.success(s0221A2000Store.selectEventList(S0221A2000Vo.SelectEventListVo
+    public ResponseEntity<?> retrieveEventList(String eventCode, int orgId) {
+        return response.success(s0221A2000Store.selectEventList(S0221A2000Vo.MoblieQRScanEventListVo
                 .builder()
-                        .eventName(eventName)
-                        .orgId(orgId)
-                .build()), "행사 목록이 성공적으로 조회되었습니다.", HttpStatus.OK);
+                    .orgId(orgId)
+                    .eventCode(eventCode)
+                .build()), "성공적으로 조회되었습니다.", HttpStatus.OK);
     }
 }

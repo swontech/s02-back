@@ -7,11 +7,15 @@ public class S0221A2000Dto {
 
     @Setter
     @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
-    public static class EventListResponse {
-        private String eventId;
+    public static class MoblieQRScanEventList {
+        private int eventId;
         private String eventNm;
-        private String eventPeriod;
-        private String regMemberName;
-        private String orgId;
+        private String idPathPriority;
+        private int orgId;
+        private String eventCode;
+        private String eventStartDate;
+        private String eventEndDate;
+        private String eventTp;
+        private String eventStatus;
     }
 }

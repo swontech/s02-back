@@ -2,19 +2,56 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="S0221A2000">
-    <select id="selectEventList" resultType="com.swontech.s02.domain.dto.s022.S0221A2000Dto$EventListResponse" parameterType="com.swontech.s02.domain.vo.s022.S0221A2000Vo$SelectEventListVo">
-        SELECT 	EVENT_ID,       -- 행사ID
-                EVENT_NM,       -- 행사명
-                CONCAT(DATE_FORMAT(EVENT_START_DATE, '%Y-%m-%d'), ' ~ ', DATE_FORMAT(EVENT_END_DATE, '%Y-%m-%d')) EVENT_PERIOD, -- 행사기간
-                (SELECT 	MEMBER_NAME
-                FROM 		tb_s020_member010
-                WHERE 		MEMBER_ID = EVENT_REG_ID) REG_MEMBER_NAME,    -- 운영자명
-                ORG_ID                                                    -- 단체ID
-        FROM    tb_s020_event010
-        WHERE   SYSDATE() BETWEEN EVENT_START_DATE AND EVENT_END_DATE
-        AND     ORG_ID = #{orgId}
-        <if test='eventName != null and eventName != ""'>
-        AND     EVENT_NM LIKE CONCAT('%', #{eventName}, '%')
-        </if>
+    <select id="moblieQRScanEventList" resultType="com.swontech.s02.domain.dto.s022.S0221A2000Dto$MoblieQRScanEventList" parameterType="com.swontech.s02.domain.vo.s022.S0221A2000Vo$MoblieQRScanEventListVo">
+        WITH RECURSIVE CTE AS (
+            SELECT  EVENT010.EVENT_ID,
+                    EVENT010.EVENT_NM,
+                    EVENT010.PAY_FLAG,
+                    EVENT010.HIGH_EVENT_ID,
+                    EVENT010.EVENT_ID AS ID_PATH_PRIORTIY,
+                    EVENT010.ORG_ID,
+                    EVENT010.EVENT_CODE,
+                    EVENT010.EVENT_FINAL_FLAG,
+                    EVENT010.EVENT_START_DATE,
+                    EVENT010.EVENT_END_DATE,
+                    EVENT010.EVENT_TP,
+                    EVENT010.EVENT_STATUS
+            FROM 	TB_S020.TB_S020_EVENT010 EVENT010
+            WHERE	ORG_ID = #{orgId}
+            AND		EVENT010.EVENT_CODE = #{eventCode}
+            AND		EVENT_LEVEL = 0
+
+            UNION ALL
+
+            SELECT	EVENT010_2.EVENT_ID,
+                    EVENT010_2.EVENT_NM,
+                    EVENT010_2.PAY_FLAG,
+                    EVENT010_2.HIGH_EVENT_ID,
+                    TEMP.ID_PATH_PRIORTIY,
+                    TEMP.ORG_ID,
+                    TEMP.EVENT_CODE,
+                    EVENT010_2.EVENT_FINAL_FLAG,
+                    EVENT010_2.EVENT_START_DATE,
+                    EVENT010_2.EVENT_END_DATE,
+                    EVENT010_2.EVENT_TP,
+                    EVENT010_2.EVENT_STATUS
+            FROM	TB_S020.TB_S020_EVENT010 EVENT010_2
+            INNER JOIN CTE TEMP
+            ON EVENT010_2.HIGH_EVENT_ID = TEMP.EVENT_ID
+        )
+        SELECT	EVENT_ID,
+                EVENT_NM,
+                ID_PATH_PRIORITY,
+                ORG_ID,
+                EVENT_CODE,
+                EVENT_START_DATE,
+                EVENT_END_DATE,
+                EVENT_TP,
+                EVENT_STATUS
+        FROM 	CTE
+        WHERE	EVENT_FINAL_FLAG = 'Y'
+        AND		NOW() BETWEEN EVENT_START_DATE AND EVENT_END_DATE
+        AND		EVENT_TP = 'A'
+        AND		EVENT_STATUS = 'A'
     </select>
 </mapper>

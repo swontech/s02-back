@@ -15,6 +15,15 @@ public class S0221A0090Controller {
         this.s0221A0090Spec = s0221A0090Spec;
     }
 
+    @GetMapping("/cost-pay-list")
+    public ResponseEntity<?> retrieveCostPayList(
+            @RequestParam("eventCode")String eventCode,
+            @RequestParam("eventPayUserId")Integer eventPayUserId,
+            @RequestParam("fromDate") String fromDate,
+            @RequestParam("toDate") String toDate ) {
+        return s0221A0090Spec.retrieveCostPayList(eventCode, eventPayUserId, fromDate, toDate);
+    }
+
     @GetMapping("/cost-req-list")
     public ResponseEntity<?> retrieveCostReqList(@RequestParam("mobileMemberId")Integer mobileMemberId, @RequestParam("fromDate")String fromDate, @RequestParam("toDate")String toDate) {
         return s0221A0090Spec.retrieveCostReqList(mobileMemberId, fromDate, toDate);

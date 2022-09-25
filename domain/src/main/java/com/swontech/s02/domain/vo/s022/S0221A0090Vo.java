@@ -12,4 +12,12 @@ public class S0221A0090Vo {
         private String fromDate;
         private String toDate;
     }
+
+    @Builder
+    public static class CostPayListVo {
+        private String eventCode;
+        private int eventPayUserId;
+        private String fromDate;
+        private String toDate;
+    }
 }

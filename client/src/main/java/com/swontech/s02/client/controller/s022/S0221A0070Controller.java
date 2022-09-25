@@ -16,7 +16,10 @@ public class S0221A0070Controller {
     }
 
     @GetMapping("/retrieve-cost-req")
-    public ResponseEntity<?> retrieveCostReq(@RequestParam("mobileMemberId")Integer mobileMemberId, @RequestParam("fromDate")String fromDate, @RequestParam("toDate")String toDate) {
-        return s0221A0070Spec.selectCostReqList(mobileMemberId, fromDate, toDate);
+    public ResponseEntity<?> retrieveCostReq(@RequestParam("eventCode")String eventCode,
+                                             @RequestParam("mobileMemberId")Integer mobileMemberId,
+                                             @RequestParam("fromDate")String fromDate,
+                                             @RequestParam("toDate")String toDate) {
+        return s0221A0070Spec.selectCostReqList(eventCode, mobileMemberId, fromDate, toDate);
     }
 }

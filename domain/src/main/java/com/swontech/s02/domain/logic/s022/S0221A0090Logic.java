@@ -17,16 +17,13 @@ public class S0221A0090Logic implements S0221A0090Spec {
 
     @Override
     public ResponseEntity<?> retrieveCostPayList(String eventCode, int eventPayUserId, String fromDate, String toDate) {
-        return response.success(s0221A0090Store.selectCostPayList(S0221A0090Vo.CostPayListVo.builder().build()));
-    }
-
-    @Override
-    public ResponseEntity<?> retrieveCostReqList(Integer mobileMemberId, String fromDate, String toDate) {
-        return response.success(s0221A0090Store.selectCostReqList(S0221A0090Vo.SelectCostReqVo
-                .builder()
-                        .mobileMemberId(mobileMemberId)
+        return response.success(s0221A0090Store.selectCostPayList(
+                S0221A0090Vo.CostPayListVo
+                        .builder()
+                        .eventCode(eventCode)
+                        .eventPayUserId(eventPayUserId)
                         .fromDate(fromDate)
                         .toDate(toDate)
-                .build()));
+                        .build()));
     }
 }

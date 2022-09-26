@@ -3,52 +3,55 @@
 
 <mapper namespace="S0221A0030">
     <select id="selectMemberExistFlag" parameterType="com.swontech.s02.domain.vo.s022.S0221A0030Vo$SelectMemberExistFlagVo" resultType="com.swontech.s02.domain.dto.s022.S0221A0030Dto$MobileMemberExistFlag">
-        SElECT  MEMBER010.MEMBER_ID,
-                MEMBER010.MEMBER_NAME,
-                MEMBER010.HP_NO,
-                MEMBER010.MOBILE_ID,
-                MEMBER010.MEMBER_TP,
-                MEMBER010.MOBILE_LOGIN_DATE,
-                CONCAT(ORG010.ORG_NAME, '@', EVENT010.EVENT_ID, '@', EVENT010.EVENT_NM) AS ORG_EVENT_NAME,
-                EVENT010.EVENT_ID,
-                EVENT010.ORG_ID,
-                EVENT010.EVENT_CODE
-        FROM	tb_s020.tb_s020_event010 EVENT010
-                INNER JOIN tb_s020.tb_s020_org010 ORG010
-                ON ORG010.ORG_ID = EVENT010.ORG_ID
-                LEFT OUTER JOIN tb_s020.tb_s020_member010 MEMBER010
-                ON	ORG010.ORG_ID = MEMBER010.ORG_ID
-                AND HP_NO = #{hpNo}
-        WHERE	EVENT010.EVENT_CODE = #{eventCode}
+        select	m010.member_id,
+                m010.member_name,
+                e010.org_id,
+                m010.hp_no,
+                m010.MOBILE_ID,
+                m010.member_tp,
+                m010.mobile_login_date,
+                CONCAT(org010.org_name, '@', e010.event_id, '@', e010.event_nm) as org_event_name,
+                e010.event_id,
+                (select concat(e020.event_id, '-', e020.event_pay_user_id)
+                from	tb_s020.tb_s020_event020	e020
+                where	e020.event_id = e010.event_id
+                and		e020.event_pay_user_id = m010.member_id)  as  event_pay_user_id
+        from	tb_s020.tb_s020_event010  e010
+        inner join tb_s020.tb_s020_org010 org010
+        on	org010.org_id = e010.org_id
+        left outer join tb_s020.tb_s020_member010  m010
+        on	org010.org_id = m010.org_id
+        and hp_no = #{hpNo}
+        where	e010.event_code = #{eventCode}
     </select>
 
-    <insert id="insertNewMobileMember" parameterType="com.swontech.s02.domain.vo.s022.S0221A0030Vo$InsertNewMobileMemberVo">
+    <insert id="insertMobileMember" parameterType="com.swontech.s02.domain.vo.s022.S0221A0030Vo$InsertMobileMemberVo">
         INSERT INTO tb_s020.tb_s020_member010 (
             MEMBER_ID,
             CREATE_OBJECT_ID,
+            CREATE_TIMESTAMP,
+            CREATE_PROGRAM_ID,
             LAST_OBJECT_ID,
+            UPDATE_TIMESTAMP,
+            UPDATE_PROGRAM_ID,
             ORG_ID,
             MEMBER_NAME,
             HP_NO,
             MEMBER_TP,
-            MOBILE_LOGIN_DATE,
-            CREATE_TIMESTAMP,
-            UPDATE_TIMESTAMP,
-            CREATE_PROGRAM_ID,
-            UPDATE_PROGRAM_ID
+            MOBILE_LOGIN_DATE
         ) VALUES (
             NEXTVAL(tb_s020.sq_s020_member010),
             LASTVAL(tb_s020.sq_s020_member010),
-            LASTVAL(tb_s020.sq_s020_member010),
-            #{orgId}, 		        -- MemberExistFlagVO.org_id
-            #{memberName},			-- 화면의 성명
-            #{hpNo},			    -- 화면의 전화번호
-            'A',                    -- 신규회원 권한
-            SYSDATE(),
-            SYSDATE(),
-            SYSDATE(),
+            SYSDATE() ,
             'S0221A0030',
-            'S0221A0030'
+            LASTVAL(tb_s020.sq_s020_member010),
+            SYSDATE() ,
+            'S0221A0030',
+            #{orgId},
+            #{memberName},
+            #{hpNo}
+            'A',
+            SYSDATE()
         )
         <selectKey resultType="java.lang.Integer" keyProperty="memberId" order="AFTER">
             SELECT  MAX(MEMBER_ID)
@@ -56,39 +59,37 @@
         </selectKey>
     </insert>
 
-    <update id="updateMobileId" parameterType="com.swontech.s02.domain.vo.s022.S0221A0030Vo$UpdateMobileIdVo">
-        UPDATE	tb_s020.tb_s020_member010
-        SET		MOBILE_ID           = #{mobileId},
-                MOBILE_LOGIN_DATE   = SYSDATE()
-        WHERE	MEMBER_ID           = #{memberId}
-    </update>
-
-    <insert id="insertNewMobileEventMember" parameterType="com.swontech.s02.domain.vo.s022.S0221A0030Vo$InsertNewMobileEventMemberVo">
-        INSERT INTO tb_s020.tb_s020_event020 (
-            EVENT_ID,
-            EVENT_PAY_USER_ID,
-            CREATE_OBJECT_ID,
-            LAST_OBJECT_ID,
-            CREATE_TIMESTAMP,
-            CREATE_PROGRAM_ID,
-            UPDATE_TIMESTAMP,
-            UPDATE_PROGRAM_ID
-        ) VALUES (
-            #{eventId},		-- MemberExistFlagVO.event_id,
-            #{memberId},	-- tb_s020_member010 에 저장한 member_id
-            #{memberId},
-            #{memberId},
-            SYSDATE(),
-            'S0221A0030',
-            SYSDATE(),
-            'S0221A0030'
-        )
+    <insert id="insertMobileMemberEvent" parameterType="com.swontech.s02.domain.vo.s022.S0221A0030Vo$InsertMobileMemberEventVo">
+        INSERT INTO tb_s020.tb_s020_event020
+        (EVENT_ID,
+        EVENT_PAY_USER_ID,
+        CREATE_OBJECT_ID,
+        CREATE_TIMESTAMP,
+        CREATE_PROGRAM_ID,
+        LAST_OBJECT_ID,
+        UPDATE_TIMESTAMP,
+        UPDATE_PROGRAM_ID)
+        VALUES
+        (#{eventId}		--  MemberExistFlagVO.event_id,
+        #{memberId},			-- tb_s020_member010 에 저장한 member_id
+        #{memberId},			-- 화면 로그인 member_1d ==>2022.9.7 수정사항
+        SYSDATE() ,
+        'S0221A0030',
+        #{memberId},			-- 화면 로그인 member_1d ==>2022.9.7 수정사항
+        SYSDATE() ,
+        'S0221A0030');
     </insert>
 
     <update id="updateMobileMember" parameterType="com.swontech.s02.domain.vo.s022.S0221A0030Vo$UpdateMobileMemberVo">
         UPDATE	tb_s020.tb_s020_member010
         SET		MOBILE_ID           = #{newMobileId},
                 MOBILE_LOGIN_DATE   = SYSDATE()
-        WHERE	MOBILE_ID           = #{mobileId}
+        WHERE	MEMBER_ID           = #{memberId}
+    </update>
+
+    <update id="updateMobileId" parameterType="com.swontech.s02.domain.vo.s022.S0221A0030Vo$UpdateMobileIdVo">
+        UPDATE  tb_s020.tb_s020_member010
+        SET     MOBILE_ID = #{mobileId}
+        WHERE   MEMBER_ID = #{memberId}
     </update>
 </mapper>

@@ -20,65 +20,84 @@ public class S0221A0030Logic implements S0221A0030Spec {
         this.response = response;
     }
 
+
+
     @Override
     public ResponseEntity<?> signUp(String eventCode, String hpNo, String memberName) throws NoSuchAlgorithmException {
-        String returnMassage = "";
+        String returnMassage = "";  // <-- 리턴 메시지
 
-        /** 1. 가입된 모바일 회원이 있는지 체크한다. */
-        S0221A0030Dto.MobileMemberExistFlag memberExistFlag = s0221A0030Store.selectMemberExistFlag(
-                S0221A0030Vo.SelectMemberExistFlagVo
-                        .builder()
-                        .eventCode(eventCode)
-                        .hpNo(hpNo)
-                        .build()
-        );
-        if(memberExistFlag == null) return response.success("등록되지 않은 부서코드입니다.");
+        Integer memberId = null;
+        Integer eventPayUserId = null;
+        String mobileId = null;
+        Integer orgId = null;
+
 
         try {
-            /** 등록된 memberId가 없다면 신규 등록 */
-            if(memberExistFlag.getMemberId() == null) {
-                S0221A0030Vo.InsertNewMobileMemberVo vo
-                        = S0221A0030Vo.InsertNewMobileMemberVo
-                                .builder()
-                                    .orgId(memberExistFlag.getOrgId())
-                                    .memberName(memberName)
-                                    .hpNo(hpNo)
-                                .build();
-                s0221A0030Store.insertNewMobileMember(vo);
-                s0221A0030Store.updateMobileId(S0221A0030Vo.UpdateMobileIdVo.builder().memberId(vo.getMemberId()).mobileId(encodingMobileId(vo.getMemberId(), hpNo)).build());
-                s0221A0030Store.insertNewMobileEventMember(
-                    S0221A0030Vo.InsertNewMobileEventMemberVo
+            /** 1. 가입된 모바일 회원이 있는지 체크한다. */
+            S0221A0030Vo.SelectMemberExistFlagVo selectMemberExistFlagVo = S0221A0030Vo.SelectMemberExistFlagVo
+                    .builder()
+                    .eventCode(eventCode)   // <-- 부서코드
+                    .hpNo(hpNo)             // <-- 전화번호
+                    .build();
+
+            S0221A0030Dto.MobileMemberExistFlag memberExistFlag = s0221A0030Store.selectMemberExistFlag(selectMemberExistFlagVo);
+            if(memberExistFlag == null) return response.success("등록되지 않은 부서코드입니다.");
+
+            memberId = memberExistFlag.getMemberId();
+            eventPayUserId = memberExistFlag.getEventPayUserId();
+            orgId = memberExistFlag.getOrgId();
+
+            // ① 회원정보 (tb_s020_member010) insert 처리
+            // ② 부서별 회원정보 (tb_s020_event020) insert 처리
+            if(memberId == null && eventPayUserId == null) {
+                S0221A0030Vo.InsertMobileMemberVo insertMobileMemberVo = S0221A0030Vo.InsertMobileMemberVo
                         .builder()
-                            .eventId(memberExistFlag.getEventId())
-                            .memberId(vo.getMemberId())
-                        .build());
-                returnMassage = "신규회원가입에 성공했습니다.";
+                            .orgId(orgId)
+                            .memberName(memberName)
+                            .hpNo(hpNo)
+                        .build();
+
+                s0221A0030Store.insertMobileMember(insertMobileMemberVo);
+                int newMemberId = insertMobileMemberVo.getMemberId();
+                String newMobileId = encodingMobileId(insertMobileMemberVo.getMemberId(), hpNo);
+                s0221A0030Store.updateMobileId(S0221A0030Vo.UpdateMobileIdVo.builder().mobileId(newMobileId).memberId(newMemberId).build());
             }
 
-            /** 등록된 memberId가 있다면 업데이트 등록 */
-            if(memberExistFlag.getMemberId() != null && memberExistFlag.getMobileId() != null) {
+            // ③ 회원정보 (tb_s020_member010) 로그인정보 update 처리
+            // ② 부서별 회원정보 (tb_s020_event020) insert 처리
+            if(memberId != null && mobileId == null && eventPayUserId == null) {
                 s0221A0030Store.updateMobileMember(S0221A0030Vo.UpdateMobileMemberVo
-                    .builder()
-                        .newMobileId(encodingMobileId(memberExistFlag.getMemberId(), memberExistFlag.getHpNo()))
-                        .mobileId(memberExistFlag.getMobileId())
-                    .build()
-                );
-                returnMassage = "기 등록된 회원의 로그인 정보 업데이트에 성공했습니다.";
+                        .builder()
+                                .mobileId(encodingMobileId(memberId, hpNo))
+                                .memberId(memberId)
+                        .build());
             }
-            return response.success(s0221A0030Store.selectMemberExistFlag(S0221A0030Vo.SelectMemberExistFlagVo
-                    .builder()
-                    .eventCode(eventCode)
-                    .hpNo(hpNo)
-                    .build()), returnMassage, HttpStatus.OK);
+
+            if(memberId != null && mobileId != null && eventPayUserId != null) {
+                // skip
+            }
+
+            if(memberId != null && mobileId != null && eventPayUserId == null) {
+                s0221A0030Store.insertMobileMemberEvent(S0221A0030Vo.InsertMobileMemberEventVo
+                        .builder()
+                                .eventId(memberExistFlag.getEventId())
+                                .memberId(memberId)
+                        .build());
+            }
+
+            if(memberId != null && mobileId == null && eventPayUserId != null) {
+                s0221A0030Store.updateMobileMember(S0221A0030Vo.UpdateMobileMemberVo.builder()
+                                .mobileId(encodingMobileId(memberId, hpNo))
+                                .memberId(memberId)
+                        .build());
+            }
+            return response.success("정상적으로 처리되었습니다.");
         } catch (Exception e) {
             return response.fail("모바일 회원가입에 실패했습니다. 관리자에게 문의해주세요." + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-
-
-
-    private String encodingMobileId(int memberId, String hpNo) throws NoSuchAlgorithmException {
+    private static String encodingMobileId(int memberId, String hpNo) throws NoSuchAlgorithmException {
         try {
             MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
             String text = memberId + hpNo;
@@ -91,7 +110,7 @@ public class S0221A0030Logic implements S0221A0030Spec {
         }
     }
 
-    private String bytesToHex(byte[] bytes) {
+    private static String bytesToHex(byte[] bytes) {
         StringBuilder builder = new StringBuilder();
         for (byte b : bytes) {
             builder.append(String.format("%02x", b));

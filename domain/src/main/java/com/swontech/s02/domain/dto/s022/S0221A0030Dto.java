@@ -18,5 +18,6 @@ public class S0221A0030Dto {
         private Integer eventId;
         private Integer orgId;
         private String eventCode;
+        private Integer eventPayUserId;
     }
 }

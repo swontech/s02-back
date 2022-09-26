@@ -19,13 +19,18 @@ public class S0221A0030Repository implements S0221A0030Store {
     }
 
     @Override
-    public int insertNewMobileMember(S0221A0030Vo.InsertNewMobileMemberVo insertNewMobileMemberVo) {
-        return sqlSessionTemplate.insert("S0221A0030.insertNewMobileMember", insertNewMobileMemberVo);
+    public int insertMobileMember(S0221A0030Vo.InsertMobileMemberVo insertMobileMemberVo) {
+        return sqlSessionTemplate.insert("S0221A0030.insertMobileMember", insertMobileMemberVo);
     }
 
     @Override
-    public int insertNewMobileEventMember(S0221A0030Vo.InsertNewMobileEventMemberVo insertNewMobileEventMemberVo) {
-        return sqlSessionTemplate.insert("S0221A0030.insertNewMobileEventMember", insertNewMobileEventMemberVo);
+    public int insertMobileMemberEvent(S0221A0030Vo.InsertMobileMemberEventVo insertMobileMemberEventMemberVo) {
+        return sqlSessionTemplate.insert("S0221A0030.insertMobileMemberEvent");
+    }
+
+    @Override
+    public int updateMobileMember(S0221A0030Vo.UpdateMobileMemberVo updateMobileMemberVo) {
+        return sqlSessionTemplate.update("S0211A0030.updateMobileMember", updateMobileMemberVo);
     }
 
     @Override
@@ -33,8 +38,5 @@ public class S0221A0030Repository implements S0221A0030Store {
         return sqlSessionTemplate.update("S0221A0030.updateMobileId", updateMobileIdVo);
     }
 
-    @Override
-    public int updateMobileMember(S0221A0030Vo.UpdateMobileMemberVo updateMobileMemberVo) {
-        return sqlSessionTemplate.update("S0221A0030.updateMobileMember", updateMobileMemberVo);
-    }
+
 }

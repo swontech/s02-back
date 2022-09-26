@@ -3,97 +3,32 @@
 
 <mapper namespace="S0221A0070">
     <select id="selectCostReqList" resultType="com.swontech.s02.domain.dto.s022.S0221A0070Dto$CostReqResponse" parameterType="com.swontech.s02.domain.vo.s022.S0221A0070Vo$SelectCostReqVo">
-        WITH RECURSIVE CTE AS (
-            SELECT	E010.EVENT_ID,
-                    E010.EVENT_NM,
-                    E010.EVENT_LEVEL AS LEV,
-                    E010.PAY_FLAG,
-                    E010.HIGH_EVENT_ID,
-                    CAST(E010.EVENT_ID AS CHAR) AS ID_PATH,
-                    E010.EVENT_ID AS ID_PATH_PRIORTIY,
-                    E010.ORG_ID,
-                    E010.EVENT_CODE
-            FROM 	TB_S020.TB_S020_EVENT010 E010
-            WHERE	E010.EVENT_CODE = #{eventCode}
-            AND		EVENT_LEVEL = 0
-
-            UNION ALL
-
-            SELECT	E010_2.EVENT_ID,
-                    E010_2.EVENT_NM,
-                    TEMP.LEV + 1 AS LEV,
-                    E010_2.PAY_FLAG,
-                    E010_2.HIGH_EVENT_ID,
-                    CONCAT(TEMP.ID_PATH, '-', E010_2.EVENT_ID) AS ID_PATH,
-                    TEMP.ID_PATH_PRIORTIY,
-                    TEMP.ORG_ID,
-                    TEMP.EVENT_CODE
-            FROM	TB_S020.TB_S020_EVENT010  E010_2
-            INNER JOIN  CTE TEMP
-            ON          E010_2.HIGH_EVENT_ID = TEMP.EVENT_ID
-        )
-        SELECT	E030.EVENT_USE_ID,				-- EVENT_USER_ID
-                E030.EVENT_ID,					-- EVENT_ID
-                E030.EVENT_USER_ID,				-- 비용 작성자 ID
-                E030.USED_DATE,					-- 사용일자
-                E030.USE_AMOUNT,				-- 사용금액
-                E030.USE_COMMENT,				-- 사용 비고
-                E030.USE_RECEIPT_ID,			-- 첨부파일 ID
-                E030.USE_RECEIPT_NAME,			-- 첨부파일 명
-                E030.USE_SUBJECT,				-- 사용제목
-                E030.USE_PRO_STATUS,			-- 비용요청 진행상태
-                (SELECT M010.MEMBER_NAME
-                FROM	TB_S020.TB_S020_MEMBER010 M010
-                INNER JOIN TB_S020.TB_S020_EVENT020 E020
-                ON 	CTE.ID_PATH_PRIORTIY = E020.EVENT_ID
-                AND	E020.EVENT_PAY_LEVEL = E030.PAY_CURRENT_STEP
-                AND	M010.MEMBER_ID	= E020.EVENT_PAY_USER_ID) PAY_NAME, 	-- 결제자명
-                (SELECT	CD_V_MEANING
-                FROM	TB_S020.TB_S020_CODE010
-                WHERE	CD_TP = 'USE_PRO_STATUS'
-                AND		CD_V = E030.USE_PRO_STATUS
-                AND		CATEGORY = '000') USE_PRO_STATUS_NM	            -- 비용요청 진행상태명
-        FROM	CTE INNER JOIN TB_S020.TB_S020_EVENT030 E030
-                ON 	CTE.EVENT_ID = E030.EVENT_ID
-        WHERE	E030.EVENT_USER_ID = #{mobileMemberId}
-        AND	    E030.USED_DATE BETWEEN STR_TO_DATE(#{fromDate}, '%y-%m-%d') AND STR_TO_DATE(#{toDate}, '%y-%m-%d')
-
-<!--        bak...
-            SELECT	EVENT010.EVENT_ID,			&#45;&#45; 행사ID-->
-<!--                EVENT010.EVENT_NM,			&#45;&#45; 행사명-->
-<!--                EVENT020.EVENT_PAY_USER_ID,	&#45;&#45; 행사비용사용현재결제자ID-->
-<!--                EVENT030.EVENT_USE_ID,		&#45;&#45; 행사비용ID-->
-<!--                EVENT030.EVENT_USER_ID,		&#45;&#45; 행사비용사용자ID-->
-<!--                EVENT030.USED_DATE,			&#45;&#45; 행사비용사용일자-->
-<!--                EVENT030.USE_AMOUNT,		&#45;&#45; 행사비용사용금액-->
-<!--                EVENT030.USE_COMMENT,		&#45;&#45; 행사비용사용내용-->
-<!--                EVENT030.USE_RECEIPT_ID,	&#45;&#45; 행사비용첨부파일ID-->
-<!--                EVENT030.USE_PRO_STATUS,	&#45;&#45; 행사비용사용진행상태-->
-<!--                EVENT030.USE_SUBJECT,		&#45;&#45; 행사비용사용제목-->
-<!--                EVENT030.PAY_STEP_CNT,		&#45;&#45; 행사비용사용결제총단계수-->
-<!--                EVENT030.PAY_CURRENT_STEP,	&#45;&#45; 행사비용사용결제현재단계-->
-<!--                &#45;&#45; 행상비용사용진행상태명-->
-<!--                (SELECT	CD_V_MEANING-->
-<!--                FROM	tb_s020.tb_s020_code010-->
-<!--                WHERE	CD_TP = 'USE_PRO_STATUS'-->
-<!--                AND		CD_V = EVENT030.USE_PRO_STATUS-->
-<!--                AND		CATEGORY = '000'-->
-<!--                AND		ORG_ID	 = EVENT010.ORG_ID) USE_PRO_STATUS_NM,-->
-<!--                &#45;&#45; 행사비용사용현재결제자명-->
-<!--                (SELECT	MEMBER010.MEMBER_NAME-->
-<!--                FROM	tb_s020.tb_s020_member010 MEMBER010-->
-<!--                WHERE	EVENT020.EVENT_PAY_USER_ID = MEMBER010.MEMBER_ID) MEMBER_NAME,-->
-<!--                &#45;&#45; 행사비용사용자명-->
-<!--                (SELECT	MEMBER010.MEMBER_NAME-->
-<!--                FROM	tb_s020.tb_s020_member010 MEMBER010-->
-<!--                WHERE	EVENT030.EVENT_USER_ID = MEMBER010.MEMBER_ID) USER_MEMBER_NAME-->
-<!--        FROM	tb_s020.tb_s020_event010 EVENT010,-->
-<!--                tb_s020.tb_s020_event020 EVENT020,-->
-<!--                tb_s020.tb_s020_event030 EVENT030-->
-<!--        WHERE 	EVENT010.EVENT_ID = EVENT020.EVENT_ID-->
-<!--        AND 	EVENT020.EVENT_ID = EVENT030.EVENT_ID-->
-<!--        AND 	EVENT020.EVENT_PAY_LEVEL = EVENT030.PAY_CURRENT_STEP-->
-<!--        AND 	EVENT030.USED_DATE BETWEEN STR_TO_DATE(#{fromDate}, '%Y-%m-%d') AND STR_TO_DATE(#{toDate}, '%Y-%m-%d')-->
-<!--        AND 	EVENT030.EVENT_USER_ID = #{mobileMemberId}-->
+        select	e030.event_use_id,				-- event_user_id
+        e030.event_id,					-- event_id
+        e030.event_user_id,				-- 비용 작성자 ID
+        e030.used_date,					-- 사용일자
+        e030.use_amount,				-- 사용금액
+        e030.use_comment,				-- 사용 비고
+        e030.use_receipt_id,			-- 첨부파일 ID
+        e030.use_receipt_name,			-- 첨부파일 명
+        e030.use_subject,				-- 사용제목
+        (select m010.member_name
+        from	tb_s020.tb_s020_member010  m010
+        inner join tb_s020.tb_s020_event020  e020
+        on 	cte.id_path_priortiy = e020.event_id
+        and	e020.event_pay_level = e030.pay_current_step
+        and	m010.member_id	= e020.event_pay_user_id)    pay_name, 	-- 결제자명
+        e030.USE_PRO_STATUS,			-- 비용요청 진행상태
+        (select	cd_v_meaning
+        from	tb_s020.tb_s020_code010
+        where	cd_tp = 'USE_PRO_STATUS'
+        and		cd_v = e030.USE_PRO_STATUS
+        and		CATEGORY = '000')	USE_PRO_STATUS_nm	-- 비용요청 진행상태명
+        from	event_hierarchy_view	cte
+        inner join tb_s020.tb_s020_event030  e030
+        on 	cte.event_id = e030.event_id
+        where	cte.event_code = #{eventCode}
+        and		e030.event_user_id = #{mobileMemberId}
+        and		e030.USED_DATE between STR_TO_DATE(#{fromDate}, '%Y-%m-%d') and STR_TO_DATE(#{toDate}, '%Y-%m-%d')
     </select>
 </mapper>

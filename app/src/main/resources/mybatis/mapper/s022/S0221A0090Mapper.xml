@@ -3,74 +3,44 @@
 
 <mapper namespace="S0221A0090">
     <select id="costPayList" resultType="com.swontech.s02.domain.dto.s022.S0221A0090Dto$CostPayList" parameterType="com.swontech.s02.domain.vo.s022.S0221A0090Vo$CostPayListVo">
-        WITH RECURSIVE CTE AS (
-            SELECT	E010.EVENT_ID,
-                    E010.EVENT_NM,
-                    E010.EVENT_LEVEL AS LEV,
-                    E010.PAY_FLAG,
-                    E010.HIGH_EVENT_ID,
-                    CAST(E010.EVENT_ID AS CHAR ) AS ID_PATH,
-                    E010.EVENT_ID	AS ID_PATH_PRIORTIY,
-                    E020.EVENT_PAY_USER_ID,
-                    E020.EVENT_PAY_LEVEL,
-                    E010.ORG_ID,
-                    E010.EVENT_CODE
-            FROM 	TB_S020.TB_S020_EVENT010 E010
-            LEFT OUTER JOIN TB_S020.TB_S020_EVENT020 E020
-            ON      E010.EVENT_ID = E020.EVENT_ID
-            WHERE	E010.EVENT_CODE = #{eventCode}
-            AND		E020.EVENT_PAY_USER_ID = #{eventPayUserId}
-            AND		EVENT_LEVEL = 0
-
-            UNION ALL
-
-            SELECT	E010_2.EVENT_ID,
-                    E010_2.EVENT_NM,
-                    TEMP.LEV + 1 AS LEV,
-                    E010_2.PAY_FLAG,
-                    E010_2.HIGH_EVENT_ID,
-                    CONCAT(TEMP.ID_PATH,'-', E010_2.EVENT_ID) AS ID_PATH,
-                    TEMP.ID_PATH_PRIORTIY,
-                    TEMP.EVENT_PAY_USER_ID,
-                    TEMP.EVENT_PAY_LEVEL,
-                    TEMP.ORG_ID,
-                    TEMP.EVENT_CODE
-            FROM	TB_S020.TB_S020_EVENT010 E010_2
-                    INNER JOIN CTE TEMP ON E010_2.HIGH_EVENT_ID = TEMP.EVENT_ID
-        )
-        SELECT	E030.EVENT_USE_ID,
-                E030.EVENT_ID,
-                E030.EVENT_USER_ID,
-                (SELECT M010.MEMBER_NAME
-                FROM	TB_S020.TB_S020_MEMBER010 M010
-                WHERE	M010.MEMBER_ID= E030.EVENT_USER_ID) MEMBER_NAME,
-                E030.USED_DATE,
-                E030.USE_AMOUNT,
-                E030.USE_COMMENT,
-                E030.USE_RECEIPT_ID,
-                E030.USE_RECEIPT_NAME,
-                E030.USE_SUBJECT,
-                (SELECT M010.MEMBER_NAME
-                FROM	TB_S020.TB_S020_MEMBER010 M010
-                INNER JOIN TB_S020.TB_S020_EVENT020 E020
-                ON      CTE.ID_PATH_PRIORTIY = E020.EVENT_ID
-                AND	E020.EVENT_PAY_LEVEL = E030.PAY_CURRENT_STEP
-                AND	M010.MEMBER_ID	= E020.EVENT_PAY_USER_ID) PAY_NAME,
-                E030.USE_PRO_STATUS,
-                (SELECT	CD_V_MEANING
-                FROM	TB_S020.TB_S020_CODE010
-                WHERE	CD_TP = 'USE_PRO_STATUS'
-                AND		CD_V = E030.USE_PRO_STATUS
-                AND		CATEGORY = '000') USE_PRO_STATUS_NM
-        FROM	CTE
-                INNER JOIN TB_S020.TB_S020_EVENT030 E030
-                ON CTE.EVENT_ID = E030.EVENT_ID
-                INNER JOIN  TB_S020.TB_S020_EVENT010  E010_2
-                ON CTE.EVENT_ID = E010_2.EVENT_ID
-        WHERE	CTE.PAY_FLAG = 'Y'
-        AND		E010_2.EVENT_FINAL_FLAG = 'Y'
-        AND		E030.USE_PRO_STATUS IN ('A', 'B')
-        AND	E030.USED_DATE BETWEEN STR_TO_DATE(#{fromDate}, '%Y-%m-%d') AND STR_TO_DATE(#{toDate}, '%Y-%m-%d')
+        select 	e030.event_use_id,
+        e030.event_id,
+        e030.event_user_id,
+        (select m010.member_name
+        from	tb_s020.tb_s020_member010  m010
+        where	m010.member_id	= e030.event_user_id ) member_name,
+        e030.used_date,
+        e030.use_amount,
+        e030.use_comment,
+        e030.use_receipt_id,
+        e030.use_receipt_name,
+        e030.use_subject,
+        (select m010.member_name
+        from	tb_s020.tb_s020_member010  m010
+        inner join tb_s020.tb_s020_event020  e020
+        on 	vi.id_path_priortiy = e020.event_id
+        and	e020.event_pay_level = e030.pay_current_step
+        and	m010.member_id	= e020.event_pay_user_id)    pay_name,
+        e030.USE_PRO_STATUS,
+        (select	cd_v_meaning
+        from	tb_s020.tb_s020_code010
+        where	cd_tp = 'USE_PRO_STATUS'
+        and		cd_v = e030.USE_PRO_STATUS
+        and		CATEGORY = '000')	USE_PRO_STATUS_nm
+        from 	tb_s020.tb_s020_member010  m010
+        inner join tb_s020.tb_s020_event020  e020
+        on m010.member_id = e020.event_pay_user_id
+        inner join event_hierarchy_view vi
+        on	e020.event_id = vi.id_path_priortiy
+        inner join tb_s020.tb_s020_event030  e030
+        on e030.event_id = vi.event_id
+        and	e030.pay_current_step = e020.event_pay_level
+        where	vi.event_code = #{eventCode}
+        and		m010.member_id = #{memberId}
+        and		vi.pay_flag = 'Y'
+        and		vi.event_final_flag = 'Y'
+        and		e030.use_pro_status in ('A', 'B')
+        and		e030.USED_DATE BETWEEN STR_TO_DATE(#{fromDate}, '%Y-%m-%d') AND STR_TO_DATE(#{toDate}, '%Y-%m-%d')
     </select>
 
     <select id="selectCostReqList" resultType="com.swontech.s02.domain.dto.s022.S0221A0090Dto$CostReqResponse" parameterType="com.swontech.s02.domain.vo.s022.S0221A0090Vo$SelectCostReqVo">

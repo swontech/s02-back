@@ -4,31 +4,31 @@
 <mapper namespace="S0221A0090">
     <select id="costPayList" resultType="com.swontech.s02.domain.dto.s022.S0221A0090Dto$CostPayList" parameterType="com.swontech.s02.domain.vo.s022.S0221A0090Vo$CostPayListVo">
         select 	e030.event_use_id,
-        e030.event_id,
-        e030.event_user_id,
-        (select m010.member_name
-        from	tb_s020.tb_s020_member010  m010
-        where	m010.member_id	= e030.event_user_id ) member_name,
-        e030.used_date,
-        e030.use_amount,
-        e030.use_comment,
-        e030.use_receipt_id,
-        e030.use_receipt_name,
-        e030.use_subject,
-        (select m010.member_name
-        from	tb_s020.tb_s020_member010  m010
-        inner join tb_s020.tb_s020_event020  e020
-        on 	vi.id_path_priortiy = e020.event_id
-        and	e020.event_pay_level = e030.pay_current_step
-        and	m010.member_id	= e020.event_pay_user_id)    pay_name,
-        e030.USE_PRO_STATUS,
-        (select	cd_v_meaning
-        from	tb_s020.tb_s020_code010
-        where	cd_tp = 'USE_PRO_STATUS'
-        and		cd_v = e030.USE_PRO_STATUS
-        and		CATEGORY = '000')	USE_PRO_STATUS_nm
+                e030.event_id,
+                e030.event_user_id,
+                (select m010.member_name
+                from	tb_s020.tb_s020_member010  m010
+                where	m010.member_id	= e030.event_user_id ) member_name,
+                e030.used_date,
+                e030.use_amount,
+                e030.use_comment,
+                e030.use_receipt_id,
+                e030.use_receipt_name,
+                e030.use_subject,
+                (select m010.member_name
+                from	tb_s020.tb_s020_member010  m010
+                inner join tb_s020.tb_s020_event020  e020
+                on 	vi.id_path_priortiy = e020.event_id
+                and	e020.event_pay_level = e030.pay_current_step
+                and	m010.member_id	= e020.event_pay_user_id)    pay_name,
+                e030.USE_PRO_STATUS,
+                (select	cd_v_meaning
+                from	tb_s020.tb_s020_code010
+                where	cd_tp = 'USE_PRO_STATUS'
+                and		cd_v = e030.USE_PRO_STATUS
+                and		CATEGORY = '000')	USE_PRO_STATUS_nm
         from 	tb_s020.tb_s020_member010  m010
-        inner join tb_s020.tb_s020_event020  e020
+                inner join tb_s020.tb_s020_event020  e020
         on m010.member_id = e020.event_pay_user_id
         inner join event_hierarchy_view vi
         on	e020.event_id = vi.id_path_priortiy
@@ -36,7 +36,7 @@
         on e030.event_id = vi.event_id
         and	e030.pay_current_step = e020.event_pay_level
         where	vi.event_code = #{eventCode}
-        and		m010.member_id = #{memberId}
+        and		m010.member_id = #{eventPayUserId}
         and		vi.pay_flag = 'Y'
         and		vi.event_final_flag = 'Y'
         and		e030.use_pro_status in ('A', 'B')

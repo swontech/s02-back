@@ -8,9 +8,19 @@ public class S0221A0010Dto {
     @Setter
     @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
     public static class MobileInitUserInfo {
+        private int memberId;
+        private String memberName;
+        private String hpNo;
+        private String mobileId;
+        private String mobileLoginDate;
+        private String orgEventName;
         private int eventId;
+        private String eventCode;
+        private String memberTp;
         private String eventNm;
-        private String eventPayRoleCd;
+        private String orgName;
+        private String eventRole;
+        private int defaultEventId;
     }
 
     @Setter

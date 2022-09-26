@@ -3,115 +3,69 @@
 
 <mapper namespace="S0221A0010">
     <select id="mobileInitUserInfo" parameterType="com.swontech.s02.domain.vo.s022.S0221A0010Vo$MobileInitUserInfoVo" resultType="com.swontech.s02.domain.dto.s022.S0221A0010Dto$MobileInitUserInfo">
-        SELECT	E010.EVENT_ID,		-- 부서(행사) ID
-                E010.EVENT_NM, 		-- 소속부서 (행사)
-                E020.EVENT_PAY_ROLE_CD	-- 담당직책
-        FROM	TB_S020.TB_S020_EVENT020 E020
-                INNER JOIN TB_S020.TB_S020_EVENT010 E010
-                    ON E010.EVENT_ID = E020.EVENT_ID
-                INNER JOIN TB_S020.TB_S020_MEMBER010 M010
-                    ON	M010.MEMBER_ID	= E020.EVENT_PAY_USER_ID
-        WHERE	E010.EVENT_CODE = #{eventCode}
-        AND		M010.HP_NO = #{hpNo}
+        select	m010.member_id,
+                m010.member_name,
+                m010.hp_no,
+                m010.mobile_id,
+                m010.mobile_login_date,
+                CONCAT(org010.org_name, '@', e010.event_id, '@', e010.event_nm) as org_event_name,
+                e010.event_id,
+                org010.org_id,
+                e010.event_code,
+                m010.member_tp,
+                e010.event_nm,
+                org010.org_name,
+        (select	ifnull( concat(e020.event_pay_level, '차결제자'), ifnull(event_pay_role_cd, '일반회원'))
+        from	tb_s020.tb_s020_event020  e020
+        where	e020.event_id	=	e010.event_id
+        and		e020.event_pay_user_id	=	m010.member_id)	as event_role,
+        (select	e010_1.event_id
+        from	tb_s020.tb_s020_event010  e010_1
+        where	e010_1.org_id	= e010.org_id
+        and		default_event_flag = 'Y')	default_event_id
+        from	tb_s020.tb_s020_event010  e010
+        inner join tb_s020.tb_s020_org010 org010
+        on	org010.org_id = e010.org_id
+        inner join tb_s020.tb_s020_member010  m010
+        on	org010.org_id = m010.org_id
+        where	e010.event_code = #{eventCode}
+        and		m010.hp_no = #{hpNo}
     </select>
 
     <select id="mobileInitUseStateCnt" parameterType="com.swontech.s02.domain.vo.s022.S0221A0010Vo$MobileInitUseStateCntVo" resultType="com.swontech.s02.domain.dto.s022.S0221A0010Dto$MobileInitUseStateCnt">
-        WITH RECURSIVE CTE AS (
-            SELECT	E010.EVENT_ID,
-                    E010.EVENT_NM,
-                    E010.EVENT_LEVEL AS LEV,
-                    E010.PAY_FLAG,
-                    E010.HIGH_EVENT_ID,
-                    CAST(E010.EVENT_ID AS CHAR) AS ID_PATH,
-                    E010.EVENT_ID AS ID_PATH_PRIORTIY,
-                    E010.ORG_ID,
-                    E010.EVENT_CODE
-            FROM 	TB_S020.TB_S020_EVENT010  E010
-            WHERE	E010.EVENT_CODE = #{eventCode}
-            AND		EVENT_LEVEL = 0
-
-            UNION ALL
-
-            SELECT	E010_2.EVENT_ID,
-                    E010_2.EVENT_NM,
-                    TEMP.LEV + 1 AS LEV,
-                    E010_2.PAY_FLAG,
-                    E010_2.HIGH_EVENT_ID,
-                    CONCAT(TEMP.ID_PATH,'-', E010_2.EVENT_ID) AS ID_PATH,
-                    TEMP.ID_PATH_PRIORTIY,
-                    TEMP.ORG_ID,
-                    TEMP.EVENT_CODE
-            FROM	TB_S020.TB_S020_EVENT010  E010_2
-                    INNER JOIN CTE  TEMP ON E010_2.HIGH_EVENT_ID = TEMP.EVENT_ID
-        )
-        SELECT	COUNT(E030.EVENT_USE_ID) CNT,
-                E030.USE_PRO_STATUS,
-                (SELECT	CD_V_MEANING
-                FROM	TB_S020.TB_S020_CODE010
-                WHERE	CD_TP = 'USE_PRO_STATUS'
-                AND		CD_V = E030.USE_PRO_STATUS
-                AND		CATEGORY = '000') USE_PRO_STATUS_NM
-        FROM	CTE
-                INNER JOIN TB_S020.TB_S020_EVENT030  E030
-                    ON CTE.EVENT_ID = E030.EVENT_ID
-        WHERE	E030.USE_PRO_STATUS IN ('A', 'B', 'C', 'D')
-        AND		E030.EVENT_USER_ID = (SELECT MEMBER_ID
-                                     FROM	 TB_S020.TB_S020_MEMBER010 M010
-                                     WHERE	 M010.HP_NO = #{hpNo}
-                                     AND	 M010.ORG_ID = CTE.ORG_ID)
-        GROUP BY	E030.USE_PRO_STATUS
-        ORDER BY 	E030.USE_PRO_STATUS
+        select	count(e030.EVENT_USE_ID)	cnt,
+        e030.USE_PRO_STATUS,
+        (select	cd_v_meaning
+        from	tb_s020.tb_s020_code010
+        where	cd_tp = 'USE_PRO_STATUS'
+        and		cd_v = e030.USE_PRO_STATUS
+        and		CATEGORY = '000')	USE_PRO_STATUS_nm
+        from	tb_s020.tb_s020_event030  e030
+        inner join event_hierarchy_view vi
+        on	vi.event_id	= e030.event_id
+        where	e030.use_pro_status in ('A', 'B', 'C', 'D', 'E')
+        and		vi.event_code = #{eventCode}
+        and		e030.event_user_id = (select	member_id
+        from	tb_s020.tb_s020_member010  m010
+        where	m010.hp_no = #{hpNo}
+        and		m010.org_id = vi.org_id)
+        group by	e030.USE_PRO_STATUS
     </select>
     
     <select id="mobileInitPayCnt" resultType="com.swontech.s02.domain.dto.s022.S0221A0010Dto$MobileInitPayCnt" parameterType="com.swontech.s02.domain.vo.s022.S0221A0010Vo$MobileInitPayCntVo">
-        WITH RECURSIVE CTE AS (
-            SELECT	E010.EVENT_ID,
-                    E010.EVENT_NM,
-                    E010.EVENT_LEVEL AS LEV,
-                    E010.PAY_FLAG,
-                    E010.HIGH_EVENT_ID,
-                    CAST(E010.EVENT_ID AS CHAR ) AS ID_PATH,
-                    E010.EVENT_ID AS ID_PATH_PRIORTIY,
-                    E020.EVENT_PAY_USER_ID,
-                    E020.EVENT_PAY_LEVEL,
-                    E010.ORG_ID,
-                    E010.EVENT_CODE
-            FROM 	TB_S020.TB_S020_EVENT010  E010
-                    LEFT OUTER JOIN TB_S020.TB_S020_EVENT020  E020
-                    ON E010.EVENT_ID = E020.EVENT_ID
-            WHERE	E010.EVENT_CODE = #{eventCode}
-            AND		EVENT_LEVEL = 0
-
-            UNION ALL
-
-            SELECT	E010_2.EVENT_ID,
-                    E010_2.EVENT_NM,
-                    TEMP.LEV + 1 AS LEV,
-                    E010_2.PAY_FLAG,
-                    E010_2.HIGH_EVENT_ID,
-                    CONCAT(TEMP.ID_PATH,'-', E010_2.EVENT_ID) AS ID_PATH,
-                    TEMP.ID_PATH_PRIORTIY,
-                    TEMP.EVENT_PAY_USER_ID,
-                    TEMP.EVENT_PAY_LEVEL,
-                    TEMP.ORG_ID,
-                    TEMP.EVENT_CODE
-            FROM	TB_S020.TB_S020_EVENT010 E010_2
-                    INNER JOIN CTE TEMP ON E010_2.HIGH_EVENT_ID = TEMP.EVENT_ID
-        )
-        SELECT	COUNT(E030.EVENT_USE_ID) PAY_CNT		-- 결제건수
-        FROM	CTE
-                INNER JOIN TB_S020.TB_S020_EVENT030 E030
-                    ON CTE.EVENT_ID = E030.EVENT_ID
-                    AND CTE.EVENT_PAY_LEVEL	= E030.PAY_CURRENT_STEP
-                    AND	E030.EVENT_USER_ID != CTE.EVENT_PAY_USER_ID
-                INNER JOIN TB_S020.TB_S020_EVENT010 E010_2
-                    ON CTE.EVENT_ID = E010_2.EVENT_ID
-        WHERE	CTE.PAY_FLAG = 'Y'
-        AND		E010_2.EVENT_FINAL_FLAG = 'Y'
-        AND		E030.USE_PRO_STATUS IN ('A', 'B')
-        AND		CTE.EVENT_PAY_USER_ID = (SELECT MEMBER_ID
-                                        FROM	TB_S020.TB_S020_MEMBER010 M010
-                                        WHERE	M010.HP_NO = #{hpNo}
-                                        AND		M010.ORG_ID = CTE.ORG_ID)
+        select 	count(e030.event_use_id)	pay_cnt
+        from 	tb_s020.tb_s020_member010  m010
+        inner join tb_s020.tb_s020_event020  e020
+        on m010.member_id = e020.event_pay_user_id
+        inner join event_hierarchy_view vi
+        on	e020.event_id = vi.id_path_priortiy
+        inner join tb_s020.tb_s020_event030  e030
+        on e030.event_id = vi.event_id
+        and	e030.pay_current_step = e020.event_pay_level
+        where	vi.event_code = #{eventCode}
+        and		m010.hp_no = #{hpNo}
+        and		vi.pay_flag = 'Y'
+        and		vi.event_final_flag = 'Y'
+        and		e030.use_pro_status in ('A', 'B')
     </select>
 </mapper>

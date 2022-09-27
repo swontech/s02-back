@@ -86,13 +86,15 @@ public class S0221A0030Logic implements S0221A0030Spec {
             }
 
             if(memberId != null && mobileId == null && eventPayUserId != null) {
-                s0221A0030Store.updateMobileMember(S0221A0030Vo.UpdateMobileMemberVo.builder()
+                s0221A0030Store.updateMobileMember(S0221A0030Vo.UpdateMobileMemberVo
+                        .builder()
                                 .mobileId(encodingMobileId(memberId, hpNo))
                                 .memberId(memberId)
                         .build());
             }
             return response.success("정상적으로 처리되었습니다.");
         } catch (Exception e) {
+            e.printStackTrace();
             return response.fail("모바일 회원가입에 실패했습니다. 관리자에게 문의해주세요." + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

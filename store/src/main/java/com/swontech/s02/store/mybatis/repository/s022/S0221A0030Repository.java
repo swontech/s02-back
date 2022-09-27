@@ -25,12 +25,12 @@ public class S0221A0030Repository implements S0221A0030Store {
 
     @Override
     public int insertMobileMemberEvent(S0221A0030Vo.InsertMobileMemberEventVo insertMobileMemberEventMemberVo) {
-        return sqlSessionTemplate.insert("S0221A0030.insertMobileMemberEvent");
+        return sqlSessionTemplate.insert("S0221A0030.insertMobileMemberEvent", insertMobileMemberEventMemberVo);
     }
 
     @Override
     public int updateMobileMember(S0221A0030Vo.UpdateMobileMemberVo updateMobileMemberVo) {
-        return sqlSessionTemplate.update("S0211A0030.updateMobileMember", updateMobileMemberVo);
+        return sqlSessionTemplate.update("S0221A0030.updateMobileMember", updateMobileMemberVo);
     }
 
     @Override

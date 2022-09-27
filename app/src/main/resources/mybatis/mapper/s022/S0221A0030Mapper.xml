@@ -70,20 +70,20 @@
             UPDATE_TIMESTAMP,
             UPDATE_PROGRAM_ID
         ) VALUES (
-            #{eventId},		--  MemberExistFlagVO.event_id,
+            #{eventId},		        --  MemberExistFlagVO.event_id,
             #{memberId},			-- tb_s020_member010 에 저장한 member_id
             #{memberId},			-- 화면 로그인 member_1d ==>2022.9.7 수정사항
-            SYSDATE() ,
+            SYSDATE(),
             'S0221A0030',
             #{memberId},			-- 화면 로그인 member_1d ==>2022.9.7 수정사항
-            SYSDATE() ,
+            SYSDATE(),
             'S0221A0030'
         )
     </insert>
 
     <update id="updateMobileMember" parameterType="com.swontech.s02.domain.vo.s022.S0221A0030Vo$UpdateMobileMemberVo">
         UPDATE	tb_s020.tb_s020_member010
-        SET		MOBILE_ID           = #{newMobileId},
+        SET		MOBILE_ID           = #{mobileId},
                 MOBILE_LOGIN_DATE   = SYSDATE()
         WHERE	MEMBER_ID           = #{memberId}
     </update>

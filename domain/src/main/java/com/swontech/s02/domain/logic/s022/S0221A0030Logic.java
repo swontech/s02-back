@@ -27,7 +27,7 @@ public class S0221A0030Logic implements S0221A0030Spec {
         String returnMassage = "";  // <-- 리턴 메시지
 
         Integer memberId = null;
-        Integer eventPayUserId = null;
+        String eventPayUserId = null;
         String mobileId = null;
         Integer orgId = null;
 

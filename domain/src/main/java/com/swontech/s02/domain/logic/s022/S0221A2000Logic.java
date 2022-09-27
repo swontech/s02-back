@@ -23,4 +23,7 @@ public class S0221A2000Logic implements S0221A2000Spec {
                     .eventCode(eventCode)
                 .build()), "성공적으로 조회되었습니다.", HttpStatus.OK);
     }
+
+
+
 }

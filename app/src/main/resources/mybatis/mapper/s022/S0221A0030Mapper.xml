@@ -13,9 +13,9 @@
                 CONCAT(org010.org_name, '@', e010.event_id, '@', e010.event_nm) as org_event_name,
                 e010.event_id,
                 (select concat(e020.event_id, '-', e020.event_pay_user_id)
-                from	tb_s020.tb_s020_event020	e020
+                from	tb_s020.tb_s020_event020 e020
                 where	e020.event_id = e010.event_id
-                and		e020.event_pay_user_id = m010.member_id)  as  event_pay_user_id
+                and		e020.event_pay_user_id = m010.member_id) as event_pay_user_id
         from	tb_s020.tb_s020_event010  e010
         inner join tb_s020.tb_s020_org010 org010
         on	org010.org_id = e010.org_id
@@ -60,24 +60,25 @@
     </insert>
 
     <insert id="insertMobileMemberEvent" parameterType="com.swontech.s02.domain.vo.s022.S0221A0030Vo$InsertMobileMemberEventVo">
-        INSERT INTO tb_s020.tb_s020_event020
-        (EVENT_ID,
-        EVENT_PAY_USER_ID,
-        CREATE_OBJECT_ID,
-        CREATE_TIMESTAMP,
-        CREATE_PROGRAM_ID,
-        LAST_OBJECT_ID,
-        UPDATE_TIMESTAMP,
-        UPDATE_PROGRAM_ID)
-        VALUES
-        (#{eventId}		--  MemberExistFlagVO.event_id,
-        #{memberId},			-- tb_s020_member010 에 저장한 member_id
-        #{memberId},			-- 화면 로그인 member_1d ==>2022.9.7 수정사항
-        SYSDATE() ,
-        'S0221A0030',
-        #{memberId},			-- 화면 로그인 member_1d ==>2022.9.7 수정사항
-        SYSDATE() ,
-        'S0221A0030');
+        INSERT INTO tb_s020.tb_s020_event020 (
+            EVENT_ID,
+            EVENT_PAY_USER_ID,
+            CREATE_OBJECT_ID,
+            CREATE_TIMESTAMP,
+            CREATE_PROGRAM_ID,
+            LAST_OBJECT_ID,
+            UPDATE_TIMESTAMP,
+            UPDATE_PROGRAM_ID
+        ) VALUES (
+            #{eventId},		--  MemberExistFlagVO.event_id,
+            #{memberId},			-- tb_s020_member010 에 저장한 member_id
+            #{memberId},			-- 화면 로그인 member_1d ==>2022.9.7 수정사항
+            SYSDATE() ,
+            'S0221A0030',
+            #{memberId},			-- 화면 로그인 member_1d ==>2022.9.7 수정사항
+            SYSDATE() ,
+            'S0221A0030'
+        )
     </insert>
 
     <update id="updateMobileMember" parameterType="com.swontech.s02.domain.vo.s022.S0221A0030Vo$UpdateMobileMemberVo">

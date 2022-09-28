@@ -26,7 +26,8 @@ public class S021100070Controller {
     }
 
     @GetMapping("/dept-pay-info")
-    public ResponseEntity<?> retrieveDeptPayInfo(@RequestParam("eventId")int eventId) {
-        return s021100070Spec.retrieveDeptPayInfo(eventId);
+    public ResponseEntity<?> retrieveDeptPayInfo(@RequestParam("orgId")int orgId,
+                                                 @RequestParam("eventId")int eventId) {
+        return s021100070Spec.retrieveDeptPayInfo(orgId, eventId);
     }
 }

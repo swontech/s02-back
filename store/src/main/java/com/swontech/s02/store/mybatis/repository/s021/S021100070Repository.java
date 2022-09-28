@@ -2,6 +2,8 @@ package com.swontech.s02.store.mybatis.repository.s021;
 
 import com.swontech.s02.domain.dto.s021.S021100070Dto;
 import com.swontech.s02.domain.store.s021.S021100070Store;
+import com.swontech.s02.domain.vo.s021.S021100070Vo;
+import com.swontech.s02.domain.vo.s021.S021100080Vo;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -25,7 +27,7 @@ public class S021100070Repository implements S021100070Store {
     }
 
     @Override
-    public List<S021100070Dto.DeptDetailPayInfo> selectDeptDetailPayInfo(int eventId) {
-        return sqlSessionTemplate.selectList("S021100070.selectDeptDetailPayInfo", eventId);
+    public List<S021100070Dto.DeptDetailPayInfo> selectDeptDetailPayInfo(S021100070Vo.ParamsVo paramsVo) {
+        return sqlSessionTemplate.selectList("S021100070.selectDeptDetailPayInfo", paramsVo);
     }
 }

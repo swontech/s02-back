@@ -17,16 +17,18 @@ public class S021100070Dto {
     @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
     public static class DeptDetailInfo {
         private int eventId;
-        private String eventTp;
         private String eventNm;
+        private String eventCode;
         private int eventHostId;
+        private String memberName;
         private int eventBudgetAmount;
         private String eventStartDate;
         private String eventEndDate;
         private String eventLoc;
         private String defaultEventFlag;
+        private String eventStatus;
+        private String payFlag;
         private String eventComment;
-        private String memberName;
     }
 
     @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)

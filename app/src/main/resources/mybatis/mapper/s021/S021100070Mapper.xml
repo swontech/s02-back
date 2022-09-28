@@ -3,59 +3,35 @@
 
 <mapper namespace="S021100070">
     <select id="selectDeptLevel" parameterType="java.lang.Integer" resultType="com.swontech.s02.domain.dto.s021.S021100070Dto$DeptLevel">
-        WITH RECURSIVE CTE AS (
-            SELECT	    EVENT010.EVENT_ID,
-                        EVENT010.EVENT_NM,
-                        EVENT010.HIGH_EVENT_ID,
-                        EVENT010.EVENT_LEVEL,
-                        EVENT010.EVENT_TP,
-                        CAST(EVENT010.EVENT_ID AS CHAR(100) CHARACTER SET UTF8) AS ID_PATH
-            FROM 	    tb_s020.tb_s020_event010 EVENT010
-            WHERE	    EVENT_LEVEL = 0
-            AND         EVENT010.ORG_ID = #{orgId}
-
-            UNION ALL
-
-            SELECT	    EVENT010_2.EVENT_ID,
-                        EVENT010_2.EVENT_NM,
-                        EVENT010_2.HIGH_EVENT_ID,
-                        EVENT010_2.EVENT_LEVEL,
-                        EVENT010_2.EVENT_TP,
-                        CONCAT(TEMP.ID_PATH, '-', EVENT010_2.EVENT_ID) AS ID_PATH
-            FROM	    tb_s020.tb_s020_event010 EVENT010_2
-            INNER JOIN  CTE TEMP
-                    ON  EVENT010_2.HIGH_EVENT_ID = TEMP.EVENT_ID
-        )
-        SELECT	EVENT_NM,
-                IFNULL(HIGH_EVENT_ID, 0) AS HIGH_EVENT_ID, 						-- 상위 id
-                ID_PATH,														-- id Path
-                CASE WHEN EVENT_LEVEL = 0
-                     THEN EVENT_ID
-                     ELSE SUBSTRING(ID_PATH, 1, LOCATE('-', ID_PATH) - 1)
-                END  AS MOST_HIGH_ID, 										-- 최상위 event_id
-                EVENT_LEVEL,												-- level
-                EVENT_TP,													-- event 구분( A : 행사 , D : 부서)
-                EVENT_ID													-- event_id
-        FROM	CTE
-        ORDER BY ID_PATH
+        SELECT	E_VI.EVENT_ID,
+                EVENT_NM,
+                HIGH_EVENT_ID,
+                ID_PATH,
+                LEV AS EVENT_LEVEL,
+                EVENT_TP
+        FROM	TB_S020.EVENT_HIERARCHY_VIEW  E_VI
+        WHERE	ORG_ID = #{orgId}
     </select>
 
     <select id="selectDeptDetailInfo" parameterType="java.lang.Integer" resultType="com.swontech.s02.domain.dto.s021.S021100070Dto$DeptDetailInfo">
-        SELECT	EVENT010.EVENT_ID,						-- 이벤트ID
-                EVENT010.EVENT_TP,                      -- 이벤트 타입
-                EVENT010.EVENT_NM,						-- EVENT_TP = 'D'이면 부서명, 'A'이면 사역(행사)명
-                EVENT010.EVENT_HOST_ID,					-- 책임자 ID
-                EVENT010.EVENT_BUDGET_AMOUNT,			-- 예산금액
-                EVENT010.EVENT_START_DATE,				-- 사용일자의 시작일자
-                EVENT010.EVENT_END_DATE,				-- 사용일자의 종료일자
-                EVENT010.EVENT_LOC,						-- 행사장소
-                EVENT010.DEFAULT_EVENT_FLAG,			-- 기본 사역(행사)여부
-                EVENT010.EVENT_COMMENT,					-- 비고
-                MEMBER010.MEMBER_NAME					-- 책임자 명
-        FROM	tb_s020.tb_s020_event010    EVENT010,
-                tb_s020.tb_s020_member010   MEMBER010
-        WHERE	EVENT010.EVENT_HOST_ID = MEMBER010.MEMBER_ID
-        AND		EVENT010.EVENT_ID = #{eventId}
+        SELECT	E010.EVENT_ID,						-- EVENT_ID
+                E010.EVENT_NM,						-- 부서(사역)명
+                E010.EVENT_CODE,					-- 코드
+                E010.EVENT_HOST_ID,					-- 책임자 ID
+                M010.MEMBER_NAME,					-- 책임자 명
+                E010.EVENT_BUDGET_AMOUNT,			-- 예산금액
+                E010.EVENT_START_DATE,				-- 사용일자의 시작일자
+                E010.EVENT_END_DATE,				-- 사용일자의 종료일자
+                E010.EVENT_LOC,						-- 행사장소
+                E010.DEFAULT_EVENT_FLAG,			-- 기본 사역(행사)여부 (Y - 기본사역(행사))
+                E010.EVENT_STATUS,					-- 공개여부 (A- 공개, B- 비공개)
+                E010.PAY_FLAG,						-- 결제여부(Y - 결제, N - 비결제)
+                E010.EVENT_COMMENT					-- 비고
+        FROM	TB_S020.TB_S020_EVENT010  E010
+                INNER JOIN  TB_S020.TB_S020_MEMBER010  M010
+                ON	E010.EVENT_HOST_ID = M010.MEMBER_ID
+                AND	E010.ORG_ID		= M010.ORG_ID
+        WHERE	E010.EVENT_ID = #{eventId}
     </select>
     <select id="selectDeptDetailPayInfo" parameterType="java.lang.Integer" resultType="com.swontech.s02.domain.dto.s021.S021100070Dto$DeptDetailPayInfo">
         SELECT		EVENT020.EVENT_ID,						-- event_id

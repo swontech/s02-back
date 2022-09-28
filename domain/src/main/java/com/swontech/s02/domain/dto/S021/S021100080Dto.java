@@ -27,5 +27,6 @@ public class S021100080Dto {
         private String payFlag;
         private int highEventId;
         private int idPath;
+        private int idPathPriortiy; /* kjy add */
     }
 }

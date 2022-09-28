@@ -3,6 +3,8 @@ package com.swontech.s02.domain.logic.s021;
 import com.swontech.s02.domain.dto.comm.CustomResponse;
 import com.swontech.s02.domain.spec.s021.S021100070Spec;
 import com.swontech.s02.domain.store.s021.S021100070Store;
+import com.swontech.s02.domain.vo.s021.S021100070Vo;
+import com.swontech.s02.domain.vo.s021.S021100080Vo;
 import org.springframework.http.ResponseEntity;
 
 public class S021100070Logic implements S021100070Spec {
@@ -24,7 +26,15 @@ public class S021100070Logic implements S021100070Spec {
     }
 
     @Override
-    public ResponseEntity<?> retrieveDeptPayInfo(int eventId) {
-        return response.success(s021100070Store.selectDeptDetailPayInfo(eventId));
+    public ResponseEntity<?> retrieveDeptPayInfo(int orgId, int eventId) {
+        return response.success(
+                s021100070Store.selectDeptDetailPayInfo(
+                        S021100070Vo.ParamsVo
+                                .builder()
+                                .orgId(orgId)
+                                .eventId(eventId)
+                                .build()
+                )
+        );
     }
 }

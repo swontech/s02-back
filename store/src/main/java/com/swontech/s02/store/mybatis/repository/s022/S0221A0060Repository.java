@@ -6,8 +6,8 @@ import com.swontech.s02.domain.vo.s022.S0221A0060Vo;
 import lombok.RequiredArgsConstructor;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
+import java.util.List;
 
-import java.util.Map;
 
 @Repository
 @RequiredArgsConstructor
@@ -15,8 +15,8 @@ public class S0221A0060Repository implements S0221A0060Store {
     private final SqlSessionTemplate sqlSessionTemplate;
 
     @Override
-    public S0221A0060Dto.SelectEventCostResponse selectEventCost(Integer eventUseId) {
-        return sqlSessionTemplate.selectOne("S0221A0060.selectEventCost", eventUseId);
+    public List<S0221A0060Dto.SelectEventCostResponse> selectEventCost(Integer eventUseId) {
+        return sqlSessionTemplate.selectList("S0221A0060.selectEventCost", eventUseId);
     }
 
     @Override

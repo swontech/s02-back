@@ -24,20 +24,53 @@
     </select>
 
     <select id="selectEventCost" parameterType="java.lang.Integer" resultType="com.swontech.s02.domain.dto.s022.S0221A0060Dto$SelectEventCostResponse">
-        SELECT  EVENT010.PAY_FLAG,
-                EVENT030.EVENT_USE_ID,
-                EVENT030.EVENT_ID,
-                EVENT030.EVENT_USER_ID,
-                EVENT030.USED_DATE,
-                EVENT030.USE_AMOUNT,
-                EVENT030.USE_COMMENT,
-                EVENT030.USE_RECEIPT_ID,
-                EVENT030.USE_PRO_STATUS,
-                EVENT030.USE_SUBJECT
-        FROM    tb_s020.tb_s020_event010 EVENT010,
-                tb_s020.tb_s020_event030 EVENT030
-        WHERE   EVENT010.EVENT_ID = EVENT030.EVENT_ID
-        AND     EVENT030.EVENT_USE_ID = #{eventUseId}
+        SELECT  E010.EVENT_ID,              -- EVENT_ID
+                E010.EVENT_NM,              -- 행사명
+                E030.EVENT_USE_ID,          -- 행사 비용 사용ID
+                E030.EVENT_USER_ID,         -- 행사 비용 사용자ID
+                (SELECT   M010.MEMBER_NAME
+                FROM   TB_S020.TB_S020_MEMBER010 M010
+                WHERE   E030.EVENT_USER_ID= M010.MEMBER_ID )  USER_NAME,  -- 사용자명
+                E030.USED_DATE,             -- 행사 비용 사용일자
+                E030.USE_AMOUNT,            -- 행사 비용 사용금액
+                E030.USE_COMMENT,           -- 행사 비용 사용 내용
+                E030.USE_RECEIPT_ID,        -- 행사 비용 사용 영수증첨부파일ID
+                E030.USE_PRO_STATUS,        -- 행사 비용 사용 진행 상태코드
+                (SELECT   CD_V_MEANING
+                FROM   TB_S020.TB_S020_CODE010
+                WHERE   CD_TP = 'USE_PRO_STATUS'
+                AND      CD_V = E030.USE_PRO_STATUS
+                AND   CATEGORY = '000'
+                AND   ORG_ID    = E010.ORG_ID)   USE_PRO_STATUS_NM,   -- 행상비용사용진행상태명
+                E030.USE_SUBJECT,            -- 행사 비용 사용 제목
+                E030.PAY_STEP_CNT,         -- 행사 비용 사용 결제단계
+                E030.PAY_CURRENT_STEP,         -- 행사 비용 사용 현재 결제단계
+                E010.PAY_FLAG,            -- 행사 비용 사용 결제여부
+                E030.USE_RECEIPT_NAME,         -- 행사 비용 사용 영수증첨부파일명
+                E040.EVENT_USE_PAY_ID,         -- 행사 비용 사용 결제ID
+                E040.PAY_STEP,            -- 행사 비용 사용 결제 단계
+                E040.PAY_MEMBER_ID,         -- 행사 비용 사용 결제자 ID
+                (SELECT   M010.MEMBER_NAME
+                FROM   TB_S020.TB_S020_MEMBER010  M010
+                WHERE   E040.PAY_MEMBER_ID = M010.MEMBER_ID)   PAIED_NAME,        -- 행사 비용 사용 결제자명
+                E040.PAY_RESULT_FLAG,         -- 행사 비용 사용 결제결과 코드
+                CASE   WHEN E040.PAY_RESULT_FLAG = 'Y' THEN '승인'
+                WHEN E040.PAY_RESULT_FLAG = 'N' THEN '반려'
+                END      PAY_RESULT_NM,      -- 행사 비용 사용 결제결과코드명
+                E040.PAY_COMMENT,                       -- 행사 비용 사용 결제 COMMENT
+                E040.PAY_DATE,            -- 행사 비용 사용 결제일자
+                (SELECT M010.MEMBER_NAME
+                FROM   TB_S020.TB_S020_EVENT020     E020,
+                TB_S020.TB_S020_MEMBER010  M010
+                WHERE   E030.PAY_CURRENT_STEP    = E020.EVENT_PAY_LEVEL
+                AND      E030.EVENT_ID      = E020.EVENT_ID
+                AND   E020.EVENT_PAY_USER_ID   = M010.MEMBER_ID)   CUR_PAY_NAME   -- 행사 비용 사용 현재단계 결제자명
+        FROM    TB_S020.TB_S020_EVENT010     E010
+                INNER JOIN TB_S020.TB_S020_EVENT030     E030
+                ON E030.EVENT_ID = E010.EVENT_ID
+                LEFT OUTER JOIN  TB_S020.TB_S020_EVENT040     E040
+                ON E030.EVENT_USE_ID = E040.EVENT_USE_ID
+        WHERE   E030.EVENT_USE_ID = #{eventUseId}
     </select>
 
     <update id="updateEventCost" parameterType="com.swontech.s02.domain.vo.s022.S0221A0060Vo$UpdateEventCostVo">

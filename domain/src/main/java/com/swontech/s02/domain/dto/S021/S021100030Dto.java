@@ -6,6 +6,20 @@ import lombok.Setter;
 
 public class S021100030Dto {
 
+    @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
+    public static class MemberDetailInfo {
+        private int memberId;
+        private String memberName;
+        private String birth;
+        private String hpNo;
+        private String zipCode;
+        private String address;
+        private String detailAddress;
+        private String email;
+        private String bankNm;
+        private String accountNo;
+    }
+
     @Getter
     @Setter
     public static class RetriveMemberList {

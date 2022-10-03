@@ -82,6 +82,8 @@
             USE_RECEIPT_ID = #{useReceiptId},
             USE_RECEIPT_NAME = #{useReceiptName},
             USE_SUBJECT = #{useSubject},
+            USE_PRO_STATUS = 'A',
+            PAY_CURRENT_STEP = 1,
             UPDATE_TIMESTAMP = SYSDATE(),
             UPDATE_PROGRAM_ID = 'S0221A0060'
         WHERE

@@ -16,7 +16,7 @@ public class S0221A0060Controller {
     }
 
     @GetMapping("/event-cost")
-    public ResponseEntity<?> retrieveEventCost(@RequestParam(name = "eventUseId", required = false)Integer eventUseId) {
+    public ResponseEntity<?> retrieveEventCost(@RequestParam(name = "eventUseId")Integer eventUseId) {
         return s0221A0060Spec.selectEventCost(eventUseId);
     }
 

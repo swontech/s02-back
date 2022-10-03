@@ -7,7 +7,7 @@
                 event_nm,
                 PAY_FLAG,
                 high_event_id,
-                id_path_priority,
+                id_path_priortiy,
                 org_id,
                 event_code,
                 event_final_flag,

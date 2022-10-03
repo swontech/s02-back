@@ -9,8 +9,11 @@ public class S0221A2000Dto {
     @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
     public static class MoblieQRScanEventList {
         private int eventId;
+        private String payFlag;
+        private int highEventId;
+        private String eventFinalFlag;
         private String eventNm;
-        private String idPathPriority;
+        private String idPathPriortiy;
         private int orgId;
         private String eventCode;
         private String eventStartDate;

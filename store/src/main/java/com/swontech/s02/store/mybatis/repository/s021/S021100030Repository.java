@@ -21,6 +21,11 @@ public class S021100030Repository implements S021100030Store {
     }
 
     @Override
+    public S021100030Dto.MemberDetailInfo selectMemberDetailInfo(int memberId) {
+        return sqlSessionTemplate.selectOne("S021100030.selectMemberDetailInfo", memberId);
+    }
+
+    @Override
     public int deleteMember(int memberId) {
         return sqlSessionTemplate.update("S021100030.deleteMember", memberId);
     }

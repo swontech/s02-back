@@ -18,6 +18,11 @@ public class S021100030Logic implements S021100030Spec {
     }
 
     @Override
+    public ResponseEntity<?> selectMemberDetailInfo(int memberId) {
+        return response.success(s021100030Store.selectMemberDetailInfo(memberId));
+    }
+
+    @Override
     public ResponseEntity<?> selectMemberList(S021100030Dto.RetriveMemberList reqDto) {
         return response.success(s021100030Store.selectMemberList(
                 S021100030Vo.SelectMemberListVo

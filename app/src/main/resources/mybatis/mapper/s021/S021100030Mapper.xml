@@ -29,6 +29,21 @@
         AND			MEMBER010.MEMBER_TP LIKE CONCAT('%', #{memberTp}, '%')
     </select>
 
+    <select id="selectMemberDetailInfo" parameterType="java.lang.Integer" resultType="com.swontech.s02.domain.dto.s021.S021100030Dto$MemberDetailInfo">
+        select  member_id,         -- member_id
+                MEMBER_NAME,   -- 회원 성명
+                BIRTH,         -- 생년월일
+                hp_no,         -- 핸드폰 번호
+                ZIP_CODE,      -- 우편번호
+                ADDRESS,      -- 주소
+                DETAIL_ADDRESS,   -- 상세주소
+                EMAIL,         -- e_mail
+                BANK_NM,      -- 거래은행
+                ACCOUNT_NO      -- 계좌번호
+        from   tb_s020.tb_s020_member010   m010
+        where   member_id = #{memberId}
+    </select>
+
     <update id="deleteMember" parameterType="java.lang.Integer">
         UPDATE	tb_s020.tb_s020_member010
         SET		DATA_END_STATUS     = '*',
@@ -39,9 +54,9 @@
 
     <update id="updateMemberTp" parameterType="com.swontech.s02.domain.vo.s021.S021100030Vo$UpdateMemberTp">
         UPDATE	tb_s020.tb_s020_member010
-        SET		MEMBER_TP = #{memberTp},
-                UPDATE_TIMESTAMP = SYSDATE(),
-                UPDATE_PROGRAM_ID = 'S021100030'
-        WHERE	MEMBER_ID = #{memberId}
+        SET		MEMBER_TP           = #{memberTp},
+                UPDATE_TIMESTAMP    = SYSDATE(),
+                UPDATE_PROGRAM_ID   = 'S021100030'
+        WHERE	MEMBER_ID           = #{memberId}
     </update>
 </mapper>

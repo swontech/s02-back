@@ -13,6 +13,12 @@ public class S021100030Controller {
         this.s021100030Spec = s021100030Spec;
     }
 
+    @GetMapping("/retrieve-member-detail")
+    public ResponseEntity<?> retrieveMemberDetail(@RequestParam("memberId") int memberId) {
+        return s021100030Spec.selectMemberDetailInfo(memberId);
+    }
+
+
     @GetMapping("/retrieve-member-list")
     public ResponseEntity<?> retrieveMemberList(S021100030Dto.RetriveMemberList reqDto) {
         return s021100030Spec.selectMemberList(reqDto);

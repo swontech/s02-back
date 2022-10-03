@@ -25,25 +25,27 @@ public class S0221A0060Logic implements S0221A0060Spec {
 
     @Override
     public ResponseEntity<?> updateEventCost(S0221A0060Dto.UpdateEventCostDto eventCostDto) {
-        if("N".equals(s0221A0060Store.selectAvailableFlag(eventCostDto.getEventUseId()))) {
-            return response.success("이미 지급이 완료된 건으로 수정이 불가합니다.");
-        }
-        int result = s0221A0060Store.updateEventCost(S0221A0060Vo.UpdateEventCostVo
+        try {
+            if("N".equals(s0221A0060Store.selectAvailableFlag(eventCostDto.getEventUseId()))) return response.success("이미 지급이 완료된 건으로 수정이 불가합니다.");
+
+            int result = s0221A0060Store.updateEventCost(S0221A0060Vo.UpdateEventCostVo
                 .builder()
-                        .eventId(eventCostDto.getEventId())
-                        .eventUserId(eventCostDto.getEventUserId())
-                        .usedDate(eventCostDto.getUsedDate())
-                        .useAmount(eventCostDto.getUseAmount())
-                        .useComment(eventCostDto.getUseComment())
-                        .useReceiptId(eventCostDto.getUseReceiptId())
-                        .useReceiptName(eventCostDto.getUseReceiptName())
-                        .useSubject(eventCostDto.getUseSubject())
-                        .eventUseId(eventCostDto.getEventUseId())
+                    .eventId(eventCostDto.getEventId())
+                    .eventUserId(eventCostDto.getEventUserId())
+                    .usedDate(eventCostDto.getUsedDate())
+                    .useAmount(eventCostDto.getUseAmount())
+                    .useComment(eventCostDto.getUseComment())
+                    .useReceiptId(eventCostDto.getUseReceiptId())
+                    .useReceiptName(eventCostDto.getUseReceiptName())
+                    .useSubject(eventCostDto.getUseSubject())
+                    .eventUseId(eventCostDto.getEventUseId())
                 .build());
-        if(result > 0) {
-            return response.success("행사비용등록 수정에 성공했습니다.");
+            if(result > 0)  return response.success("행사비용등록 수정에 성공했습니다.");
+
+            return response.success("수정된 항목이 없습니다.");
+        } catch (Exception e) {
+            return response.fail("행사비용이 정상적으로 수정되지 않았습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return response.fail("행사비용이 정상적으로 수정되지 않았습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @Override
@@ -54,7 +56,7 @@ public class S0221A0060Logic implements S0221A0060Spec {
 
         S0221A0060Dto.PayInfo payInfo = s0221A0060Store.selectPayInfo(eventCostDto.getEventId());
         if(payInfo == null) {
-            return response.fail("비용요청등록이 가능한 event가 아니거나 등록된 event가 없습니다.", HttpStatus.BAD_REQUEST);
+            return response.success("비용요청등록이 가능한 event가 아니거나 등록된 event가 없습니다.");
         }
 
         eventPayDept = payInfo.getEventPayDept();

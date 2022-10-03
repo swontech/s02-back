@@ -3,15 +3,12 @@
 
 <mapper namespace="S0221A0060">
     <select id="selectPayInfo" parameterType="java.lang.Integer" resultType="com.swontech.s02.domain.dto.s022.S0221A0060Dto$PayInfo">
-        SELECT  EVENT010.PAY_FLAG,
-                IFNULL(MAX(EVENT020.EVENT_PAY_LEVEL), 1) -1 EVENT_PAY_DEPT
-        FROM    tb_s020.tb_s020_event010 EVENT010
-                LEFT OUTER JOIN tb_s020.tb_s020_event020 EVENT020
-                             ON EVENT010.EVENT_ID = EVENT020.EVENT_ID
-        WHERE       EVENT010.EVENT_ID = #{eventId}
-        GROUP BY    EVENT010.EVENT_ID,
-                    EVENT010.PAY_FLAG,
-                    EVENT010.EVENT_BUDGET_AMOUNT
+        SELECT  VI.EVENT_ID,
+                VI.PAY_FLAG,
+                VI.EVENT_BUDGET_AMOUNT,
+                VI.EVENT_PAY_DEPT
+        FROM    TB_S020.EVENT_HIERARCHY_VIEW VI
+        WHERE   VI.EVENT_ID = #{eventId}
     </select>
 
     <select id="selectAvailableFlag" parameterType="java.lang.Integer" resultType="java.lang.String">

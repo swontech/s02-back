@@ -7,7 +7,9 @@ import lombok.Setter;
 public class S0221A0060Dto {
     @Getter
     public static class PayInfo {
+        private int eventId;
         private String payFlag;
+        private int eventBudgetAmount;
         private int eventPayDept;
     }
 

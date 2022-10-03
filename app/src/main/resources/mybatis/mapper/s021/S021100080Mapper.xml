@@ -18,14 +18,14 @@
                     e010.EVENT_LEVEL	as lev,
                     e010.event_nm		as menu_path,
                     e010.EVENT_HOST_ID,
-                    -- null	as	event_host_name,
+                    -- null	as event_host_name,
                     e010.PAY_FLAG,
                     e010.high_event_id,
                     cast(e010.event_id as char) as id_path,
-                    e010.event_id	as id_path_priortiy
-            FROM 	tb_s020.tb_s020_event010  e010
+                    e010.event_id as id_path_priority
+            FROM 	tb_s020.tb_s020_event010 e010
                     left outer join tb_s020.tb_s020_event020  e020
-                    on e010.event_id	= e020.event_id
+                    on e010.event_id = e020.event_id
             where	e010.ORG_ID = #{orgId}
             and		event_level = 0
             and		e010.event_nm like CONCAT('%', #{eventNm}, '%')
@@ -37,6 +37,7 @@
                         e010.EVENT_LEVEL,
                         e010.PAY_FLAG
             union all
+
             select	e010_2.event_id,
                     e010_2.event_nm,
                     temp.pay_level_1	AS	pay_level_1,
@@ -54,11 +55,11 @@
                     e010_2.PAY_FLAG,
                     e010_2.high_event_id,
                     concat(temp.id_path,'-', e010_2.event_id)		as id_path,
-                    temp.id_path_priortiy
+                    temp.id_path_priority
             from	tb_s020.tb_s020_event010  e010_2
                     inner join cte  temp on e010_2.high_event_id = temp.event_id )
     select
-                id_path_priortiy,												-- 최상위 event_id
+                id_path_priority,												-- 최상위 event_id
                 SUBSTRING_INDEX(menu_path, '-', 1)   as event_nm_0,				-- 최상위 부서/행사명
                 pay_level_1,													-- 0_Level 1차결제자 ID
                 (SELECT m010.MEMBER_NAME
@@ -122,7 +123,7 @@
                 event_id,														-- event_id
                 event_nm														-- 행사명
         from	cte
-    order by 	id_path_priortiy,
+    order by 	id_path_priority,
                 id_path,
                 lev desc
     </select>

@@ -26,7 +26,7 @@ public class S021100080Dto {
         private String chargeNm;
         private String payFlag;
         private int highEventId;
-        private int idPath;
-        private int idPathPriortiy; /* kjy add */
+        private String idPath;
+        private int idPathPriority; /* kjy add */
     }
 }

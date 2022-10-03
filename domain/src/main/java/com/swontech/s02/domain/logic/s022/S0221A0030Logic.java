@@ -8,10 +8,11 @@ import com.swontech.s02.domain.dto.s022.S0221A0030Dto;
 import com.swontech.s02.domain.spec.s022.S0221A0030Spec;
 import com.swontech.s02.domain.store.s022.S0221A0030Store;
 import com.swontech.s02.domain.vo.s022.S0221A0030Vo;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-
+@Slf4j
 public class S0221A0030Logic implements S0221A0030Spec {
     private final S0221A0030Store s0221A0030Store;
     private final CustomResponse response;
@@ -46,38 +47,54 @@ public class S0221A0030Logic implements S0221A0030Spec {
             memberId = memberExistFlag.getMemberId();
             eventPayUserId = memberExistFlag.getEventPayUserId();
             orgId = memberExistFlag.getOrgId();
+            mobileId = memberExistFlag.getMobileId();
 
             // ① 회원정보 (tb_s020_member010) insert 처리
             // ② 부서별 회원정보 (tb_s020_event020) insert 처리
             if(memberId == null && eventPayUserId == null) {
+                log.info("case: 1");
                 S0221A0030Vo.InsertMobileMemberVo insertMobileMemberVo = S0221A0030Vo.InsertMobileMemberVo
                         .builder()
                             .orgId(orgId)
                             .memberName(memberName)
                             .hpNo(hpNo)
                         .build();
-
                 s0221A0030Store.insertMobileMember(insertMobileMemberVo);
                 int newMemberId = insertMobileMemberVo.getMemberId();
                 String newMobileId = encodingMobileId(insertMobileMemberVo.getMemberId(), hpNo);
                 s0221A0030Store.updateMobileId(S0221A0030Vo.UpdateMobileIdVo.builder().mobileId(newMobileId).memberId(newMemberId).build());
+
+                s0221A0030Store.insertMobileMemberEvent(S0221A0030Vo.InsertMobileMemberEventVo
+                        .builder()
+                                .memberId(newMemberId)
+                                .eventId(memberExistFlag.getEventId())
+                        .build());
             }
 
             // ③ 회원정보 (tb_s020_member010) 로그인정보 update 처리
             // ② 부서별 회원정보 (tb_s020_event020) insert 처리
             if(memberId != null && mobileId == null && eventPayUserId == null) {
+                log.info("case: 2");
                 s0221A0030Store.updateMobileMember(S0221A0030Vo.UpdateMobileMemberVo
                         .builder()
-                                .mobileId(encodingMobileId(memberId, hpNo))
-                                .memberId(memberId)
+                            .mobileId(encodingMobileId(memberId, hpNo))
+                            .memberId(memberId)
+                        .build());
+
+                s0221A0030Store.insertMobileMemberEvent(S0221A0030Vo.InsertMobileMemberEventVo
+                        .builder()
+                            .memberId(memberId)
+                            .eventId(memberExistFlag.getEventId())
                         .build());
             }
 
             if(memberId != null && mobileId != null && eventPayUserId != null) {
+                log.info("case: 3");
                 // skip
             }
 
             if(memberId != null && mobileId != null && eventPayUserId == null) {
+                log.info("case: 4");
                 s0221A0030Store.insertMobileMemberEvent(S0221A0030Vo.InsertMobileMemberEventVo
                         .builder()
                                 .eventId(memberExistFlag.getEventId())
@@ -86,6 +103,7 @@ public class S0221A0030Logic implements S0221A0030Spec {
             }
 
             if(memberId != null && mobileId == null && eventPayUserId != null) {
+                log.info("case: 5");
                 s0221A0030Store.updateMobileMember(S0221A0030Vo.UpdateMobileMemberVo
                         .builder()
                                 .mobileId(encodingMobileId(memberId, hpNo))
@@ -94,7 +112,7 @@ public class S0221A0030Logic implements S0221A0030Spec {
             }
             return response.success("정상적으로 처리되었습니다.");
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
             return response.fail("모바일 회원가입에 실패했습니다. 관리자에게 문의해주세요." + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

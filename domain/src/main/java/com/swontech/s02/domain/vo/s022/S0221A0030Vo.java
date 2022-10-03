@@ -6,6 +6,7 @@ import lombok.Getter;
 public class S0221A0030Vo {
 
     @Builder
+    @Getter
     public static class SelectMemberExistFlagVo {
         private String hpNo;
         private String eventCode;

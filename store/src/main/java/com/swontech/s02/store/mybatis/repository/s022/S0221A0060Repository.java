@@ -15,8 +15,13 @@ public class S0221A0060Repository implements S0221A0060Store {
     private final SqlSessionTemplate sqlSessionTemplate;
 
     @Override
-    public List<S0221A0060Dto.SelectEventCostResponse> selectEventCost(Integer eventUseId) {
-        return sqlSessionTemplate.selectList("S0221A0060.selectEventCost", eventUseId);
+    public S0221A0060Dto.SelectEventCostHeader selectEventCostHeader(Integer eventUseId) {
+        return sqlSessionTemplate.selectOne("S0221A0060.selectEventCostHeader", eventUseId);
+    }
+
+    @Override
+    public List<S0221A0060Dto.SelectEventCostDetail> selectEventCostDetail(Integer eventUseId) {
+        return sqlSessionTemplate.selectList("S0221A0060.selectEventCostDetail", eventUseId);
     }
 
     @Override

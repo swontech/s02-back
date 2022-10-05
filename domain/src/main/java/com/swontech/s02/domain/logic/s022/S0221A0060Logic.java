@@ -8,7 +8,9 @@ import com.swontech.s02.domain.vo.s022.S0221A0060Vo;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class S0221A0060Logic implements S0221A0060Spec {
     private final S0221A0060Store s0221A0060Store;
@@ -20,7 +22,12 @@ public class S0221A0060Logic implements S0221A0060Spec {
 
     @Override
     public ResponseEntity<?> selectEventCost(Integer eventUseId) {
-        return response.success(s0221A0060Store.selectEventCost(eventUseId));
+        Map<String, Object> data = new HashMap<>();
+
+        data.put("header", s0221A0060Store.selectEventCostHeader(eventUseId));
+        data.put("detail", s0221A0060Store.selectEventCostDetail(eventUseId));
+
+        return response.success(data);
     }
 
     @Override

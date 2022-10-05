@@ -43,7 +43,7 @@ public class S0221A0060Dto {
     @Getter
     @Setter
     @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
-    public static class SelectEventCostResponse {
+    public static class SelectEventCostHeader {
         private int eventId;
         private String eventNm;
         private int eventUseId;
@@ -56,18 +56,23 @@ public class S0221A0060Dto {
         private String useProStatus;
         private String useProStatusNm;
         private String useSubject;
-        private String payStepCnt;
-        private String payCurrentStep;
+        private int payStepCnt;
+        private int payCurrentStep;
         private String payFlag;
         private String useReceiptName;
-        private String eventUsePayId;
-        private String payStep;
-        private String payMemberId;
+    }
+
+    @Getter
+    @Setter
+    @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
+    public static class SelectEventCostDetail {
+        private int eventUsePayId;
+        private int payStep;
+        private int payMemberId;
         private String paiedName;
         private String payResultFlag;
         private String payResultNm;
         private String payComment;
         private String payDate;
-        private String curPayName;
     }
 }

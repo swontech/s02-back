@@ -9,7 +9,7 @@
                 ID_PATH,
                 LEV AS EVENT_LEVEL,
                 EVENT_TP
-        FROM	TB_S020.EVENT_HIERARCHY_VIEW  E_VI
+        FROM	tb_s020.event_hierarchy_view  E_VI
         WHERE	ORG_ID = #{orgId}
     </select>
 
@@ -27,7 +27,7 @@
                 E010.EVENT_STATUS,					-- 공개여부 (A- 공개, B- 비공개)
                 E010.PAY_FLAG,						-- 결제여부(Y - 결제, N - 비결제)
                 E010.EVENT_COMMENT					-- 비고
-        FROM	TB_S020.TB_S020_EVENT010  E010
+        FROM	tb_s020.tb_s020_event010  E010
                 INNER JOIN  TB_S020.TB_S020_MEMBER010  M010
                 ON	E010.EVENT_HOST_ID = M010.MEMBER_ID
                 AND	E010.ORG_ID		= M010.ORG_ID
@@ -50,11 +50,11 @@
                      ELSE 'N'
                 END	FOURTH_PAY_FLAG,						-- 4차 결제자
                 EVENT_PAY_ROLE_CD,							-- 비고
-                IFNULL(EVENT_PAY_LEVEL, 99),							-- 결제자LEVEL
+                IFNULL(EVENT_PAY_LEVEL, 99),				-- 결제자LEVEL
                 E020.EVENT_ID
-        FROM 	TB_S020.TB_S020_EVENT020 E020
-                INNER JOIN TB_S020.TB_S020_MEMBER010 M010
-                ON 	M010.MEMBER_ID	= E020.EVENT_PAY_USER_ID
+        FROM 	tb_s020.tb_s020_event020 E020
+                INNER JOIN tb_s020.tb_s020_member010 M010
+                ON 	M010.MEMBER_ID	= e020.event_pay_user_id
                 AND	M010.ORG_ID = #{orgId}
         WHERE	E020.EVENT_ID = #{eventId}
         ORDER BY IFNULL(EVENT_PAY_LEVEL, 99)

@@ -14,30 +14,40 @@
             FROM    tb_s020.tb_s020_org010
         </selectKey>
 
-        INSERT INTO tb_s020.tb_s020_org010 (
-            /* S021300010단체 등록/수정 화면 S021100020.insertOrgVo Created By MSH */
+        INSERT INTO TB_S020.TB_S020_ORG010 (
             ORG_ID,
             ORG_NAME,
             ZIP_CODE,
             ADDRESS,
             DETAIL_ADDRESS,
             TEL_NO,
+            CREATE_OBJECT_ID,
             CREATE_TIMESTAMP,
             CREATE_PROGRAM_ID,
+            LAST_OBJECT_ID,
             UPDATE_TIMESTAMP,
-            UPDATE_PROGRAM_ID
-        ) VALUES (
-            NEXTVAL(tb_s020.sq_s020_org010),
-            #{orgName},		            -- 단체명
-            #{zipCode},		            -- 우편번호
-            #{address},		            -- 주소
-            #{detailAddress},	        -- 상세주소
-            CONCAT(#{firstTelNo}, '-', #{middleTelNo}, '-', #{lastTelNo}),
-            SYSDATE(),
-            'S021100020',
-            SYSDATE(),
-            'S021100020'
+            UPDATE_PROGRAM_ID,
+            ORG_CODE
         )
+        SELECT  NEXTVAL(tb_s020.sq_s020_member010),
+                #{orgName},		            -- 단체명
+                #{zipCode},		            -- 우편번호
+                #{address},		            -- 주소
+                #{detailAddress},	        -- 상세주소
+                CONCAT(IFNULL(#{firstTelNo}, ''), '-', IFNULL(#{middleTelNo}, ''), '-', IFNULL(#{lastTelNo}, '')),
+                'TEST',             -- 로그인한 정보의 로그인ID => 2022.09.06 추가 수정사항
+                SYSDATE(),
+                'S021100020',
+                'TEST',             -- 로그인한 정보의 로그인ID => 2022.09.06 추가 수정사항
+                SYSDATE(),
+                'S021100020',
+                CASE    WHEN ASCII(MAX(ORG_CODE)) =  0 THEN 'AAA'
+                        WHEN SUBSTRING(MAX(ORG_CODE), 3) != 'Z' THEN CONCAT(SUBSTRING(MAX(ORG_CODE), 1, 1), SUBSTRING(MAX(ORG_CODE), 2, 1),  CHR(ASCII(SUBSTRING(MAX(ORG_CODE), 3)) + 1))
+                        WHEN SUBSTRING(MAX(ORG_CODE), 3) = 'Z' AND  SUBSTRING(MAX(ORG_CODE), 2, 1) != 'Z'  THEN CONCAT(SUBSTRING(MAX(ORG_CODE), 1, 1), CHR(ASCII(SUBSTRING(MAX(ORG_CODE), 2, 1)) +1),  'A')
+                        WHEN SUBSTRING(MAX(ORG_CODE), 3) = 'Z' AND  SUBSTRING(MAX(ORG_CODE), 2, 1) = 'Z' AND  SUBSTRING(MAX(ORG_CODE), 1, 1) != 'Z' THEN CONCAT(CHR(ASCII(SUBSTRING(MAX(ORG_CODE), 1, 1)) + 1), 'A',  'A')
+                        ELSE '999'
+                END
+        FROM    TB_S020.TB_S020_ORG010
     </insert>
 
     <insert id="insertMember" parameterType="com.swontech.s02.domain.vo.s021.S021100020Vo$InsertMemberVo">
@@ -63,7 +73,7 @@
             #{memberName},
             CONCAT(#{firstHpNo}, '-', #{middleHpNo}, '-', #{lastHpNo}),
             #{email},
-            'R',
+            'C',
             #{pwd}
         )
     </insert>
@@ -122,6 +132,7 @@
             MEMBER010.EMAIL = #{email},
             MEMBER010.MEMBER_NAME = #{memberName},
             MEMBER010.HP_NO = CONCAT(#{firstHpNo}, '-', #{middleHpNo}, '-', #{lastHpNo}),
+            MEMBER010.PWD = #{pwd}
 
             ORG010.UPDATE_TIMESTAMP = SYSDATE(),
             ORG010.UPDATE_PROGRAM_ID = 's021100020',
@@ -129,6 +140,6 @@
             MEMBER010.UPDATE_PROGRAM_ID = 's021100020'
 
         WHERE	ORG010.ORG_ID = #{orgId}
-        AND 	MEMBER010.MEMBER_TP = 'R'
+        AND 	MEMBER010.MEMBER_TP = 'C'
     </update>
 </mapper>

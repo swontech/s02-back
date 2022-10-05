@@ -57,5 +57,6 @@ public class S021100020Vo {
         private String firstHpNo;
         private String middleHpNo;
         private String lastHpNo;
+        private String pwd;
     }
 }

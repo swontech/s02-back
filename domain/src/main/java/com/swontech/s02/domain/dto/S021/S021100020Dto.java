@@ -16,6 +16,8 @@ public class S021100020Dto {
     public static class RegisterOrgReqDto {
         @NotNull
         private String orgName;
+        @NotNull
+        private String pwd;
         @NotBlank
         private String zipCode;
         @NotBlank
@@ -30,16 +32,12 @@ public class S021100020Dto {
         private String lastTelNo;
         @NotBlank
         private String memberName;
-
         @NotBlank
         private String firstHpNo;
-
         @NotBlank
         private String middleHpNo;
-
         @NotBlank
         private String lastHpNo;
-
         @NotBlank
         private String email;
     }
@@ -50,6 +48,7 @@ public class S021100020Dto {
     public static class PatchOrgReqDto {
         private int orgId;
         private String orgName;
+        private String pwd;
         private String zipCode;
         private String address;
         private String detailAddress;

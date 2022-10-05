@@ -59,4 +59,113 @@
         WHERE	E020.EVENT_ID = #{eventId}
         ORDER BY IFNULL(EVENT_PAY_LEVEL, 99)
     </select>
+
+    <insert id="insertEvent" parameterType="com.swontech.s02.domain.vo.s021.S021100070Vo$TbEvent010Vo">
+        <selectKey resultType="java.lang.Integer" keyProperty="eventId" order="AFTER">
+            SELECT  MAX(EVENT_ID)
+            FROM    tb_s020.tb_s020_event010
+        </selectKey>
+
+        INSERT INTO tb_s020.tb_s020_event010(
+        /* S021100070 부서(행사) 저장 화면 S021100070.insertEventVo Created By KJY */
+            EVENT_ID,
+            CREATE_OBJECT_ID,
+            CREATE_TIMESTAMP,
+            CREATE_PROGRAM_ID,
+            LAST_OBJECT_ID,
+            UPDATE_TIMESTAMP,
+            UPDATE_PROGRAM_ID,
+            EVENT_NM,
+            EVENT_CODE,
+            EVENT_START_DATE,
+            EVENT_END_DATE,
+            PAY_FLAG,
+            EVENT_LOC,
+            EVENT_HOST_ID,
+            EVENT_COMMENT,
+            EVENT_STATUS,
+            EVENT_REG_ID,
+            EVENT_BUDGET_AMOUNT,
+            ORG_ID,
+            DEFAULT_EVENT_FLAG,
+            HIGH_EVENT_ID,
+            EVENT_LEVEL,
+            EVENT_FINAL_FLAG,
+            EVENT_TP,
+            EVENT_PAY_DEPT
+        ) VALUES (
+            NEXTVAL(tb_s020.sq_s020_event010),
+            #{memberId},			-- 화면의 사용자 member_id
+            SYSDATE(),
+            'S021100070',
+            #{memberId},			-- 화면의 사용자 member_id
+            SYSDATE(),
+            'S021100070',
+            #{eventNm},				-- 화면의 부서 또는 행사(사역)명
+            #{eventCode},			-- 0 Leve의 경우만 "SearchEventCodeVO.event_code" 조회하여 등록
+            #{eventStartDate},		-- 화면의 사용일자 from
+            #{eventEndDate},		-- 화면의 사용일자 to
+            #{payFlag},				-- 화면의 결제여부
+            #{eventLoc},			-- 화면의 행사장소
+            #{eventHostId},			-- 화면의 책임자 ID EVENT_HOST_ID
+            #{eventComment},		-- 화면의  비고
+            #{eventStatus},			-- 화면의 공개여부 EVENT_STATUS ??
+            #{memberId} ,           -- 행사등록자ID(로그인한 memberid)
+            #{eventBudgetAmount},	-- 화면의  예산금액
+            #{orgId},				-- 화면의 로그인된 org_id
+            #{defaultEventFlag},	-- 화면의  기본사역여부
+            #{highEventId},		-- 0Level 경우 null , 1Level 이상의 경우는 선택한 상위 event_id
+            #{eventLevel},		-- 0Level 최상위의 경우 null, 그외 상위 Level +1
+            #{eventFinalFlag},	-- 행사(사역)일때 'Y', 기타 null
+            #{eventTp},			-- 행사(사역)이면 'A', 부서이면 'D'
+            #{eventPayDept}		-- 0Level 최상위이면 화면의 최종 결제 depth 값
+        )
+    </insert>
+    <update id="updateEvent" parameterType="com.swontech.s02.domain.vo.s021.S021100070Vo$TbEvent010Vo">
+        UPDATE tb_s020.tb_s020_event010
+        SET	LAST_OBJECT_ID = #{memberId},			-- 화면의 로그인 member_id
+            UPDATE_TIMESTAMP = SYSDATE(),
+            UPDATE_PROGRAM_ID = 'S021100070',
+            EVENT_NM            = #{eventNm},			-- 화면의 부서, 행사(사역)명
+            EVENT_START_DATE    = #{eventStartDate},	-- 화면의 사용일자 from
+            EVENT_END_DATE      = #{eventEndDate},		-- 화면의 사용일자 to
+            PAY_FLAG            = #{payFlag},			-- 화면의 결제여부
+            EVENT_LOC           = #{eventLoc},			-- 화면의 행사장소
+            EVENT_HOST_ID       = #{eventHostId},		-- 화면의 책임자 ID
+            EVENT_COMMENT       = #{eventComment},		-- 화면의 비고
+            EVENT_STATUS        = #{eventStatus},		-- 공개여부 (공개 - 'A', 비공개 - 'B')
+            EVENT_BUDGET_AMOUNT = #{eventBudgetAmount}	-- 화면의  예산금액
+            DEFAULT_EVENT_FLAG  = #{defaultEventFlag}	-- 화면의 기본사역여부
+        WHERE EVENT_ID = #{eventId}				-- 화면에서 선택한 event_id
+    </update>
+    <insert id="insertEventMember" parameterType="com.swontech.s02.domain.vo.s021.S021100070Vo$TbEvent020Vo">
+
+        INSERT INTO tb_s020.tb_s020_event020(
+            EVENT_ID,
+            EVENT_PAY_USER_ID,
+            CREATE_OBJECT_ID,
+            CREATE_TIMESTAMP,
+            CREATE_PROGRAM_ID,
+            LAST_OBJECT_ID,
+            UPDATE_TIMESTAMP,
+            UPDATE_PROGRAM_ID,
+            EVENT_PAY_LEVEL,
+            EVENT_PAY_ROLE_CD
+        )  VALUES (
+            #{eventId},			-- 신규 등록시 tb_s020_event010 에 저장한 event_id, 수정시는 선택한 event_id
+            #{eventPayUserId},	-- 화면에서 선택한 결제자의 member_id
+            #{memberId},	    -- 화면의 로그인 member_id
+            SYSDATE(),
+            'S021100070',
+            #{memberId},	    -- 화면의 로그인 member_id
+            SYSDATE(),
+            'S021100070',
+            #{eventPayLevel},	-- 화면의 결제자 Level구분
+            #{eventPayRoleCd}	-- 화면의 사용자 비고
+        )
+    </insert>
+    <update id="deleteEventMember" parameterType="java.lang.Integer">
+        DELETE FROM tb_s020.tb_s020_event020
+         WHERE event_id = #{eventId}		-- 선택한 event_id
+    </update>
 </mapper>

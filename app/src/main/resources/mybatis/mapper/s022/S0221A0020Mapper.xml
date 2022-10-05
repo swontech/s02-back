@@ -46,4 +46,13 @@
             'S0221A0020'
         )
     </select>
+
+    <select id="selectQRScanInfo" parameterType="java.lang.Integer" resultType="com.swontech.s02.domain.dto.s022.S0221A0020Dto$SelectQRScanInfo">
+        SELECT  NAME_PATH_PRIORTIY,    -- 부서명
+                EVENT_NM,              -- 행사명
+                EVENT_START_DATE,      -- 행사시작일자
+                EVENT_END_DATE         -- 행사종료일자
+        FROM    TB_S020.EVENT_HIERARCHY_VIEW VI
+        WHERE   EVENT_ID = #{eventId}
+    </select>
 </mapper>

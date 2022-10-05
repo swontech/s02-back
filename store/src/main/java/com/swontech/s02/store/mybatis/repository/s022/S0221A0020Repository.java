@@ -1,5 +1,6 @@
 package com.swontech.s02.store.mybatis.repository.s022;
 
+import com.swontech.s02.domain.dto.s022.S0221A0020Dto;
 import com.swontech.s02.domain.store.s022.S0221A0020Store;
 import com.swontech.s02.domain.vo.s022.S0221A0020Vo;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -30,6 +31,11 @@ public class S0221A0020Repository implements S0221A0020Store {
     @Override
     public String selectEnterFlag(S0221A0020Vo.SelectEnterFlag selectEnterFlag) {
         return sqlSessionTemplate.selectOne("S0221A0020.selectEnterFlag", selectEnterFlag);
+    }
+
+    @Override
+    public S0221A0020Dto.SelectQRScanInfo selectQRScanInfo(int eventId) {
+        return sqlSessionTemplate.selectOne("S0221A0020.selectQRScanInfo", eventId);
     }
 
 

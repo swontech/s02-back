@@ -59,4 +59,9 @@ public class S0221A0020Logic implements S0221A0020Spec {
             )
         );
     }
+
+    @Override
+    public ResponseEntity<?> selectQrScanInfo(int eventId) {
+        return response.success(s0221A0020Store.selectQRScanInfo(eventId));
+    }
 }

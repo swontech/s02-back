@@ -35,5 +35,6 @@ public class S021100040Vo {
         private String accountNo;
         private String bankNm;
         private int memberId;
+        private String pwd;
     }
 }

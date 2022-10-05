@@ -7,13 +7,16 @@ import com.swontech.s02.domain.store.s021.S021100040Store;
 import com.swontech.s02.domain.vo.s021.S021100040Vo;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 public class S021100040Logic implements S021100040Spec {
     private final S021100040Store s021100040Store;
     private final CustomResponse response;
-    public S021100040Logic(S021100040Store s021100040Store, CustomResponse response) {
+    private final PasswordEncoder passwordEncoder;
+    public S021100040Logic(S021100040Store s021100040Store, CustomResponse response, PasswordEncoder passwordEncoder) {
         this.s021100040Store = s021100040Store;
         this.response = response;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -29,7 +32,7 @@ public class S021100040Logic implements S021100040Spec {
                                     .address(reqDto.getAddress())
                                     .detailAddress(reqDto.getDetailAddress())
                                     .email(reqDto.getEmail())
-                                    .pwd(reqDto.getPwd())
+                                    .pwd(passwordEncoder.encode(reqDto.getPwd()))
                                     .accountNo(reqDto.getAccountNo())
                                     .bankNm(reqDto.getBankNm())
                                 .build()
@@ -56,6 +59,7 @@ public class S021100040Logic implements S021100040Spec {
                                 .email(reqDto.getEmail())
                                 .accountNo(reqDto.getAccountNo())
                                 .bankNm(reqDto.getBankNm())
+                                .pwd(passwordEncoder.encode(reqDto.getPwd()))
                             .build()
             );
             if(result > 0) {

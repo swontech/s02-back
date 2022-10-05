@@ -1,11 +1,15 @@
 package com.swontech.s02.client.controller.s021;
 
+import com.swontech.s02.domain.logic.s021.S021100070Logic;
 import com.swontech.s02.domain.spec.s021.S021100070Spec;
 import com.swontech.s02.domain.dto.s021.S021100070Dto;
 
 import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import javafx.scene.effect.Bloom;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,6 +21,7 @@ import java.util.List;
 @Api(tags = "부서(행사) 등록(s021100070) API", description = "부서(행사) 등록,수정,삭제 기능 API ")
 public class S021100070Controller {
     private final S021100070Spec s021100070Spec;
+    private Logger logger = LoggerFactory.getLogger(S021100070Controller.class);
 
     public S021100070Controller(S021100070Spec s021100070Spec) {
         this.s021100070Spec = s021100070Spec;
@@ -61,11 +66,16 @@ public class S021100070Controller {
     }
 
     @Operation(summary = "부서(행사) 저장-등록,수정,삭제", description = "화면에서 저장버튼 클릭시 기능 처리")
-    @PostMapping("/reg-eventMember")
+    @PostMapping("/save-event")
     public ResponseEntity<?> saveEvent(@RequestParam("eventId") @Parameter(name = "부서(행사)id", description = "유:eventId, 무:0") int eventId,
                                        final @Valid @RequestBody S021100070Dto.RegisterEventDto registerEventDto,
                                        final @Valid @RequestBody List<S021100070Dto.RegisterEventMemberDto> listRegEventMemberDto
     ) {
+        logger.info("부서(행사) 저장-등록,수정,삭제 api 호출");
+        logger.info("eventId=>"+ eventId);
+        logger.info("부서(행사)data =>"+ registerEventDto.toString());
+        logger.info("부서(행사)회원 data =>"+ listRegEventMemberDto.toString());
+
         //list dto 로 받아서 loop insert, 부서(행사)가 신규 등록이면 eventId는 0
         return s021100070Spec.saveEvent(eventId, registerEventDto, listRegEventMemberDto);
     }

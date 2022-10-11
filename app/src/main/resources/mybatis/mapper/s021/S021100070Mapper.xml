@@ -50,7 +50,7 @@
                      ELSE 'N'
                 END	FOURTH_PAY_FLAG,						-- 4차 결제자
                 EVENT_PAY_ROLE_CD,							-- 비고
-                IFNULL(EVENT_PAY_LEVEL, 99),				-- 결제자LEVEL
+                IFNULL(EVENT_PAY_LEVEL, 99) AS EVENT_PAY_LEVEL,	-- 결제자LEVEL
                 E020.EVENT_ID
         FROM 	tb_s020.tb_s020_event020 E020
                 INNER JOIN tb_s020.tb_s020_member010 M010

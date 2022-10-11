@@ -39,11 +39,16 @@ public class S021100070Dto {
 
     @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
     public static class DeptDetailPayInfo {
-        private int eventId;
-        private int eventPayUserId;
-        private int eventPayLevel;
-        private String eventPayRoleCd;
+        private int memberId;
         private String memberName;
+        private String hpNo;
+        private String fstPayFlag;
+        private String sndPayFlag;
+        private String trdPayFlag;
+        private String fourthPayFlag;
+        private String eventPayRoleCd; 
+        private int eventPayLevel;
+        private int eventId;
     }
     /** 부서(행사) 등록 항목 */
     @Getter

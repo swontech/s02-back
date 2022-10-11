@@ -26,7 +26,12 @@ subprojects {
         mavenCentral()
     }
 
-    bootJar.mainClassName('com.swontech.s02.Application')
+    bootJar {
+        mainClassName('com.swontech.s02.Application')
+        archiveBaseName = 's02-back'
+        archiveFileName = 's02-back.jar'
+        archiveVersion = '0.0.1'
+    }
 
     dependencies {
         // springboot && lombok

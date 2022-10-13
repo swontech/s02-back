@@ -30,6 +30,11 @@ public class S021100070Repository implements S021100070Store {
         return sqlSessionTemplate.selectList("S021100070.selectDeptDetailPayInfo", paramsVo);
     }
 
+    @Override
+    public String selectNewEventCode(S021100070Vo.ParamsVo paramsVo) {
+        return sqlSessionTemplate.selectOne("S021100070.selectNewEventCode", paramsVo);
+    }
+
     /**2022.09.28 kjy
      * 부서(행사) 등록
      */
@@ -61,5 +66,14 @@ public class S021100070Repository implements S021100070Store {
         return sqlSessionTemplate.delete("S021100070.deleteEventMember", eventId);
     }
 
+    @Override
+    public int updateEventFinalFlag(S021100070Vo.ParamsVo paramsVo) {
+        return sqlSessionTemplate.update("S021100070.updateEventFinalFlag", paramsVo);
+    }
+
+    @Override
+    public int updateDefaultEventFlag(S021100070Vo.ParamsVo paramsVo) {
+        return sqlSessionTemplate.update("S021100070.updateDefaultEventFlag", paramsVo);
+    }
 
 }

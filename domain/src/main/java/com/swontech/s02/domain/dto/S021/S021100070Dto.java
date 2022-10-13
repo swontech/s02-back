@@ -35,6 +35,9 @@ public class S021100070Dto {
         private String eventStatus;
         private String payFlag;
         private String eventComment;
+        private int highEventId;
+        private int eventLevel;
+        private String eventTp;
     }
 
     @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
@@ -50,6 +53,12 @@ public class S021100070Dto {
         private int eventPayLevel;
         private int eventId;
     }
+
+    @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
+    public static class NewEventCode {
+        private String eventCode;
+    }
+
     /** 부서(행사) 등록 항목 */
     @Getter
     @AllArgsConstructor

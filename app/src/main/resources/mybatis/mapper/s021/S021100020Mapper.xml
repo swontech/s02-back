@@ -79,42 +79,26 @@
     </insert>
 
     <select id="selectOrg" parameterType="java.lang.Integer" resultType="com.swontech.s02.domain.dto.s021.S021100020Dto$OrgDetailInfo">
-        WITH
-            /* parameter */
-            PARAM AS (
-                SELECT #{orgId} AS ORG_ID
-                FROM    DUAL
-            ),
-
-            /* 단체테이블 tb_s020_org010 */
-            ORG AS (
-                SELECT	A.ORG_ID,
-                        A.ORG_NAME,
-                        A.ZIP_CODE,
-                        A.ADDRESS,
-                        A.DETAIL_ADDRESS,
-                        A.TEL_NO
-                FROM 	tb_s020_org010 A,
-                        PARAM
-                WHERE 	A.ORG_ID = PARAM.ORG_ID
-            ),
-
-            /* 단체테이블 tb_s020_org010 join with 회원테이블 tb_s020_member010(대표자 정보 조회)*/
-            JOIN_WITH_MEMBER AS (
-                SELECT 	A.*,
-                        B.MEMBER_ID,
-                        B.MEMBER_NAME,
-                        B.EMAIL,
-                        B.HP_NO,
-                        B.MEMBER_TP
-                FROM	ORG A,
-                        tb_s020_member010 B
-                WHERE	A.ORG_ID = B.ORG_ID
-                AND     B.MEMBER_TP = 'R'
-            )
-
-        SELECT 	*
-        FROM 	JOIN_WITH_MEMBER
+        select	org.org_id,						 -- ORG_ID
+            org.org_name,						 -- 단체명
+            org.zip_code,						 -- 우편번호
+            org.address,						 -- 주소
+            org.detail_address,						 -- 상세주소
+            substring_index(org.tel_no, '-', 1)  tel_no_fst,				-- 연락처 첫번째
+            substring_index(substring_index(org.tel_no, '-', 2),'-', -1) 	tel_no_snd,		 -- 연락처 두번째
+            substring_index(org.tel_no, '-', -1)	tel_no_thd,				-- 연락처 세번째
+            mem.member_name,						 -- 대표자명
+            substring_index(mem.hp_no, '-', 1)  hp_fst,						 -- 대표자 HP 첫번째
+            substring_index(substring_index(mem.hp_no, '-', 2),'-', -1)  hp_snd, -- 대표자 HP 두번째
+            substring_index(mem.hp_no, '-', -1)   hp_thd,						 -- 대표자 HP 세번째
+            substring_index(mem.email, '@', 1)    email_fst,					 -- 대표자 EMAIL 첫번째
+            substring_index(mem.email, '@', -1)   email_snd,					 -- 대표자 EMAIL 두번째
+            mem.member_id
+        from	tb_s020.tb_s020_org010 		org
+            inner join tb_s020.tb_s020_member010   mem
+            on	org.org_id    = mem.org_id
+            and	mem.member_tp = 'C'
+        where	org.org_id 	= #{orgId}		 -- 선택한 ORG_ID
     </select>
 
     <update id="updateOrg" parameterType="com.swontech.s02.domain.vo.s021.S021100020Vo$UpdateOrgVo">

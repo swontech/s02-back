@@ -72,9 +72,18 @@ public class S021100020Dto {
         private String zipCode;
         private String address;
         private String detailAddress;
-        private String telNo;
-        private String hpNo;
-        private String email;
+//        private String telNo;
+//        private String hpNo;
+//        private String email;
+        private String telNoFst;
+        private String telNoSnd;
+        private String telNoThd;
+        private String hpFst;
+        private String hpSnd;
+        private String hpThd;
+        private String emailFst;
+        private String emailSnd;
+        private String memberId;
         private String memberTp;
         private String memberName;
     }

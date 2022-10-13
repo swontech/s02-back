@@ -16,9 +16,10 @@ public class S021100010Dto {
         private int orgId;
         private String orgName;
         private String telNo;
-        private String hpNo;
+//        private String hpNo;
         private String memberName;
         private String email;
         private String memberCnt;
+        private String orgCode;
     }
 }

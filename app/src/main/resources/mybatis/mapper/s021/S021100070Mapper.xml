@@ -27,6 +27,9 @@
                 E010.EVENT_STATUS,					-- 공개여부 (A- 공개, B- 비공개)
                 E010.PAY_FLAG,						-- 결제여부(Y - 결제, N - 비결제)
                 E010.EVENT_COMMENT					-- 비고
+                E010.HIGH_EVENT_ID,
+                E010.EVENT_LEVEL,
+                E010.EVENT_TP
         FROM	tb_s020.tb_s020_event010  E010
                 INNER JOIN  TB_S020.TB_S020_MEMBER010  M010
                 ON	E010.EVENT_HOST_ID = M010.MEMBER_ID
@@ -168,4 +171,32 @@
         DELETE FROM tb_s020.tb_s020_event020
          WHERE event_id = #{eventId}		-- 선택한 event_id
     </update>
+
+    <select id="selectNewEventCode" parameterType="java.lang.Integer" resultType="com.swontech.s02.domain.dto.s021.S021100070Dto$NewEventCode">
+        select 	case when length(max(cast(substring(e010.event_code, 4) as unsigned)) + 1) = 1
+                            then concat(org010.org_code, '0', max(cast(substring(e010.event_code, 4) as unsigned)) + 1)
+                     when length(max(cast(substring(e010.event_code, 4) as unsigned)) + 1) = 2
+                            then concat(org010.org_code,  max(cast(substring(e010.event_code, 4) as unsigned)) + 1)
+                end event_code
+        from 	tb_s020.tb_s020_event010  e010
+                inner join tb_s020.tb_s020_org010  org010
+                on org010.org_id	= e010.org_id
+        where	e010.org_id = #{orgId}
+         and	e010.event_level = 0
+    </select>
+
+    <update id="updateEventFinalFlag" parameterType="com.swontech.s02.domain.vo.s021.S021100070Vo$ParamsVo">
+        update tb_s020.tb_s020_event010  e010
+           set EVENT_FINAL_FLAG = null
+         where org_id = #{orgId}		-- org_id
+           and event_id = #{eventId}	-- 등록 시 선택한 상위 event_id
+    </update>
+
+    <update id="updateDefaultEventFlag" parameterType="com.swontech.s02.domain.vo.s021.S021100070Vo$ParamsVo">
+        update tb_s020.tb_s020_event010  e010
+           set DEFAULT_EVENT_FLAG = null
+         where org_id = #{orgId}		-- org_id
+           and event_id = #{eventId}	-- 등록 시 선택한 상위 event_id
+    </update>
+
 </mapper>

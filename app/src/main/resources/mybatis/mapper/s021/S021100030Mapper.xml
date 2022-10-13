@@ -13,10 +13,11 @@
                     MEMBER010.MEMBER_TP,				-- 회원 등급
                     -- 회원등급명
                     (SELECT CD_V_MEANING
-                    FROM 	tb_s020.tb_s020_code010
-                    WHERE 	CD_TP 		= 'MEMBER_TP'
-                    AND  	CATEGORY 	='000'
-                    AND  	CD_V = MEMBER010.MEMBER_TP) AS MEMBER_TP_NM
+                       FROM tb_s020.tb_s020_code010
+                      WHERE CD_TP 		= 'MEMBER_TP'
+                        AND CATEGORY 	='000'
+                        AND CD_V = MEMBER010.MEMBER_TP) AS MEMBER_TP_NM,
+                    DATE_FORMAT(M010.CREATE_TIMESTAMP,  '%Y-%c-%d') 	REG_DATE		-- 등록일자
         FROM 		tb_s020.tb_s020_member010 	MEMBER010
         INNER JOIN 	tb_s020.tb_s020_org010 		ORG010
         ON			MEMBER010.ORG_ID = ORG010.ORG_ID

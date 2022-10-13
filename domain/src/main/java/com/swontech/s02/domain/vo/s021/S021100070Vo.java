@@ -3,6 +3,7 @@ package com.swontech.s02.domain.vo.s021;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.NoArgsConstructor;
 
 public class S021100070Vo {
@@ -13,6 +14,7 @@ public class S021100070Vo {
         private int eventId;
     }
     @Getter
+    @Setter
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
@@ -49,6 +51,5 @@ public class S021100070Vo {
         private int eventPayLevel;
         private String eventPayRoleCd;
     }
-
 
 }

@@ -10,6 +10,9 @@ public interface S021100070Store {
     S021100070Dto.DeptDetailInfo selectDeptDetailInfo(int eventId);
     List<S021100070Dto.DeptDetailPayInfo> selectDeptDetailPayInfo(S021100070Vo.ParamsVo paramsVo);
 
+    /** kjy 부서(행사) 신규 등록(최상위)인 경우 신규생성 발번된 부서코드 조회 */
+    String selectNewEventCode(S021100070Vo.ParamsVo paramsVo);
+
     /** kjy 부서(행사) 신규 등록 */
     int insertEvent(S021100070Vo.TbEvent010Vo TbEvent010Vo);
 
@@ -21,22 +24,25 @@ public interface S021100070Store {
      * 1.INFO : 부서(행사) 정보 수정
      * 2.DEFAULT_EVENT : 기본사역 삭제 처리, DEFAULT_EVENT_FLAG=NULL
      * 3.FINAL_FLAG: 행사최하위여부 삭제 처리, EVENT_FINAL_FLAG=NULL
-     * @return
+     * @return int
      */
     int updateEvent(S021100070Vo.TbEvent010Vo TbEvent010Vo);
 
     /**kjy 부서(행사) 정보 삭제
      * tb_s020_event010
-     * @param eventId
-     * @return
+     * @param eventId :
+     * @return int
      */
     int deleteEvent(int eventId);
 
     /**kjy 부서(행사)의 회원정보 삭제
      * tb_s020_event020
-     * @param eventId
-     * @return
+     * @param eventId :
+     * @return int
      */
     int deleteEventMember(int eventId);
 
+    int updateEventFinalFlag(S021100070Vo.ParamsVo paramsVo);
+
+    int updateDefaultEventFlag(S021100070Vo.ParamsVo paramsVo);
 }

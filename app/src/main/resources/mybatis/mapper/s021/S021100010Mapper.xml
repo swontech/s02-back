@@ -3,22 +3,22 @@
 
 <mapper namespace="S021100010">
     <select id="selectOrgList" parameterType="com.swontech.s02.domain.vo.s021.S021100010Vo$SelectOrgListVo" resultType="com.swontech.s02.domain.dto.s021.S021100010Dto$OrgListResponse">
-        SELECT  ORG010.ORG_ID,
-                ORG010.ORG_NAME,
-                ORG010.TEL_NO,
-                MEM010.HP_NO,
-                MEM010.MEMBER_NAME,
-                MEM010.EMAIL,
-                (SELECT COUNT(MEMBER_ID)
-                FROM    tb_s020.tb_s020_member010 TB
-                WHERE   TB.ORG_ID = ORG010.ORG_ID) AS MEMBER_CNT
-        FROM    tb_s020.tb_s020_org010 ORG010,
-                tb_s020.tb_s020_member010 MEM010
-        WHERE   ORG010.ORG_ID = MEM010.ORG_ID
-        AND     MEM010.MEMBER_TP = 'R'
-        AND     ORG010.DATA_END_STATUS IS NULL
-        AND     ORG010.ORG_NAME LIKE CONCAT('%', #{orgName}, '%')
-        AND     MEM010.MEMBER_NAME LIKE CONCAT('%', #{memberName}, '%')
+        select 	org.org_id,							-- ORG_ID
+            org.org_name,						-- 단체명
+            org.tel_no,							-- 대표 연락처
+            mem.member_name,					-- 대표자명
+            mem.email,							-- 대표자 EMAIL
+            (select COUNT(MEMBER_ID)
+               from	tb_s020.tb_s020_member010 mem_1
+              where	mem_1.org_id = org.org_id)	member_cnt,     -- 회원수
+            org.org_code						-- 단체코드 (2022.09.28 추가)
+        from	tb_s020.tb_s020_org010	org
+            inner join tb_s020.tb_s020_member010   mem
+            on	org.org_id    = mem.org_id
+        where	mem.member_tp = 'C'
+        and		org.data_end_status IS NULL
+        and		org.org_name	LIKE	concat('%',ifnull(null, #{orgName}),'%')	    -- 검색조건의 단체명
+        and		mem.member_name	LIKE	concat('%',ifnull(null, #{memberName}),'%')		-- 검색조건의 대표자명
     </select>
 
     <update id="updateOrgStatus" parameterType="java.lang.Integer">

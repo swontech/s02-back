@@ -42,6 +42,12 @@ public class S021100070Controller {
         return s021100070Spec.retrieveDeptPayInfo(orgId, eventId);
     }
 
+    @GetMapping("/newEventCode")
+    public ResponseEntity<?> retrieveNewEventCode(@RequestParam("orgId") int orgId,
+                                                 @RequestParam("eventId") int eventId) {
+        return s021100070Spec.retrieveNewEventCode(orgId, eventId);
+    }
+
     @Operation(summary = "[unitTest]부서(행사) 등록", description = "[unitTest]화면에서 저장시 신규 등록인 경우")
     @PostMapping("/reg-event")
     public ResponseEntity<?> registerEvent(final @Valid @RequestBody S021100070Dto.RegisterEventDto registerEventDto) {
@@ -77,6 +83,24 @@ public class S021100070Controller {
 
         //list dto 로 받아서 loop insert, 부서(행사)가 신규 등록이면 eventId는 0
         return s021100070Spec.saveEvent(eventId, registerEventDto, listRegEventMemberDto);
+    }
+
+    /*행사최하위여부( EVENT_FINAL_FLAG) null update */
+    @Operation(summary = "[unitTest]부서(행사) 수정", description = "상위 부서(행사)정보:행사최하위여부 수정")
+    @PostMapping("/patch-finalFlag")
+    public ResponseEntity<?> patchEventFinalFlag(@RequestParam("orgId") int orgId,
+                                                 @RequestParam("highEventId") int eventId) {
+        logger.info("부서(행사) 저장-등록,수정,삭제 api 호출");
+        return s021100070Spec.patchEventFinalFlag(orgId, eventId);
+    }
+
+    /* 기본사역 삭제 처리 update  */
+    @Operation(summary = "[unitTest]부서(행사) 수정", description = "상위 부서(행사)정보:기본사역 수정")
+    @PostMapping("/patch-defaultFlag")
+    public ResponseEntity<?> patchDefaultEventFlag(@RequestParam("orgId") int orgId,
+                                                 @RequestParam("eventId") int eventId) {
+        logger.info("부서(행사) 저장-등록,수정,삭제 api 호출");
+        return s021100070Spec.patchDefaultEventFlag(orgId, eventId);
     }
 
 }

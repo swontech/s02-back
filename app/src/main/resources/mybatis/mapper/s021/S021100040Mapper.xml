@@ -36,7 +36,7 @@
             #{detailAddress},			-- 화면의 상세주소
             #{email},		            -- 화면의 email주소
             #{pwd},                     -- 초기 비밀번호
-            #{memberTp},                -- 회원구분
+            'A',                -- 회원구분
             #{accountNo}, 		        -- 화면의 입력한 계좌번호
             #{bankNm}                   -- 화면의 입력한 은행
         )

@@ -16,6 +16,9 @@ public enum ExceptionEnum {
     UNSUPPORTED_JWT(401, "A003", "Unsupported Jwt... JWT의 형식과 구성이 올바르지 않습니다."),
     CLAIMS_EMPTY_JWT(401, "A004", "Claims is Empty... JWT의 기존 서명을 확인하지 못했습니다."),
 
+    // 인증 정보 에러
+    USER_NOT_FOUND(403, "A005", "가입된 이메일 정보가 없습니다."),
+    PASSWORD_INCORRECT(403, "A006", "비밀번호가 일치하지 않습니다."),
     ;
 
 

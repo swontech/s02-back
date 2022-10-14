@@ -31,8 +31,8 @@ public class S021100070Repository implements S021100070Store {
     }
 
     @Override
-    public String selectNewEventCode(S021100070Vo.ParamsVo paramsVo) {
-        return sqlSessionTemplate.selectOne("S021100070.selectNewEventCode", paramsVo);
+    public String selectNewEventCode(int orgId) {
+        return sqlSessionTemplate.selectOne("S021100070.selectNewEventCode", orgId);
     }
 
     /**2022.09.28 kjy

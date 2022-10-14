@@ -26,12 +26,18 @@
                 E010.DEFAULT_EVENT_FLAG,			-- 기본 사역(행사)여부 (Y - 기본사역(행사))
                 E010.EVENT_STATUS,					-- 공개여부 (A- 공개, B- 비공개)
                 E010.PAY_FLAG,						-- 결제여부(Y - 결제, N - 비결제)
-                E010.EVENT_COMMENT					-- 비고
+                E010.EVENT_COMMENT,					-- 비고
                 E010.HIGH_EVENT_ID,
                 E010.EVENT_LEVEL,
-                E010.EVENT_TP
+                E010.EVENT_TP,                    -- 부서행사구분(A:행사/D:부서)
+                E010.EVENT_FINAL_FLAG,            -- 행사최하위여부(Y:최하위 /NULL:최하위 아님)
+                CASE  WHEN E010.EVENT_TP = 'A' AND E010.EVENT_FINAL_FLAG = 'Y' THEN 'Y'
+                      WHEN E010.EVENT_TP = 'D' AND (SELECT COUNT(*)  FROM TB_S020.EVENT_HIERARCHY_VIEW
+                                                     WHERE ID_PATH_PRIORTIY = E010.EVENT_ID) > 1 THEN 'Y'
+                      ELSE   'N'
+                      END   AS DEL_FLAG      -- 부서(행사)삭제가능여부 (Y - 삭제 가능 / N - 삭제불가)
         FROM	tb_s020.tb_s020_event010  E010
-                INNER JOIN  TB_S020.TB_S020_MEMBER010  M010
+                LEFT OUTER JOIN  TB_S020.TB_S020_MEMBER010  M010
                 ON	E010.EVENT_HOST_ID = M010.MEMBER_ID
                 AND	E010.ORG_ID		= M010.ORG_ID
         WHERE	E010.EVENT_ID = #{eventId}

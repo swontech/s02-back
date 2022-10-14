@@ -38,6 +38,8 @@ public class S021100070Dto {
         private int highEventId;
         private int eventLevel;
         private String eventTp;
+        private String eventFinalFlag;
+        private String delFlag;
     }
 
     @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)

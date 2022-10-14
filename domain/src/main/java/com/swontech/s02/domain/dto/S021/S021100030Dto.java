@@ -52,5 +52,6 @@ public class S021100030Dto {
         private String mobileLoginDate;
         private String memberTp;
         private String memberTpNm;
+        private String regDate;
     }
 }

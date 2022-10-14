@@ -11,7 +11,7 @@ public interface S021100070Store {
     List<S021100070Dto.DeptDetailPayInfo> selectDeptDetailPayInfo(S021100070Vo.ParamsVo paramsVo);
 
     /** kjy 부서(행사) 신규 등록(최상위)인 경우 신규생성 발번된 부서코드 조회 */
-    String selectNewEventCode(S021100070Vo.ParamsVo paramsVo);
+    String selectNewEventCode(int orgId);
 
     /** kjy 부서(행사) 신규 등록 */
     int insertEvent(S021100070Vo.TbEvent010Vo TbEvent010Vo);

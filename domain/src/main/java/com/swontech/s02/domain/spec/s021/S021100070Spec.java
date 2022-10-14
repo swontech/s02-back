@@ -11,7 +11,7 @@ public interface S021100070Spec {
     ResponseEntity<?> retrieveDeptPayInfo(int orgId, int eventId);
 
     /** kjy 부서(행사) 신규 등록(최상위)인 경우 신규생성 발번된 부서코드 조회 */
-    ResponseEntity<?> retrieveNewEventCode(int orgId, int eventId);
+    ResponseEntity<?> retrieveNewEventCode(int orgId);
 
     /** 부서(행사) 신규 등록 */
     ResponseEntity<?> registerEvent(S021100070Dto.RegisterEventDto registerEventDto );

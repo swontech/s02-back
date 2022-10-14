@@ -48,15 +48,9 @@ public class S021100070Logic implements S021100070Spec {
 
     /** kjy 부서(행사) 신규 등록(최상위 level)시 부서코드 발번 조회 */
     @Override
-    public ResponseEntity<?> retrieveNewEventCode(int orgId, int eventId) {
+    public ResponseEntity<?> retrieveNewEventCode(int orgId) {
         return response.success(
-                s021100070Store.selectNewEventCode(
-                        S021100070Vo.ParamsVo
-                                .builder()
-                                .orgId(orgId)
-                                .eventId(eventId)
-                                .build()
-                )
+                s021100070Store.selectNewEventCode(orgId)
         );
     }
 
@@ -150,7 +144,7 @@ public class S021100070Logic implements S021100070Spec {
                 //최상위 즉, level=0 이면 부서코드 발번조회하여 set
                 if(registerEventVo.getEventLevel() == 0)
                 {
-                    String newEventCode = s021100070Store.selectNewEventCode(paramsVo);
+                    String newEventCode = s021100070Store.selectNewEventCode(registerEventDto.getOrgId());
                     logger.info("[S021100070] 부서(행사) 신규등록 부서코드 발번조회 : " + newEventCode);
 
                     registerEventVo.setEventCode(newEventCode);

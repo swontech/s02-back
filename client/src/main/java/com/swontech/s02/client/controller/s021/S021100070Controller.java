@@ -1,6 +1,5 @@
 package com.swontech.s02.client.controller.s021;
 
-import com.swontech.s02.domain.logic.s021.S021100070Logic;
 import com.swontech.s02.domain.spec.s021.S021100070Spec;
 import com.swontech.s02.domain.dto.s021.S021100070Dto;
 
@@ -43,9 +42,8 @@ public class S021100070Controller {
     }
 
     @GetMapping("/newEventCode")
-    public ResponseEntity<?> retrieveNewEventCode(@RequestParam("orgId") int orgId,
-                                                 @RequestParam("eventId") int eventId) {
-        return s021100070Spec.retrieveNewEventCode(orgId, eventId);
+    public ResponseEntity<?> retrieveNewEventCode(@RequestParam("orgId") int orgId) {
+        return s021100070Spec.retrieveNewEventCode(orgId);
     }
 
     @Operation(summary = "[unitTest]부서(행사) 등록", description = "[unitTest]화면에서 저장시 신규 등록인 경우")

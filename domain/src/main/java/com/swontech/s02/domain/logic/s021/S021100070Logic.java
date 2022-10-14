@@ -57,6 +57,7 @@ public class S021100070Logic implements S021100070Spec {
     /** kjy 부서(행사) 신규 등록 */
     @Override
     public ResponseEntity<?> registerEvent(S021100070Dto.RegisterEventDto registerEventDto) {
+        logger.info("[unitTest]부서(행사) 등록 registerEvent() 호출");
 
         S021100070Vo.TbEvent010Vo registerEventVo = this.setDataRegisterEventVo(registerEventDto);
         s021100070Store.insertEvent(registerEventVo);
@@ -220,6 +221,8 @@ public class S021100070Logic implements S021100070Spec {
 
     /** 화면에서 넘겨받은 부서(행사) 정보 항목을 등록대상 vo로 변환한다. */
     private S021100070Vo.TbEvent010Vo setDataRegisterEventVo(S021100070Dto.RegisterEventDto registerEventDto) {
+
+        logger.info("[unitTest]부서(행사) 등록 setDataRegisterEventVo() 호출");
 
         return S021100070Vo.TbEvent010Vo.builder()
                 .eventNm(registerEventDto.getEventNm())

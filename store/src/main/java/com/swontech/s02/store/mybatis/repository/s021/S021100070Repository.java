@@ -5,6 +5,8 @@ import com.swontech.s02.domain.store.s021.S021100070Store;
 import com.swontech.s02.domain.vo.s021.S021100070Vo;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
@@ -14,6 +16,8 @@ public class S021100070Repository implements S021100070Store {
     public S021100070Repository(SqlSessionTemplate sqlSessionTemplate) {
         this.sqlSessionTemplate = sqlSessionTemplate;
     }
+
+    private final Logger logger = LoggerFactory.getLogger(S021100070Repository.class);
 
     @Override
     public List<S021100070Dto.DeptLevel> selectDeptLevel(int orgId) {
@@ -40,6 +44,8 @@ public class S021100070Repository implements S021100070Store {
      */
     @Override
     public int insertEvent(S021100070Vo.TbEvent010Vo TbEvent010Vo) {
+        logger.info("S021100070Repository insertEvent 호출");
+        logger.info("부서(행사) data =>"+ TbEvent010Vo.toString());
         return sqlSessionTemplate.insert("S021100070.insertEvent", TbEvent010Vo);
     }
 
@@ -48,11 +54,15 @@ public class S021100070Repository implements S021100070Store {
      */
     @Override
     public int insertEventMember(S021100070Vo.TbEvent020Vo TbEvent020Vo) {
+        logger.info("S021100070Repository insertEventMember 호출");
+        logger.info("부서(행사)회원 data =>"+ TbEvent020Vo.toString());
         return sqlSessionTemplate.insert("S021100070.insertEventMember", TbEvent020Vo);
     }
 
     @Override
     public int updateEvent(S021100070Vo.TbEvent010Vo TbEvent010Vo) {
+        logger.info("S021100070Repository updateEvent 호출");
+        logger.info("부서(행사) data =>"+ TbEvent010Vo.toString());
         return sqlSessionTemplate.update("S021100070.updateEvent", TbEvent010Vo);
     }
 

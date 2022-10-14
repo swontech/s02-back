@@ -178,7 +178,7 @@
          WHERE event_id = #{eventId}		-- 선택한 event_id
     </update>
 
-    <select id="selectNewEventCode" parameterType="java.lang.Integer" resultType="com.swontech.s02.domain.dto.s021.S021100070Dto$NewEventCode">
+    <select id="selectNewEventCode" parameterType="java.lang.String" resultType="com.swontech.s02.domain.dto.s021.S021100070Dto$NewEventCode">
         select 	case when length(max(cast(substring(e010.event_code, 4) as unsigned)) + 1) = 1
                             then concat(org010.org_code, '0', max(cast(substring(e010.event_code, 4) as unsigned)) + 1)
                      when length(max(cast(substring(e010.event_code, 4) as unsigned)) + 1) = 2

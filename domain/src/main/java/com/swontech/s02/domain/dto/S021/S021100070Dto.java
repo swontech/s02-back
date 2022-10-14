@@ -66,41 +66,23 @@ public class S021100070Dto {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class RegisterEventDto {
-        @NotNull
         private String eventNm;
-        @NotBlank
         private String eventCode;
-        @NotBlank
         private String eventStartDate;
-        @NotBlank
         private String eventEndDate;
-        @NotBlank
         private String payFlag;
-        @NotBlank
         private String eventLoc;
-        @NotBlank
         private int eventHostId;
-        @NotBlank
         private String eventComment;
-        @NotBlank
         private String eventStatus;
-        @NotBlank
         private int eventRegId;
-        @NotBlank
         private int eventBudgetAmount;
-        @NotNull
         private int orgId;
-        @NotBlank
         private String defaultEventFlag;
-        @NotBlank
         private int highEventId;
-        @NotBlank
         private int eventLevel;
-        @NotBlank
         private String eventFinalFlag;
-        @NotBlank
         private String eventTp;
-        @NotBlank
         private int eventPayDept;
     }
 
@@ -109,13 +91,9 @@ public class S021100070Dto {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class RegisterEventMemberDto {
-        @NotNull
         private int eventPayUserId;     /*행사결제자ID*/
-        @NotBlank
         private int memberId;           /*로그인 memberId*/
-        @NotBlank
         private int eventPayLevel;      /*행사결제LEVEL*/
-        @NotBlank
         private String eventPayRoleCd;  /*결재자역활구분*/
     }
 

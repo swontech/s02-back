@@ -118,19 +118,31 @@ public class S021100070Logic implements S021100070Spec {
         try
         {
             int result = 0;
+            boolean isSuccess = false;
 
             //1.기존 부서(행사)이면 (즉, eventId<>0) 해당 부서의 회원정보 삭제 후 등록처리
             if( eventId > 0 ) {
                 logger.info("[S021100070] 부서(행사) 등록 : 기존 부서(행사) 정보 수정");
-
                 // 1)기존 부서(행사) 정보 수정
                 S021100070Dto.PatchEventDto patchEventDto = new S021100070Dto.PatchEventDto();
+                //use : registerEventDto:getter, patchEventDto:setter
                 BeanUtils.copyProperties(registerEventDto, patchEventDto);
+                patchEventDto.setEventId(eventId);
+                patchEventDto.setMemberId(registerEventDto.getEventRegId());
+
+                logger.info("[S021100070] 부서(행사) 수정 enevtId=>"+ patchEventDto.getEventId() );
+                logger.info("[S021100070] 부서(행사) 수정 enevtNm=>"+ patchEventDto.getEventNm() );
+                logger.info("[S021100070] 부서(행사) 수정 getDefaultEventFlag=>"+ patchEventDto.getDefaultEventFlag());
+
                 result = s021100070Store.updateEvent(getPatchEventVo(patchEventDto));
+
+                logger.info("[S021100070] 부서(행사) 수정 결과 : "+ result);
                 // 정상 수정이면
                 if(result > 0) {
                     // 2)부서 회원정보 delete 후 insert
-                    s021100070Store.deleteEventMember(eventId);
+                    result = s021100070Store.deleteEventMember(eventId);
+                    logger.info("[S021100070] 부서(행사) 회원 삭제 결과 : "+ result);
+                    isSuccess = true;
                 }
 
             } else {
@@ -169,23 +181,26 @@ public class S021100070Logic implements S021100070Spec {
                             .build();
                     s021100070Store.updateEventFinalFlag(paramsVo);
                 }
+                isSuccess = true;
             }
 
-            // 회원정보 insert : 넘겨받은 회원정보수 만큼 vo로 변환하여 looping
-            for (S021100070Dto.RegisterEventMemberDto eventMemberDto : litRegEventMemberDto )
-            {
-                result = 0;
-                S021100070Vo.TbEvent020Vo eventMemberVo = S021100070Vo.TbEvent020Vo.builder()
-                        .eventId(eventId)
-                        .eventPayUserId(eventMemberDto.getEventPayUserId())
-                        .eventPayLevel(eventMemberDto.getEventPayLevel())
-                        .eventPayRoleCd(eventMemberDto.getEventPayRoleCd())
-                        .build();
-                logger.info("[S021100070] 부서(행사) 회원등록 대상: " + eventMemberDto.toString());
+            if(isSuccess) {
+                // 회원정보 insert : 넘겨받은 회원정보수 만큼 vo로 변환하여 looping
+                for (S021100070Dto.RegisterEventMemberDto eventMemberDto : litRegEventMemberDto) {
+                    result = 0;
+                    S021100070Vo.TbEvent020Vo eventMemberVo = S021100070Vo.TbEvent020Vo.builder()
+                            .eventId(eventId)
+                            .eventPayUserId(eventMemberDto.getEventPayUserId())
+                            .eventPayLevel(eventMemberDto.getEventPayLevel())
+                            .eventPayRoleCd(eventMemberDto.getEventPayRoleCd())
+                            .memberId(eventMemberDto.getMemberId())
+                            .build();
+                    logger.info("[S021100070] 부서(행사) 회원등록 대상 MemberId: " + eventMemberVo.getMemberId());
 
-                result = s021100070Store.insertEventMember(eventMemberVo);
+                    result = s021100070Store.insertEventMember(eventMemberVo);
 
-                logger.info("[S021100070] 부서(행사) 회원등록 처리결과: " + result);
+                    logger.info("[S021100070] 부서(행사) 회원등록 처리결과: " + result);
+                }
             }
 
             //최종 회원등록까지 정상이면 success
@@ -193,7 +208,7 @@ public class S021100070Logic implements S021100070Spec {
                 return response.success(eventId, "부서(행사) 정보 등록에 성공했습니다.", HttpStatus.OK);
             }
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            logger.info(e.getMessage());
 //            throw e;
         }
         return response.fail("부서(행사) 저장에 실패했습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
@@ -243,6 +258,7 @@ public class S021100070Logic implements S021100070Spec {
                 .eventFinalFlag(registerEventDto.getEventFinalFlag())
                 .eventTp(registerEventDto.getEventTp())
                 .eventPayDept(registerEventDto.getEventPayDept())
+                .memberId(registerEventDto.getEventRegId())
                 .build();
     }
 
@@ -261,6 +277,8 @@ public class S021100070Logic implements S021100070Spec {
                 .eventStatus(eventDto.getEventStatus())
                 .eventBudgetAmount(eventDto.getEventBudgetAmount())
                 .defaultEventFlag(eventDto.getDefaultEventFlag())
+                .memberId(eventDto.getMemberId())
+                .eventId(eventDto.getEventId())
                 .build();
     }
 

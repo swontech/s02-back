@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -97,6 +98,7 @@ public class S021100070Dto {
         private String eventPayRoleCd;  /*결재자역활구분*/
     }
 
+    @Setter
     @Getter
     @AllArgsConstructor
     @NoArgsConstructor

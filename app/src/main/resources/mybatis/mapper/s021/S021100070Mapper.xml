@@ -132,20 +132,20 @@
     </insert>
     <update id="updateEvent" parameterType="com.swontech.s02.domain.vo.s021.S021100070Vo$TbEvent010Vo">
         UPDATE tb_s020.tb_s020_event010
-        SET	LAST_OBJECT_ID = #{memberId},			-- 화면의 로그인 member_id
+        SET	LAST_OBJECT_ID = #{memberId},			/* 화면의 로그인 member_id*/
             UPDATE_TIMESTAMP = SYSDATE(),
             UPDATE_PROGRAM_ID = 'S021100070',
-            EVENT_NM            = #{eventNm},			-- 화면의 부서, 행사(사역)명
-            EVENT_START_DATE    = #{eventStartDate},	-- 화면의 사용일자 from
-            EVENT_END_DATE      = #{eventEndDate},		-- 화면의 사용일자 to
-            PAY_FLAG            = #{payFlag},			-- 화면의 결제여부
-            EVENT_LOC           = #{eventLoc},			-- 화면의 행사장소
-            EVENT_HOST_ID       = #{eventHostId},		-- 화면의 책임자 ID
-            EVENT_COMMENT       = #{eventComment},		-- 화면의 비고
-            EVENT_STATUS        = #{eventStatus},		-- 공개여부 (공개 - 'A', 비공개 - 'B')
-            EVENT_BUDGET_AMOUNT = #{eventBudgetAmount}	-- 화면의  예산금액
-            DEFAULT_EVENT_FLAG  = #{defaultEventFlag}	-- 화면의 기본사역여부
-        WHERE EVENT_ID = #{eventId}				-- 화면에서 선택한 event_id
+            EVENT_NM            = #{eventNm},			/* 화면의 부서, 행사(사역)명*/
+            EVENT_START_DATE    = #{eventStartDate},	/* 화면의 사용일자 from*/
+            EVENT_END_DATE      = #{eventEndDate},		/* 화면의 사용일자 to*/
+            PAY_FLAG            = #{payFlag},			/* 화면의 결제여부*/
+            EVENT_LOC           = #{eventLoc},			/* 화면의 행사장소*/
+            EVENT_HOST_ID       = #{eventHostId},		/* 화면의 책임자 ID*/
+            EVENT_COMMENT       = #{eventComment},		/* 화면의 비고*/
+            EVENT_STATUS        = #{eventStatus},		/* 공개여부 (공개 - 'A', 비공개 - 'B')*/
+            EVENT_BUDGET_AMOUNT = #{eventBudgetAmount},	/* 화면의  예산금액*/
+            DEFAULT_EVENT_FLAG  = #{defaultEventFlag}	/* 화면의 기본사역여부*/
+        WHERE EVENT_ID = #{eventId}				/* 화면에서 선택한 event_id*/
     </update>
     <insert id="insertEventMember" parameterType="com.swontech.s02.domain.vo.s021.S021100070Vo$TbEvent020Vo">
 
@@ -161,16 +161,16 @@
             EVENT_PAY_LEVEL,
             EVENT_PAY_ROLE_CD
         )  VALUES (
-            #{eventId},			-- 신규 등록시 tb_s020_event010 에 저장한 event_id, 수정시는 선택한 event_id
-            #{eventPayUserId},	-- 화면에서 선택한 결제자의 member_id
-            #{memberId},	    -- 화면의 로그인 member_id
+            #{eventId},			/* 신규 등록시 tb_s020_event010 에 저장한 event_id, 수정시는 선택한 event_id*/
+            #{eventPayUserId},	/* 화면에서 선택한 결제자의 member_id */
+            #{memberId},	    /* 화면의 로그인 member_id*/
             SYSDATE(),
             'S021100070',
-            #{memberId},	    -- 화면의 로그인 member_id
+            #{memberId},	    /* 화면의 로그인 member_id*/
             SYSDATE(),
             'S021100070',
-            #{eventPayLevel},	-- 화면의 결제자 Level구분
-            #{eventPayRoleCd}	-- 화면의 사용자 비고
+            #{eventPayLevel},	/* 화면의 결제자 Level구분*/
+            #{eventPayRoleCd}	/* 화면의 사용자 비고*/
         )
     </insert>
     <update id="deleteEventMember" parameterType="java.lang.Integer">

@@ -3,6 +3,7 @@ package com.swontech.s02.domain.dto.s022;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 public class S0221A0060Dto {
     @Getter
@@ -35,9 +36,9 @@ public class S0221A0060Dto {
         private int eventId;
         private String usedDate;
         private int useAmount;
-        private String useReceiptId;
         private String useReceiptName;
         private String useComment;
+        private String base64String;
     }
 
     @Getter

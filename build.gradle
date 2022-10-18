@@ -80,6 +80,9 @@ project(":app") {
 
         // actuator
         implementation "org.springframework.boot:spring-boot-starter-actuator"
+
+        // aws s3
+        implementation "com.amazonaws:aws-java-sdk-s3:1.12.281"
     }
 }
 
@@ -90,6 +93,9 @@ project(":client") {
         implementation project(":domain")
         implementation project(":store")
         implementation project(":core")
+
+        // aws s3
+        implementation "com.amazonaws:aws-java-sdk-s3:1.12.281"
     }
 }
 
@@ -105,6 +111,9 @@ project(":domain") {
 
         // mybatis
         implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.1.4'
+
+        // aws s3
+        implementation "com.amazonaws:aws-java-sdk-s3:1.12.281"
     }
 }
 

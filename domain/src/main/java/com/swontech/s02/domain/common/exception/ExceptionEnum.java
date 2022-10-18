@@ -19,6 +19,9 @@ public enum ExceptionEnum {
     // 인증 정보 에러
     USER_NOT_FOUND(403, "A005", "가입된 이메일 정보가 없습니다."),
     PASSWORD_INCORRECT(403, "A006", "비밀번호가 일치하지 않습니다."),
+
+    // AWS관련 오류
+    FILE_UPLOAD_FAIL(500, "B001", "S3버킷에 파일을 업로드하는데 실패했습니다.")
     ;
 
 

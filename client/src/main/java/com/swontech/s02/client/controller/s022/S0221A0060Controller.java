@@ -2,11 +2,13 @@ package com.swontech.s02.client.controller.s022;
 
 import com.swontech.s02.domain.dto.s022.S0221A0060Dto;
 import com.swontech.s02.domain.spec.s022.S0221A0060Spec;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/rest/v1/s0221a0060")
 public class S0221A0060Controller {

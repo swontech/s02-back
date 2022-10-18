@@ -18,27 +18,17 @@ public class S021100020Dto {
         private String orgName;
         @NotNull
         private String pwd;
-        @NotBlank
         private String zipCode;
-        @NotBlank
         private String address;
-        @NotBlank
         private String detailAddress;
-        @NotBlank
         private String firstTelNo;
-        @NotBlank
         private String middleTelNo;
-        @NotBlank
         private String lastTelNo;
         @NotBlank
         private String memberName;
-        @NotBlank
         private String firstHpNo;
-        @NotBlank
         private String middleHpNo;
-        @NotBlank
         private String lastHpNo;
-        @NotBlank
         private String email;
     }
 

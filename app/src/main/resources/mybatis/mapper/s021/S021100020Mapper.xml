@@ -116,7 +116,7 @@
             MEMBER010.EMAIL = #{email},
             MEMBER010.MEMBER_NAME = #{memberName},
             MEMBER010.HP_NO = CONCAT(#{firstHpNo}, '-', #{middleHpNo}, '-', #{lastHpNo}),
-            MEMBER010.PWD = #{pwd}
+            MEMBER010.PWD = #{pwd},
 
             ORG010.UPDATE_TIMESTAMP = SYSDATE(),
             ORG010.UPDATE_PROGRAM_ID = 's021100020',

@@ -185,6 +185,7 @@ public class S021100070Logic implements S021100070Spec {
             }
 
             if(isSuccess) {
+                isSuccess = false;
                 // 회원정보 insert : 넘겨받은 회원정보수 만큼 vo로 변환하여 looping
                 for (S021100070Dto.RegisterEventMemberDto eventMemberDto : litRegEventMemberDto) {
                     result = 0;
@@ -201,15 +202,15 @@ public class S021100070Logic implements S021100070Spec {
 
                     logger.info("[S021100070] 부서(행사) 회원등록 처리결과: " + result);
                 }
+                isSuccess = true;
             }
 
             //최종 회원등록까지 정상이면 success
-            if(result > 0) {
+            if(isSuccess) {
                 return response.success(eventId, "부서(행사) 정보 등록에 성공했습니다.", HttpStatus.OK);
             }
         } catch (Exception e) {
             logger.info(e.getMessage());
-//            throw e;
         }
         return response.fail("부서(행사) 저장에 실패했습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
     }

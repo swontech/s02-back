@@ -40,7 +40,7 @@ public class S3BucketLogic implements S3BucketSpec {
             meta.setContentLength(byteArrayInputStream.available());
             amazonS3.putObject(bucket, fileName, byteArrayInputStream, meta);
 
-            return amazonS3.getUrl(bucket, fileName).toString();
+            return amazonS3.getUrl(dir, fileName).toString();
         } catch(Exception e) {
             throw e;
         }

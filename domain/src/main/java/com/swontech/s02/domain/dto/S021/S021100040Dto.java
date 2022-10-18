@@ -9,7 +9,9 @@ public class S021100040Dto {
         private int orgId;
         private String memberName;
         private String birth;
-        private String hpNo;
+        private String firstHpNo;
+        private String middleHpNo;
+        private String lastHpNo;
         private String zipCode;
         private String address;
         private String detailAddress;
@@ -23,7 +25,9 @@ public class S021100040Dto {
     public static class UpdateMemberInfoDto {
         private String memberName;
         private String birth;
-        private String hpNo;
+        private String firstHpNo;
+        private String middleHpNo;
+        private String lastHpNo;
         private String zipCode;
         private String address;
         private String detailAddress;

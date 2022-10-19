@@ -77,12 +77,44 @@
         WHERE	E030.EVENT_USE_ID	= #{eventUsedId}  /*선택한 EVENT_USE_ID*/
     </select>
     <insert id="insertCostPayHistory" parameterType="com.swontech.s02.domain.vo.s022.S022300010Vo$RegisterCostPayReqVo">
-
-
+        INSERT INTO TB_S020.TB_S020_EVENT040
+        (EVENT_USE_PAY_ID,
+            CREATE_OBJECT_ID,
+            CREATE_TIMESTAMP,
+            CREATE_PROGRAM_ID,
+            LAST_OBJECT_ID,
+            UPDATE_TIMESTAMP,
+            UPDATE_PROGRAM_ID,
+            EVENT_USE_ID,
+            PAY_STEP,
+            PAY_MEMBER_ID,
+            PAY_RESULT_FLAG,
+            PAY_COMMENT,
+            PAY_DATE
+        ) VALUES (
+              NEXTVAL(TB_S020.SQ_S020_EVENT040)
+            , #{payMemberId}	/* 로그인 MEMBER_ID*/
+            , SYSDATE()
+            , 'S022300020'
+            , #{payMemberId}	/* 로그인 MEMBER_ID*/
+            , SYSDATE()
+            , 'S022300020'
+            , #{eventUseId}    /* 선택된 EVENT_USE_ID*/
+            , '6'               /* 결제단계 */
+            , #{payMemberId}    /* 로그인 MEMBER_ID*/
+            , 'Y'
+            ,'비용지급'
+            , SYSDATE()
+        );
     </insert>
-    <update id="updateCostPayProgressStatus" parameterType="java.lang.Integer">
-
-
+    <update id="updateCostPayProgressStatus" parameterType="com.swontech.s02.domain.vo.s022.S022300010Vo$UpdateCostPayReqVo">
+        UPDATE	TB_S020.TB_S020_EVENT030
+           SET  LAST_OBJECT_ID = #{memberId}
+                ,UPDATE_TIMESTAMP = SYSDATE()
+                ,UPDATE_PROGRAM_ID = 'S022300020'
+                ,USE_PRO_STATUS ='D'
+                ,PAY_CURRENT_STEP = '6'
+        WHERE	EVENT_USE_ID = #{eventUseId}
     </update>
 
 </mapper>

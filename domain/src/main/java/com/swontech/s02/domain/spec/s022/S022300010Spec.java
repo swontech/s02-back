@@ -15,6 +15,8 @@ public interface S022300010Spec {
     ResponseEntity<?> retrieveCostPayProTotList(S022300010Vo.ParamsVo paramsVo);
     /*비용 요청 조회 상세*/
     ResponseEntity<?> retrieveCostPayProTotDetail(int eventUsedId);
+    /*비용지급 처리 */
+    ResponseEntity<?> registerCostPay(S022300010Dto.RegisterCostPayReqDto registerCostPayReqDto);
     /*비용지금 이력 등록*/
     ResponseEntity<?> registerCostPayHistory(S022300010Dto.RegisterCostPayReqDto registerCostPayReqDto);
     /*비용지금 진행상태 update */

@@ -28,8 +28,15 @@ public class S022300010Vo {
         private int eventUsePayId;
         private int eventUseId;
         private String payStep;
-        private int payMemberId;
+        private int payMemberId;    /*로그인 memberId*/
         private String payResultFlag;
     }
-
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class UpdateCostPayReqVo {
+        private int eventUseId;
+        private int memberId;
+    }
 }

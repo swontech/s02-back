@@ -45,7 +45,7 @@ public class S021100070Dto {
 
     @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
     public static class DeptDetailPayInfo {
-        private int memberId;
+        private int eventPayUserId;
         private String memberName;
         private String hpNo;
         private String fstPayFlag;

@@ -6,6 +6,8 @@ import org.springframework.http.ResponseEntity;
 public interface S021100020Spec {
     /** 이메일 중복 체크 */
     ResponseEntity<?> duplicationCheckEmail(String email);
+    /* kjy 2022.10.18 : for 단체명 중복체크*/
+    ResponseEntity<?> duplicationCheckOrgName(String orgName);
     /** 단체 등록 */
     ResponseEntity<?> registerOrg(S021100020Dto.RegisterOrgReqDto reqDto);
     /** 단체 상세정보 조회 */

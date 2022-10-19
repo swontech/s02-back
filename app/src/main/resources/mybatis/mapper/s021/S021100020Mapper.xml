@@ -8,6 +8,12 @@
         WHERE       EMAIL = #{email}
     </select>
 
+    <select id="selectOrgName" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT ORG_NAME
+          FROM tb_s020.tb_s020_org010
+         WHERE ORG_NAME = #{orgName}
+    </select>
+
     <insert id="insertOrg" parameterType="com.swontech.s02.domain.vo.s021.S021100020Vo$InsertOrgVo">
         <selectKey resultType="java.lang.Integer" keyProperty="orgId" order="AFTER">
             SELECT  MAX(ORG_ID)

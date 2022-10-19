@@ -26,6 +26,12 @@ public class S021100020Controller {
         return s021100020Spec.duplicationCheckEmail(email);
     }
 
+    @Operation(summary = "단체명 중복 체크", description = "클라이언트에서 입력받은 단체명의 유무를 조회한다.")
+    @GetMapping("/dup-check-org")
+    public ResponseEntity<?> duplicationCheckOrgName(@RequestParam("orgName")String orgName) {
+        return s021100020Spec.duplicationCheckOrgName(orgName);
+    }
+
     @Operation(summary = "단체 신규 등록")
     @PostMapping("/org")
     public ResponseEntity<?> registerOrg(final @Valid @RequestBody S021100020Dto.RegisterOrgReqDto reqDto) {

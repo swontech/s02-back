@@ -31,7 +31,16 @@ public class S021100020Logic implements S021100020Spec {
         }
         return responseDto.success(false, "이미 사용중인 이메일 주소입니다.", HttpStatus.OK);
     }
-    
+
+    /* kjy 2022.10.18 : for 단체명 중복체크*/
+    @Override
+    public ResponseEntity<?> duplicationCheckOrgName(String orgName) {
+        if(s021100020Store.selectOrgName(orgName) == null) {
+            return responseDto.success(true, "사용 가능한 단체명입니다.", HttpStatus.OK);
+        }
+        return responseDto.success(false, "이미 사용중인 단체명입니다.", HttpStatus.OK);
+    }
+
     @Override
     public ResponseEntity<?> retrieveOrg(int orgId) {
         return responseDto.success(s021100020Store.selectOrg(orgId));

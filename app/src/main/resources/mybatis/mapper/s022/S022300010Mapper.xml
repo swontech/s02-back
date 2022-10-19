@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="S022300010">
+    <select id="selectCostPayProTotList" parameterType="com.swontech.s02.domain.vo.s022.S022300010Vo$ParamsVo" resultType="com.swontech.s02.domain.dto.s022.S022300010Dto$CostPayProTotList">
+        SELECT	E030.EVENT_USE_ID,
+                E030.EVENT_USER_ID,
+                M010.MEMBER_NAME,
+                PRI.NAME_PATH_PRIORTIY,
+                PRI.EVENT_NM,
+                E030.USE_SUBJECT,
+                E030.USED_DATE,
+                E030.USE_AMOUNT,
+                E030.USE_PRO_STATUS,
+                C010.CD_V_MEANING AS	STATUS_NM,
+                E020.EVENT_PAY_USER_ID,
+                (SELECT M010_1.MEMBER_NAME
+                FROM	TB_S020.TB_S020_MEMBER010	M010_1
+                WHERE	E020.EVENT_PAY_USER_ID = M010_1.MEMBER_ID  ) AS PAYER_NAME
+        FROM 	TB_S020.TB_S020_EVENT030 E030
+        INNER JOIN TB_S020.EVENT_HIERARCHY_VIEW PRI
+        ON PRI.EVENT_ID = E030.EVENT_ID
+        INNER JOIN TB_S020.TB_S020_MEMBER010	M010
+        ON  E030.EVENT_USER_ID = M010.MEMBER_ID
+        AND	PRI.ORG_ID = M010.ORG_ID
+        INNER JOIN TB_S020.TB_S020_CODE010 C010
+        ON	E030.USE_PRO_STATUS = C010.CD_V
+        AND	C010.CD_TP = 'USE_PRO_STATUS'
+        AND	C010.ORG_ID = PRI.ORG_ID
+        AND C010.CATEGORY = '000'
+        INNER JOIN TB_S020.TB_S020_EVENT020 E020
+        ON	E020.EVENT_ID = PRI.ID_PATH_PRIORTIY
+        AND	E020.EVENT_PAY_LEVEL = E030.PAY_CURRENT_STEP
+        WHERE	E030.USED_DATE BETWEEN #{fromUsedDate} AND #{toUsedDate}					/*조회일자 FROM, TO*/
+          AND	M010.MEMBER_NAME LIKE CONCAT('%', IFNULL( #{memberName}, '') , '%')		    /*대표자명*/
+          AND	PRI.NAME_PATH_PRIORTIY LIKE CONCAT('%',IFNULL(  #{namePathPriortiy}, '') , '%')	/*발의부서*/
+          AND	E030.USE_PRO_STATUS = #{useProStatus} 						/*진행상태*/
+          AND	PRI.ORG_ID = #{orgId}									    /*ORG_ID*/
+        ORDER BY E030.EVENT_USE_ID ;
+    </select>
+
+    <select id="selectCostPayProTotDetail" parameterType="java.lang.Integer" resultType="com.swontech.s02.domain.dto.s022.S022300010Dto$CostPayProTotDetail">
+        SELECT	E030.EVENT_USE_ID,
+                E030.EVENT_USER_ID,
+                M010.MEMBER_NAME,
+                PRI.NAME_PATH_PRIORTIY,
+                E030.USED_DATE,
+                E030.USE_AMOUNT,
+                E030.USE_PRO_STATUS,
+                C010.CD_V_MEANING AS	STATUS_NM,
+                E030.USE_RECEIPT_NAME,
+                E030.USE_RECEIPT_ID,
+                E030.USE_SUBJECT,
+                PRI.EVENT_NM,
+                E030.USE_COMMENT,
+                E040.EVENT_USE_PAY_ID,
+                E040.PAY_MEMBER_ID,
+                (SELECT M010_1.MEMBER_NAME
+                   FROM	TB_S020.TB_S020_MEMBER010	M010_1
+                  WHERE	E040.PAY_MEMBER_ID = M010_1.MEMBER_ID  ) AS PAYER_NAME,
+                E040.PAY_RESULT_FLAG,
+                E040.PAY_DATE,
+                E040.PAY_COMMENT
+        FROM 	TB_S020.TB_S020_EVENT030 E030
+            INNER JOIN TB_S020.EVENT_HIERARCHY_VIEW PRI
+               ON PRI.EVENT_ID = E030.EVENT_ID
+            INNER JOIN TB_S020.TB_S020_MEMBER010	M010
+               ON E030.EVENT_USER_ID = M010.MEMBER_ID
+              AND PRI.ORG_ID = M010.ORG_ID
+            INNER JOIN TB_S020.TB_S020_CODE010 C010
+               ON E030.USE_PRO_STATUS = C010.CD_V
+              AND	C010.CD_TP = 'USE_PRO_STATUS'
+              AND	C010.ORG_ID = PRI.ORG_ID
+              AND C010.CATEGORY = '000'
+            LEFT OUTER JOIN TB_S020.TB_S020_EVENT040 E040
+              ON E030.EVENT_USE_ID = E040.EVENT_USE_ID
+        WHERE	E030.EVENT_USE_ID	= #{eventUsedId}  /*선택한 EVENT_USE_ID*/
+    </select>
+    <insert id="insertCostPayHistory" parameterType="com.swontech.s02.domain.vo.s022.S022300010Vo$RegisterCostPayReqVo">
+
+
+    </insert>
+    <update id="updateCostPayProgressStatus" parameterType="java.lang.Integer">
+
+
+    </update>
+
+</mapper>

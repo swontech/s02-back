@@ -30,17 +30,15 @@ public class S3BucketLogic implements S3BucketSpec {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
         String fileName = UUID.randomUUID() + "_" + simpleDateFormat.format(nowDate);
         ObjectMetadata meta = new ObjectMetadata();
+        String targetDir = bucket + "/storage/img/s02/" + dir;
 
-        bucket += "/storage/img/s02/" + dir;
-
-        log.info("bucket:" + bucket);
         try {
             log.info(fileName);
             byte[] decodedFile = Base64.getMimeDecoder().decode(base64.substring(base64.indexOf(",") + 1));
             ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(decodedFile);
 
             meta.setContentLength(byteArrayInputStream.available());
-            amazonS3.putObject(bucket, fileName, byteArrayInputStream, meta);
+            amazonS3.putObject(targetDir, fileName, byteArrayInputStream, meta);
 
             return dir + "/" + fileName;
         } catch(Exception e) {

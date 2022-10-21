@@ -32,6 +32,8 @@ public class S3BucketLogic implements S3BucketSpec {
         ObjectMetadata meta = new ObjectMetadata();
 
         bucket += "/storage/img/s02/" + dir;
+
+        log.info("bucket:" + bucket);
         try {
             log.info(fileName);
             byte[] decodedFile = Base64.getMimeDecoder().decode(base64.substring(base64.indexOf(",") + 1));

@@ -11,6 +11,9 @@ import lombok.NoArgsConstructor;
 public class S022300010Vo {
 
     @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class ParamsVo {
         private String memberName;
         private String fromUsedDate;

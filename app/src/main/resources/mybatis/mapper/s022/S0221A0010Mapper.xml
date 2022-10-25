@@ -34,21 +34,21 @@
 
     <select id="mobileInitUseStateCnt" parameterType="com.swontech.s02.domain.vo.s022.S0221A0010Vo$MobileInitUseStateCntVo" resultType="com.swontech.s02.domain.dto.s022.S0221A0010Dto$MobileInitUseStateCnt">
         select	count(e030.EVENT_USE_ID)	cnt,
-        e030.USE_PRO_STATUS,
-        (select	cd_v_meaning
-        from	tb_s020.tb_s020_code010
-        where	cd_tp = 'USE_PRO_STATUS'
-        and		cd_v = e030.USE_PRO_STATUS
-        and		CATEGORY = '000')	USE_PRO_STATUS_nm
-        from	tb_s020.tb_s020_event030  e030
-        inner join event_hierarchy_view vi
-        on	vi.event_id	= e030.event_id
-        where	e030.use_pro_status in ('A', 'B', 'C', 'D', 'E')
+                e030.USE_PRO_STATUS,
+                (select	cd_v_meaning
+                    from	tb_s020.tb_s020_code010
+                    where	cd_tp = 'USE_PRO_STATUS'
+                    and		cd_v = e030.USE_PRO_STATUS
+                    and		CATEGORY = '000')	USE_PRO_STATUS_nm
+            from	tb_s020.tb_s020_event030  e030
+                inner join event_hierarchy_view vi
+                on	vi.event_id	= e030.event_id
+        where	e030.use_pro_status in ('A', 'B', 'C', 'D', 'E', 'F')
         and		vi.event_code = #{eventCode}
         and		e030.event_user_id = (select	member_id
-        from	tb_s020.tb_s020_member010  m010
-        where	m010.hp_no = #{hpNo}
-        and		m010.org_id = vi.org_id)
+                                        from	tb_s020.tb_s020_member010  m010
+                                        where	m010.hp_no = #{hpNo}
+                                        and		m010.org_id = vi.org_id)
         group by	e030.USE_PRO_STATUS
     </select>
     

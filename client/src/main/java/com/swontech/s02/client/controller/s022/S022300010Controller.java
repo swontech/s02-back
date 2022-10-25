@@ -1,5 +1,6 @@
 package com.swontech.s02.client.controller.s022;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.swontech.s02.domain.dto.s022.S022300010Dto;
 import com.swontech.s02.domain.spec.s022.S022300010Spec;
 import com.swontech.s02.domain.vo.s022.S022300010Vo;
@@ -10,6 +11,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/rest/v1/s022300010")
@@ -23,7 +26,12 @@ public class S022300010Controller {
     }
     /*비용 요청 조회*/
     @GetMapping("/cost-pay-list")
-    public ResponseEntity<?> retrieveCostPayProTotList(@RequestBody S022300010Vo.ParamsVo paramsVo) {
+    public ResponseEntity<?> retrieveCostPayProTotList(@RequestParam Map<String, Object> mapParams)
+    {
+        logger.info("비용요청조회 params =>" + mapParams );
+        ObjectMapper mapper = new ObjectMapper();
+        S022300010Vo.ParamsVo paramsVo = mapper.convertValue(mapParams, S022300010Vo.ParamsVo.class);
+        logger.info("비용요청조회 params convert =>" + mapParams );
 
         return s022300010Spec.retrieveCostPayProTotList(paramsVo);
     }

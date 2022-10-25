@@ -55,6 +55,7 @@ public class S021100070Dto {
         private String eventPayRoleCd; 
         private int eventPayLevel;
         private int eventId;
+        private String useRegFlag;      /*등록권한*/
     }
 
     @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
@@ -96,6 +97,7 @@ public class S021100070Dto {
         private int memberId;           /*로그인 memberId*/
         private int eventPayLevel;      /*행사결제LEVEL*/
         private String eventPayRoleCd;  /*결재자역활구분*/
+        private String useRegFlag;      /*등록권한*/
     }
 
     @Setter
@@ -123,6 +125,7 @@ public class S021100070Dto {
         private String eventTp;
         private int eventPayDept;
         private int memberId; /*로그인 memberId*/
+        private String useRegFlag;      /*등록권한*/
     }
 
 }

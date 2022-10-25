@@ -60,7 +60,8 @@
                 END	FOURTH_PAY_FLAG,						-- 4차 결제자
                 EVENT_PAY_ROLE_CD,							-- 비고
                 IFNULL(EVENT_PAY_LEVEL, 99) AS EVENT_PAY_LEVEL,	-- 결제자LEVEL
-                E020.EVENT_ID
+                E020.EVENT_ID,
+                E020.USE_REG_FLAG   /*2022.10.25 add 등록권한*/
         FROM 	tb_s020.tb_s020_event020 E020
                 INNER JOIN tb_s020.tb_s020_member010 M010
                 ON 	M010.MEMBER_ID	= E020.EVENT_PAY_USER_ID
@@ -159,7 +160,8 @@
             UPDATE_TIMESTAMP,
             UPDATE_PROGRAM_ID,
             EVENT_PAY_LEVEL,
-            EVENT_PAY_ROLE_CD
+            EVENT_PAY_ROLE_CD,
+            USE_REG_FLAG
         )  VALUES (
             #{eventId},			/* 신규 등록시 tb_s020_event010 에 저장한 event_id, 수정시는 선택한 event_id*/
             #{eventPayUserId},	/* 화면에서 선택한 결제자의 member_id */
@@ -170,7 +172,8 @@
             SYSDATE(),
             'S021100070',
             #{eventPayLevel},	/* 화면의 결제자 Level구분*/
-            #{eventPayRoleCd}	/* 화면의 사용자 비고*/
+            #{eventPayRoleCd},	/* 화면의 사용자 비고*/
+            #{useRegFlag}       /* 등록권한 */
         )
     </insert>
     <update id="deleteEventMember" parameterType="java.lang.Integer">

@@ -50,6 +50,7 @@ public class S021100070Vo {
         private int memberId;           /*로그인 memberId*/
         private int eventPayLevel;
         private String eventPayRoleCd;
+        private String useRegFlag;      /*등록권한*/
     }
 
 }

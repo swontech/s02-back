@@ -195,6 +195,7 @@ public class S021100070Logic implements S021100070Spec {
                             .eventPayLevel(eventMemberDto.getEventPayLevel())
                             .eventPayRoleCd(eventMemberDto.getEventPayRoleCd())
                             .memberId(eventMemberDto.getMemberId())
+                            .useRegFlag(eventMemberDto.getUseRegFlag())
                             .build();
                     logger.info("[S021100070] 부서(행사) 회원등록 대상 MemberId: " + eventMemberVo.getMemberId());
 

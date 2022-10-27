@@ -38,8 +38,12 @@ public class S021100030Logic implements S021100030Spec {
     }
 
     @Override
-    public ResponseEntity<?> deleteMember(S021100030Dto.DeleteMember reqDto) {
-        int result = s021100030Store.deleteMember(reqDto.getMemberId());
+    public ResponseEntity<?> deleteMember(S021100030Dto.UpdateMemberTp reqDto) {
+        int result = s021100030Store.deleteMember(S021100030Vo.UpdateMemberTp
+                .builder()
+                .memberId(reqDto.getMemberId())
+                .loginId(reqDto.getLoginId()) /*2022.10.27 kjy*/
+                .build());
         if(result > 0) {
             return response.success("회원정보를 정상적으로 삭제했습니다.");
         }
@@ -53,6 +57,7 @@ public class S021100030Logic implements S021100030Spec {
                     .builder()
                         .memberId(reqDto.getMemberId())
                         .memberTp(reqDto.getMemberTp())
+                        .loginId(reqDto.getLoginId()) /*2022.10.27 kjy*/
                     .build());
 
         if(result > 0) {

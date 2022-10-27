@@ -45,11 +45,12 @@
         where   member_id = #{memberId}
     </select>
 
-    <update id="deleteMember" parameterType="java.lang.Integer">
+    <update id="deleteMember" parameterType="com.swontech.s02.domain.vo.s021.S021100030Vo$UpdateMemberTp">
         UPDATE	tb_s020.tb_s020_member010
         SET		DATA_END_STATUS     = '*',
                 DATA_END_PROGRAM_ID = 'S021100030',
                 DATA_END_TIMESTAMP  = SYSDATE()
+            , DATA_END_OBJECT_ID = #{loginId}   /*2022.10.27 kjy*/
         WHERE	MEMBER_ID           = #{memberId}
     </update>
 
@@ -58,6 +59,7 @@
         SET		MEMBER_TP           = #{memberTp},
                 UPDATE_TIMESTAMP    = SYSDATE(),
                 UPDATE_PROGRAM_ID   = 'S021100030'
+            , LAST_OBJECT_ID = #{loginId}   /*2022.10.27 kjy*/
         WHERE	MEMBER_ID           = #{memberId}
     </update>
 </mapper>

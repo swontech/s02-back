@@ -39,6 +39,7 @@ public class S021100030Dto {
     public static class UpdateMemberTp {
         private int memberId;
         private String memberTp;
+        private int loginId; /*2022.10.27 kjy*/
     }
 
     @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
@@ -53,5 +54,6 @@ public class S021100030Dto {
         private String memberTp;
         private String memberTpNm;
         private String regDate;
+        private int loginId; /*2022.10.27 kjy*/
     }
 }

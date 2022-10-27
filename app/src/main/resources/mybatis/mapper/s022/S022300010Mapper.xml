@@ -60,7 +60,9 @@
                   WHERE	E040.PAY_MEMBER_ID = M010_1.MEMBER_ID  ) AS PAYER_NAME,
                 E040.PAY_RESULT_FLAG,
                 E040.PAY_DATE,
-                E040.PAY_COMMENT
+                E040.PAY_COMMENT,
+                M010.ACCOUNT_NO,  /*계좌번호*/
+                M010.BANK_NM      /*은행명*/
         FROM 	TB_S020.TB_S020_EVENT030 E030
             INNER JOIN TB_S020.EVENT_HIERARCHY_VIEW PRI
                ON PRI.EVENT_ID = E030.EVENT_ID

@@ -67,25 +67,45 @@ public class S021100020Logic implements S021100020Spec {
                     .firstTelNo(reqDto.getFirstTelNo())         // 단체 연락처
                     .middleTelNo(reqDto.getMiddleTelNo())       // 단체 연락처
                     .lastTelNo(reqDto.getLastTelNo())           // 단체 연락처
+                    .ceoName(reqDto.getCeoName())       /*2022.10.26 kjy 대표자명*/
                     .build();
             s021100020Store.insertOrg(insertOrgVo);
 
+            int result = 0;
             /**
              *  insertOrgVo Mapper(S02100020Mapper.xml)에서 데이터 입력 후, 시퀀스를 통해 자동발번된 org_id를 리턴, insertOrgVo에 담아준다.
              *  컨트롤러로부터 전달받은 request dto 중 대표자정보와 insertOrgVo.orgId 및 전화번호를 초기 패스워드로 암호화 인코딩하여 InsertMemberVo에 담는다.
              */
-            s021100020Store.insertMember(S021100020Vo.InsertMemberVo
+            S021100020Vo.InsertMemberVo insertMemberVo = S021100020Vo.InsertMemberVo
                     .builder()
-                        .orgId(insertOrgVo.getOrgId())          // 단체 id(insertOrg DML이후 VO에 담긴 orgId)
-                        .memberName(reqDto.getMemberName())
-                        .firstHpNo(reqDto.getFirstHpNo())
-                        .middleHpNo(reqDto.getMiddleHpNo())
-                        .lastHpNo(reqDto.getLastHpNo())
-                        .email(reqDto.getEmail())
-                        .pwd(passwordEncoder.encode(reqDto.getPwd()))   // 인코딩된 패스워드
-                    .build()
-                    );
-            return responseDto.success("단체 신규등록에 성공했습니다.");
+                    .orgId(insertOrgVo.getOrgId())          // 단체 id(insertOrg DML이후 VO에 담긴 orgId)
+                    .memberName(reqDto.getMemberName())
+                    .firstHpNo(reqDto.getFirstHpNo())
+                    .middleHpNo(reqDto.getMiddleHpNo())
+                    .lastHpNo(reqDto.getLastHpNo())
+                    .email(reqDto.getEmail())
+                    .pwd(passwordEncoder.encode(reqDto.getPwd()))   // 인코딩된 패스워드
+                    .build();
+            result = s021100020Store.insertMember(insertMemberVo);
+
+            /* 2022.10.26 kjy
+             * 단체 신규 등록시 발번된 memberId 로 org010.created_object_id 추가 update
+             */
+            if(result > 0) {
+                int newMemberId = insertMemberVo.getMemberId();
+                log.info("[S021100020] 단체신규등록된 memberId : " + newMemberId);
+
+                result = 0;
+                if( newMemberId > 0) {
+                    result = s021100020Store.updateOrgAudit(S021100020Vo.UpdateOrgVo.builder()
+                            .orgId(insertOrgVo.getOrgId())
+                            .memberId(insertMemberVo.getMemberId()).build()
+                        );
+                    log.info("[S021100020] 단체신규등록 audit update 처리결과 : " + result);
+                }
+            }
+
+            return responseDto.success(insertOrgVo.getOrgId(), "단체 신규등록에 성공했습니다.", HttpStatus.OK);
         } catch (Exception e) {
             log.error(e.getMessage());
             throw e;
@@ -116,6 +136,8 @@ public class S021100020Logic implements S021100020Spec {
                     .middleHpNo(reqDto.getMiddleHpNo())
                     .lastHpNo(reqDto.getLastHpNo())
                     .pwd(passwordEncoder.encode(reqDto.getPwd()))
+                    .memberId(reqDto.getMemberId()) /*2022.10.26 kjy 로그인 memberId*/
+                    .ceoName(reqDto.getCeoName())   /*2022.10.26 kjy 대표자명*/
                     .build());
             return responseDto.success("단체 상세 정보 수정에 성공했습니다.");
         } catch (Exception e) {

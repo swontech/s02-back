@@ -37,6 +37,7 @@ public class S021100040Logic implements S021100040Spec {
                                     .pwd(passwordEncoder.encode(reqDto.getPwd()))
                                     .accountNo(reqDto.getAccountNo())
                                     .bankNm(reqDto.getBankNm())
+                                    .loginId(reqDto.getLoginId()) /*2022.10.27 kjy*/
                                 .build()
                     );
         if(result > 0) {
@@ -64,6 +65,7 @@ public class S021100040Logic implements S021100040Spec {
                                 .accountNo(reqDto.getAccountNo())
                                 .bankNm(reqDto.getBankNm())
                                 .pwd(passwordEncoder.encode(reqDto.getPwd()))
+                                .loginId(reqDto.getLoginId()) /*2022.10.27 kjy*/
                             .build()
             );
             if(result > 0) {

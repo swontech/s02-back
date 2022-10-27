@@ -19,6 +19,7 @@ public class S021100040Dto {
         private String pwd;
         private String accountNo;
         private String bankNm;
+        private int loginId; /*2022.10.27 kjy*/
     }
 
     @Getter
@@ -36,5 +37,6 @@ public class S021100040Dto {
         private String bankNm;
         private int memberId;
         private String pwd;
+        private int loginId; /*2022.10.27 kjy*/
     }
 }

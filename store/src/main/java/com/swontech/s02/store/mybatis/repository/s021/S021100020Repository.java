@@ -43,5 +43,10 @@ public class S021100020Repository implements S021100020Store {
         return sqlSessionTemplate.update("S021100020.updateOrg", updateOrgVo);
     }
 
+    /* 2022.10.26 kjy org audit 항목 update */
+    @Override
+    public int updateOrgAudit(S021100020Vo.UpdateOrgVo updateOrgVo) {
+        return sqlSessionTemplate.update("S021100020.updateOrgAudit", updateOrgVo);
+    }
 
 }

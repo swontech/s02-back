@@ -25,9 +25,12 @@ public class S021100020Vo {
         private String firstTelNo;
         private String middleTelNo;
         private String lastTelNo;
+        private String ceoName;         /*대표자명*/
+
     }
 
     @Builder
+    @Getter
     @NoArgsConstructor
     @AllArgsConstructor
     public static class InsertMemberVo {
@@ -38,6 +41,7 @@ public class S021100020Vo {
         private String lastHpNo;
         private String email;
         private String pwd;
+        private int memberId;           /*로그인 memberId*/
     }
 
     @Builder
@@ -58,5 +62,7 @@ public class S021100020Vo {
         private String middleHpNo;
         private String lastHpNo;
         private String pwd;
+        private int memberId;           /*로그인 memberId*/
+        private String ceoName;         /*대표자명*/
     }
 }

@@ -25,7 +25,7 @@ public class S021100030Controller {
     }
 
     @PostMapping("/delete-member")
-    public ResponseEntity<?> deleteMember(@RequestBody S021100030Dto.DeleteMember reqDto) {
+    public ResponseEntity<?> deleteMember(@RequestBody S021100030Dto.UpdateMemberTp reqDto) {
         return s021100030Spec.deleteMember(reqDto);
     }
 

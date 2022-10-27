@@ -17,4 +17,7 @@ public interface S021100020Store {
 
     int updateOrg(S021100020Vo.UpdateOrgVo updateOrg);
 
+    /* 2022.10.26 kjy org audit 항목 update */
+    int updateOrgAudit(S021100020Vo.UpdateOrgVo updateOrg);
+
 }

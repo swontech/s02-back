@@ -30,6 +30,8 @@ public class S021100020Dto {
         private String middleHpNo;
         private String lastHpNo;
         private String email;
+        private int memberId;           /*로그인 memberId*/
+        private String ceoName;         /*대표자명*/
     }
 
     @Getter
@@ -50,6 +52,8 @@ public class S021100020Dto {
         private String firstHpNo;
         private String middleHpNo;
         private String lastHpNo;
+        private int memberId;           /*로그인 memberId*/
+        private String ceoName;         /*대표자명*/
     }
 
     @Setter
@@ -62,9 +66,6 @@ public class S021100020Dto {
         private String zipCode;
         private String address;
         private String detailAddress;
-//        private String telNo;
-//        private String hpNo;
-//        private String email;
         private String telNoFst;
         private String telNoSnd;
         private String telNoThd;
@@ -76,5 +77,6 @@ public class S021100020Dto {
         private String memberId;
         private String memberTp;
         private String memberName;
+        private String ceoName;         /*대표자명*/
     }
 }

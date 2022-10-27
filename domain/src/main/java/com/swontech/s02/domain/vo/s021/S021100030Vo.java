@@ -16,5 +16,6 @@ public class S021100030Vo {
     public static class UpdateMemberTp {
         private int memberId;
         private String memberTp;
+        private int loginId;
     }
 }

@@ -49,6 +49,8 @@ public class S022300010Dto {
         private String payResultFlag;
         private String payDate;
         private String payComment;
+        private String accountNo;
+        private String bankNm;
     }
 
     @Getter

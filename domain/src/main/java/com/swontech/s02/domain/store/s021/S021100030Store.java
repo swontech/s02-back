@@ -9,6 +9,6 @@ import java.util.List;
 public interface S021100030Store {
     List<S021100030Dto.MemberListResponse> selectMemberList(S021100030Vo.SelectMemberListVo selectMemberListVo);
     S021100030Dto.MemberDetailInfo selectMemberDetailInfo(int memberId);
-    int deleteMember(int memberId);
+    int deleteMember(S021100030Vo.UpdateMemberTp updateMemberTpVo);
     int updateMemberTp(S021100030Vo.UpdateMemberTp updateMemberTpVo);
 }

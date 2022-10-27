@@ -27,13 +27,12 @@
             ADDRESS,
             DETAIL_ADDRESS,
             TEL_NO,
-            CREATE_OBJECT_ID,
             CREATE_TIMESTAMP,
             CREATE_PROGRAM_ID,
-            LAST_OBJECT_ID,
             UPDATE_TIMESTAMP,
             UPDATE_PROGRAM_ID,
-            ORG_CODE
+            ORG_CODE,
+            CEO_NAME
         )
         SELECT  NEXTVAL(tb_s020.sq_s020_member010),
                 #{orgName},		            -- 단체명
@@ -41,10 +40,8 @@
                 #{address},		            -- 주소
                 #{detailAddress},	        -- 상세주소
                 CONCAT(IFNULL(#{firstTelNo}, ''), '-', IFNULL(#{middleTelNo}, ''), '-', IFNULL(#{lastTelNo}, '')),
-                'TEST',             -- 로그인한 정보의 로그인ID => 2022.09.06 추가 수정사항
                 SYSDATE(),
                 'S021100020',
-                'TEST',             -- 로그인한 정보의 로그인ID => 2022.09.06 추가 수정사항
                 SYSDATE(),
                 'S021100020',
                 CASE    WHEN ASCII(MAX(ORG_CODE)) =  0 THEN 'AAA'
@@ -52,11 +49,17 @@
                         WHEN SUBSTRING(MAX(ORG_CODE), 3) = 'Z' AND  SUBSTRING(MAX(ORG_CODE), 2, 1) != 'Z'  THEN CONCAT(SUBSTRING(MAX(ORG_CODE), 1, 1), CHR(ASCII(SUBSTRING(MAX(ORG_CODE), 2, 1)) +1),  'A')
                         WHEN SUBSTRING(MAX(ORG_CODE), 3) = 'Z' AND  SUBSTRING(MAX(ORG_CODE), 2, 1) = 'Z' AND  SUBSTRING(MAX(ORG_CODE), 1, 1) != 'Z' THEN CONCAT(CHR(ASCII(SUBSTRING(MAX(ORG_CODE), 1, 1)) + 1), 'A',  'A')
                         ELSE '999'
-                END
+                END,
+                #{ceoName}  /*2022.10.26 kjy 대표자명*/
         FROM    TB_S020.TB_S020_ORG010
     </insert>
 
     <insert id="insertMember" parameterType="com.swontech.s02.domain.vo.s021.S021100020Vo$InsertMemberVo">
+        <selectKey resultType="java.lang.Integer" keyProperty="memberId" order="AFTER">
+            SELECT  MAX(MEMBER_ID)
+            FROM    tb_s020.tb_s020_member010
+        </selectKey>
+
         INSERT INTO tb_s020.tb_s020_member010 (
             MEMBER_ID,
             CREATE_TIMESTAMP,
@@ -99,7 +102,8 @@
             substring_index(mem.hp_no, '-', -1)   hp_thd,						 -- 대표자 HP 세번째
             substring_index(mem.email, '@', 1)    email_fst,					 -- 대표자 EMAIL 첫번째
             substring_index(mem.email, '@', -1)   email_snd,					 -- 대표자 EMAIL 두번째
-            mem.member_id
+            mem.member_id,
+            org.CEO_NAME   /*2022.10.26 kjy 대표자명*/
         from	tb_s020.tb_s020_org010 		org
             inner join tb_s020.tb_s020_member010   mem
             on	org.org_id    = mem.org_id
@@ -128,8 +132,18 @@
             ORG010.UPDATE_PROGRAM_ID = 's021100020',
             MEMBER010.UPDATE_TIMESTAMP = SYSDATE(),
             MEMBER010.UPDATE_PROGRAM_ID = 's021100020'
-
+            ,ORG010.LAST_OBJECT_ID = #{memberId}			/* 2022.10.26 kjy 로그인 member_id*/
+            ,MEMBER010.LAST_OBJECT_ID = #{memberId}			/* 2022.10.26 kjy 로그인 member_id*/
+            ,ORG010.CEO_NAME = #{ceoName}      /*2022.10.26 kjy 대표자명*/
         WHERE	ORG010.ORG_ID = #{orgId}
         AND 	MEMBER010.MEMBER_TP = 'C'
+    </update>
+
+    <update id="updateOrgAudit" parameterType="com.swontech.s02.domain.vo.s021.S021100020Vo$UpdateOrgVo">
+        UPDATE  tb_s020.tb_s020_org010
+           SET  CREATE_OBJECT_ID = #{memberId}
+              , LAST_OBJECT_ID = #{memberId}
+              , UPDATE_TIMESTAMP = SYSDATE()
+         WHERE  ORG_ID = #{orgId}
     </update>
 </mapper>

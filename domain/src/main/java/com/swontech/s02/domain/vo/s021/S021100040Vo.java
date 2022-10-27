@@ -23,6 +23,7 @@ public class S021100040Vo {
         private final String memberTp = "C";
         private String accountNo;
         private String bankNm;
+        private int loginId; /*2022.10.27 kjy*/
     }
 
     @Builder
@@ -42,5 +43,6 @@ public class S021100040Vo {
         private String bankNm;
         private int memberId;
         private String pwd;
+        private int loginId; /*2022.10.27 kjy*/
     }
 }

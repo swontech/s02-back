@@ -26,8 +26,8 @@ public class S021100030Repository implements S021100030Store {
     }
 
     @Override
-    public int deleteMember(int memberId) {
-        return sqlSessionTemplate.update("S021100030.deleteMember", memberId);
+    public int deleteMember(S021100030Vo.UpdateMemberTp updateMemberTpVo) {
+        return sqlSessionTemplate.update("S021100030.deleteMember", updateMemberTpVo);
     }
 
     @Override

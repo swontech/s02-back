@@ -26,6 +26,7 @@ public class S0221A0060Dto {
         private String useReceiptId;
         private String useReceiptName;
         private String useComment;
+        private String base64String;
     }
 
     @Getter

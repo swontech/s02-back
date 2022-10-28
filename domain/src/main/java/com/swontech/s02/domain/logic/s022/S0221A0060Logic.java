@@ -1,6 +1,5 @@
 package com.swontech.s02.domain.logic.s022;
 
-import com.swontech.s02.domain.common.exception.CustomException;
 import com.swontech.s02.domain.dto.comm.CustomResponse;
 import com.swontech.s02.domain.dto.s022.S0221A0060Dto;
 import com.swontech.s02.domain.spec.comm.S3BucketSpec;
@@ -10,7 +9,6 @@ import com.swontech.s02.domain.vo.s022.S0221A0060Vo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
 import java.util.List;
@@ -39,8 +37,17 @@ public class S0221A0060Logic implements S0221A0060Spec {
 
     @Override
     public ResponseEntity<?> updateEventCost(S0221A0060Dto.UpdateEventCostDto eventCostDto) {
+
         try {
             if("N".equals(s0221A0060Store.selectAvailableFlag(eventCostDto.getEventUseId()))) return response.success("이미 지급이 완료된 건으로 수정이 불가합니다.");
+
+            /** base64String이 빈 값이면 수정이 아니므로 기존 receiptId로 update
+                base64String이 빈 값이 아니라면 수정이므로 기존 receiptId로 update */
+            String receiptId = eventCostDto.getUseReceiptId();
+            if(!"".equals(eventCostDto.getBase64String())) {
+                s3BucketSpec.delete(receiptId, "event");                                    // <-- 기존 파일 삭제
+                receiptId = s3BucketSpec.upload(eventCostDto.getBase64String(), "event");   // <-- 새 이미지 등록
+            }
 
             int result = s0221A0060Store.updateEventCost(S0221A0060Vo.UpdateEventCostVo
                 .builder()
@@ -49,7 +56,7 @@ public class S0221A0060Logic implements S0221A0060Spec {
                     .usedDate(eventCostDto.getUsedDate())
                     .useAmount(eventCostDto.getUseAmount())
                     .useComment(eventCostDto.getUseComment())
-                    .useReceiptId(eventCostDto.getUseReceiptId())
+                    .useReceiptId(receiptId)
                     .useReceiptName(eventCostDto.getUseReceiptName())
                     .useSubject(eventCostDto.getUseSubject())
                     .eventUseId(eventCostDto.getEventUseId())

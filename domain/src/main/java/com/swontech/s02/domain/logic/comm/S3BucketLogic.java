@@ -2,8 +2,6 @@ package com.swontech.s02.domain.logic.comm;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.swontech.s02.domain.common.exception.CustomException;
-import com.swontech.s02.domain.common.exception.ExceptionEnum;
 import com.swontech.s02.domain.spec.comm.S3BucketSpec;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,7 +31,6 @@ public class S3BucketLogic implements S3BucketSpec {
         String targetDir = bucket + "/storage/img/s02/" + dir;
 
         try {
-            log.info(fileName);
             byte[] decodedFile = Base64.getMimeDecoder().decode(base64.substring(base64.indexOf(",") + 1));
             ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(decodedFile);
 
@@ -47,16 +44,12 @@ public class S3BucketLogic implements S3BucketSpec {
     }
 
     @Override
-    public void delete(String fileId) {
+    public void delete(String fileId, String dir) {
         try {
-            amazonS3.deleteObject(bucket, fileId);
+            String targetDir = bucket + "/storage/img/s02/" + dir;
+            amazonS3.deleteObject(targetDir, fileId);
         } catch (Exception e) {
             throw e;
         }
-    }
-
-    @Override
-    public String update(String fileId) {
-        return null;
     }
 }

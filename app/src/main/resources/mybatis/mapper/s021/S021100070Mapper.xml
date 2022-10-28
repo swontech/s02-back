@@ -182,30 +182,44 @@
     </update>
 
     <select id="selectNewEventCode" parameterType="java.lang.Integer" resultType="java.lang.String">
-        select 	case when length(max(cast(substring(e010.event_code, 4) as unsigned)) + 1) = 1
-                            then concat(org010.org_code, '0', max(cast(substring(e010.event_code, 4) as unsigned)) + 1)
-                     when length(max(cast(substring(e010.event_code, 4) as unsigned)) + 1) = 2
-                            then concat(org010.org_code,  max(cast(substring(e010.event_code, 4) as unsigned)) + 1)
-                end event_code
-        from 	tb_s020.tb_s020_event010  e010
+        select ifnull(
+                    case when length(max(cast(substring(e010.event_code, 4) as unsigned)) + 1) = 1
+                                then concat(org010.org_code, '0', max(cast(substring(e010.event_code, 4) as unsigned)) + 1)
+                         when length(max(cast(substring(e010.event_code, 4) as unsigned)) + 1) = 2
+                                then concat(org010.org_code,  max(cast(substring(e010.event_code, 4) as unsigned)) + 1)
+                    end
+                  , (select concat(org_code,'01')   /*2022.10.27 kjy 신규부서 최초등록인 경우 */
+                       from tb_s020.tb_s020_org010
+                      where org_id = #{orgId} )
+                    ) as event_code
+          from 	tb_s020.tb_s020_event010  e010
                 inner join tb_s020.tb_s020_org010  org010
                 on org010.org_id	= e010.org_id
-        where	e010.org_id = #{orgId}
-         and	e010.event_level = 0
+         where	e010.org_id = #{orgId}
+           and	e010.event_level = 0
     </select>
 
     <update id="updateEventFinalFlag" parameterType="com.swontech.s02.domain.vo.s021.S021100070Vo$ParamsVo">
-        update tb_s020.tb_s020_event010  e010
+        update tb_s020.tb_s020_event010
            set EVENT_FINAL_FLAG = null
          where org_id = #{orgId}		-- org_id
            and event_id = #{eventId}	-- 등록 시 선택한 상위 event_id
     </update>
 
     <update id="updateDefaultEventFlag" parameterType="com.swontech.s02.domain.vo.s021.S021100070Vo$ParamsVo">
-        update tb_s020.tb_s020_event010  e010
+        update tb_s020.tb_s020_event010
            set DEFAULT_EVENT_FLAG = null
          where org_id = #{orgId}		-- org_id
            and event_id = #{eventId}	-- 등록 시 선택한 상위 event_id
+    </update>
+
+    <update id="deleteEvent" parameterType="com.swontech.s02.domain.vo.s021.S021100070Vo$DeleteEventVo">
+        UPDATE	tb_s020.tb_s020_event010
+           SET	DATA_END_STATUS     = '*'
+              , DATA_END_PROGRAM_ID = 'S021100070'
+              , DATA_END_TIMESTAMP  = SYSDATE()
+              , DATA_END_OBJECT_ID  = #{memberId}
+         WHERE	EVENT_ID            = #{eventId}
     </update>
 
 </mapper>

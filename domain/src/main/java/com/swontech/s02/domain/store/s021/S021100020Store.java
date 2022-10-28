@@ -7,7 +7,7 @@ public interface S021100020Store {
     String selectMemberEmail(String email);
 
     /* kjy 2022.10.18 : for 단체명 중복체크*/
-    String selectOrgName(String orgName);
+    String selectOrgName(S021100020Vo.SelectOrgDuplicationVo selectOrgDuplicationVo);
 
     int insertOrg(S021100020Vo.InsertOrgVo insertOrgVo);
 

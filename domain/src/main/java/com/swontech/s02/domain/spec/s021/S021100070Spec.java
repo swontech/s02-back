@@ -30,4 +30,6 @@ public interface S021100070Spec {
     ResponseEntity<?> patchEventFinalFlag(int orgId, int eventId);
     /* 기본사역 삭제 처리 update  */
     ResponseEntity<?> patchDefaultEventFlag(int orgId, int eventId);
+
+    ResponseEntity<?> deleteEvent(int eventId, int memberId);
 }

@@ -31,6 +31,7 @@ public class S021100020Dto {
         private String lastHpNo;
         private String email;
         private int memberId;           /*로그인 memberId*/
+        @NotNull
         private String ceoName;         /*대표자명*/
     }
 

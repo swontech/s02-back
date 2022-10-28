@@ -65,4 +65,11 @@ public class S021100020Vo {
         private int memberId;           /*로그인 memberId*/
         private String ceoName;         /*대표자명*/
     }
+
+    @Getter
+    @Builder
+    public static class SelectOrgDuplicationVo{
+        private String orgName;
+        private String ceoName;
+    }
 }

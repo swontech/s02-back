@@ -81,7 +81,7 @@ public class S021100070Controller {
         return s021100070Spec.patchEvent(patchEventDto);
     }
 
-    @Operation(summary = "부서(행사) 저장-등록,수정,삭제", description = "화면에서 저장버튼 클릭시 기능 처리")
+    @Operation(summary = "부서(행사) 저장-등록,수정", description = "화면에서 저장버튼 클릭시 기능 처리")
     @PostMapping("/save-event")
     public ResponseEntity<?> saveEvent(@RequestParam("eventId") @Parameter(name = "부서(행사)id", description = "유:eventId, 무:0") int eventId,
                                        @RequestBody ObjectNode jsonNodes
@@ -107,6 +107,14 @@ public class S021100070Controller {
 
         //list dto 로 받아서 loop insert, 부서(행사)가 신규 등록이면 eventId는 0
         return s021100070Spec.saveEvent(eventId, registerEventDto, listRegEventMemberDto);
+    }
+
+    @Operation(summary = "부서(행사) 삭제", description = "단, 최하위 부서(행사)인 경우만 가능")
+    @PostMapping("/delete-event")
+    public ResponseEntity<?> deleteEvent(@RequestParam("eventId") int eventId,
+                                         @RequestParam("memberId") @Parameter(name="회원 id", description="로그인한 회읜 member_id")int memberId) {
+
+        return s021100070Spec.deleteEvent(eventId, memberId);
     }
 
     /*행사최하위여부( EVENT_FINAL_FLAG) null update */

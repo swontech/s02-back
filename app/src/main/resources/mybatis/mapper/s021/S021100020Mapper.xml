@@ -8,10 +8,12 @@
         WHERE       EMAIL = #{email}
     </select>
 
-    <select id="selectOrgName" parameterType="java.lang.String" resultType="java.lang.String">
-        SELECT ORG_NAME
+    <select id="selectOrgName" parameterType="com.swontech.s02.domain.vo.s021.S021100020Vo$SelectOrgDuplicationVo"
+                                resultType="java.lang.String">
+        SELECT concat(ORG_NAME, concat(",", CEO_NAME))
           FROM tb_s020.tb_s020_org010
          WHERE ORG_NAME = #{orgName}
+           AND CEO_NAME = #{ceoName}
     </select>
 
     <insert id="insertOrg" parameterType="com.swontech.s02.domain.vo.s021.S021100020Vo$InsertOrgVo">

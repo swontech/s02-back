@@ -53,4 +53,10 @@ public class S021100070Vo {
         private String useRegFlag;      /*등록권한*/
     }
 
+    @Builder
+    public static class DeleteEventVo {
+        private int eventId;
+        private int memberId;           /*로그인 memberId*/
+    }
+
 }

@@ -236,6 +236,16 @@ public class S021100070Logic implements S021100070Spec {
         return response.success( "부서(행사) 정보[기본사역] 수정에 성공했습니다.");
     }
 
+    @Override
+    public ResponseEntity<?> deleteEvent(int eventId, int memberId) {
+
+        int result = s021100070Store.deleteEvent(S021100070Vo.DeleteEventVo.builder()
+                .eventId(eventId)
+                .memberId(memberId).build());
+
+        return response.success(result, "부서(행사) 정보 삭제 성공했습니다.", HttpStatus.OK);
+    }
+
     /** 화면에서 넘겨받은 부서(행사) 정보 항목을 등록대상 vo로 변환한다. */
     private S021100070Vo.TbEvent010Vo setDataRegisterEventVo(S021100070Dto.RegisterEventDto registerEventDto) {
 

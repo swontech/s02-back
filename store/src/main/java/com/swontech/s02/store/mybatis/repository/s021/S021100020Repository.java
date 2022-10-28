@@ -19,8 +19,8 @@ public class S021100020Repository implements S021100020Store {
     }
 
     @Override
-    public String selectOrgName(String orgName) {
-        return sqlSessionTemplate.selectOne("S021100020.selectOrgName", orgName);
+    public String selectOrgName(S021100020Vo.SelectOrgDuplicationVo selectOrgDuplicationVo) {
+        return sqlSessionTemplate.selectOne("S021100020.selectOrgName", selectOrgDuplicationVo);
     }
 
     @Override

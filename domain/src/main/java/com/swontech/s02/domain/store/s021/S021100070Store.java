@@ -33,7 +33,7 @@ public interface S021100070Store {
      * @param eventId :
      * @return int
      */
-    int deleteEvent(int eventId);
+    int deleteEvent(S021100070Vo.DeleteEventVo deleteEventVo);
 
     /**kjy 부서(행사)의 회원정보 삭제
      * tb_s020_event020

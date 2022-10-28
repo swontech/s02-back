@@ -67,8 +67,8 @@ public class S021100070Repository implements S021100070Store {
     }
 
     @Override
-    public int deleteEvent(int eventId) {
-        return sqlSessionTemplate.delete("S021100070.deleteEvent", eventId);
+    public int deleteEvent(S021100070Vo.DeleteEventVo deleteEventVo) {
+        return sqlSessionTemplate.update("S021100070.deleteEvent", deleteEventVo);
     }
 
     @Override

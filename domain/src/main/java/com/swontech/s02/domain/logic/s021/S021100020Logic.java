@@ -34,11 +34,17 @@ public class S021100020Logic implements S021100020Spec {
 
     /* kjy 2022.10.18 : for 단체명 중복체크*/
     @Override
-    public ResponseEntity<?> duplicationCheckOrgName(String orgName) {
-        if(s021100020Store.selectOrgName(orgName) == null) {
-            return responseDto.success(true, "사용 가능한 단체명입니다.", HttpStatus.OK);
+    public ResponseEntity<?> duplicationCheckOrgName(String orgName, String ceoName)
+    {
+        String searchString = "단체명:" + orgName + ",대표자명:" + ceoName;
+        if(s021100020Store.selectOrgName(S021100020Vo.SelectOrgDuplicationVo.builder()
+                                            .orgName(orgName)
+                                            .ceoName(ceoName).build()
+                                        ) == null)
+        {
+            return responseDto.success(true, searchString + ": 사용 가능한 단체입니다.", HttpStatus.OK);
         }
-        return responseDto.success(false, "이미 사용중인 단체명입니다.", HttpStatus.OK);
+        return responseDto.success(false, searchString + ": 이미 사용중인 단체입니다.", HttpStatus.OK);
     }
 
     @Override

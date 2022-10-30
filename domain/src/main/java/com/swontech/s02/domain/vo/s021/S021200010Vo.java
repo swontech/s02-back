@@ -10,6 +10,20 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 
 public class S021200010Vo {
+    @Builder
+    public static class UpdatePwdVo {
+        private String pwd;
+        private String email;
+        private String orgName;
+        private String ceoName;
+    }
+
+    @Builder
+    public static class SelectEmailVo {
+        private String orgName;
+        private String ceoName;
+        private String hpNo;
+    }
 
     @Getter
     @Builder

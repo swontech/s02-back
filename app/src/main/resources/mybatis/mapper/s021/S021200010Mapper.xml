@@ -30,4 +30,25 @@
         WHERE   EMAIL = #{email}
     </select>
 
+    <select id="selectEmail" parameterType="com.swontech.s02.domain.vo.s021.S021200010Vo$SelectEmailVo" resultType="java.lang.String">
+        SELECT 	MEM.EMAIL
+        FROM	TB_S020.TB_S020_ORG010 		ORG
+                INNER JOIN TB_S020.TB_S020_MEMBER010   MEM
+                ON	ORG.ORG_ID    = MEM.ORG_ID
+        WHERE	ORG_NAME = #{orgName}			-- 단체명
+        AND		CEO_NAME = #{ceoName}			-- 대표자명
+        AND		HP_NO = #{hpNo}				    -- HP_NO
+        AND		ORG.DATA_END_STATUS IS NULL
+        AND		MEM.DATA_END_STATUS IS NULL
+    </select>
+
+    <update id="updatePwd" parameterType="com.swontech.s02.domain.vo.s021.S021200010Vo$UpdatePwdVo">
+        UPDATE	TB_S020.TB_S020_MEMBER010
+        SET		PWD = #{pwd}		-- 암호화 처리
+        WHERE	EMAIL = #{email}
+        AND		ORG_ID = (SELECT ORG_ID
+                          FROM   TB_S020.TB_S020_ORG010 ORG
+                          WHERE  ORG_NAME = #{orgName}
+                          AND    CEO_NAME = #{ceoName})
+    </update>
 </mapper>

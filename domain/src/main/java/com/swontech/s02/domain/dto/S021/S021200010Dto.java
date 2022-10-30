@@ -9,6 +9,14 @@ import javax.validation.constraints.NotEmpty;
 
 public class S021200010Dto {
 
+    @Getter
+    public static class InitializePwd {
+        private String pwd;
+        private String email;
+        private String orgName;
+        private String ceoName;
+    }
+
     @Builder
     @Getter
     @Setter

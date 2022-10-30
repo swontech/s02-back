@@ -24,4 +24,14 @@ public class S021200010Repository implements S021200010Store {
     public S021200010Vo.Member selectMember(String email) {
         return sqlSessionTemplate.selectOne("S021200010.selectMember", email);
     }
+
+    @Override
+    public String selectEmail(S021200010Vo.SelectEmailVo selectEmailVo) {
+        return sqlSessionTemplate.selectOne("S021200010.selectEmail", selectEmailVo);
+    }
+
+    @Override
+    public int updatePwd(S021200010Vo.UpdatePwdVo updatePwdVo) {
+        return sqlSessionTemplate.update("S021200010.updatePwd", updatePwdVo);
+    }
 }

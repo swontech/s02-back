@@ -8,4 +8,6 @@ import java.util.Map;
 public interface S021200010Store {
     S021200010Dto.MemberInfoDto selectMemberInfo(S021200010Vo.SelectMemberEmailVo selectMemberEmailVo);
     S021200010Vo.Member selectMember(String email);
+    String selectEmail(S021200010Vo.SelectEmailVo selectEmailVo);
+    int updatePwd(S021200010Vo.UpdatePwdVo updatePwdVo);
 }

@@ -18,4 +18,17 @@ public class S021200010Controller {
     public ResponseEntity<?> logIn(@Validated S021200010Dto.LogInReqDto reqDto) throws Exception {
         return s021200010Spec.logIn(reqDto);
     }
+
+    @GetMapping("/find-email")
+    public ResponseEntity<?> findEmail(@RequestParam("orgName") String orgName,
+                                       @RequestParam("ceoName") String ceoName,
+                                       @RequestParam("hpNo") String hpNo) throws Exception {
+        return s021200010Spec.findEmail(orgName, ceoName, hpNo);
+    }
+
+    @PostMapping("/init-pwd")
+    public ResponseEntity<?> initializePwd(@RequestBody S021200010Dto.InitializePwd reqDto) {
+        return s021200010Spec.updatePwd(reqDto);
+    }
+
 }

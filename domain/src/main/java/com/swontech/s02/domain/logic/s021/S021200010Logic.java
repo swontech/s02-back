@@ -23,6 +23,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.concurrent.TimeUnit;
 
@@ -32,9 +33,11 @@ public class S021200010Logic implements S021200010Spec {
     private final JwtTokenProvider jwtTokenProvider;
     private final AuthRedisStore authRedisStore;
     private final CustomResponse responseDto;
+    private final PasswordEncoder passwordEncoder;
     private Logger logger = LoggerFactory.getLogger(S021200010Logic.class);
 
-    public S021200010Logic(S021200010Store s021200010Store, AuthenticationManagerBuilder authenticationManagerBuilder, JwtTokenProvider jwtTokenProvider, AuthRedisStore authRedisStore, CustomResponse responseDto) {
+    public S021200010Logic(S021200010Store s021200010Store, AuthenticationManagerBuilder authenticationManagerBuilder, JwtTokenProvider jwtTokenProvider, AuthRedisStore authRedisStore, CustomResponse responseDto, PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
         this.s021200010Store = s021200010Store;
         this.authenticationManagerBuilder = authenticationManagerBuilder;
         this.jwtTokenProvider = jwtTokenProvider;
@@ -92,6 +95,37 @@ public class S021200010Logic implements S021200010Spec {
         } catch (CustomException ex) {
             logger.error(ex.getMessage());
             return responseDto.fail(ex.getExceptionEnum(), "로그인 실패", HttpStatus.FORBIDDEN);
+        }
+    }
+
+    @Override
+    public ResponseEntity<?> findEmail(String orgName, String ceoName, String hpNo) {
+        return responseDto.success(
+                s021200010Store.selectEmail(
+                    S021200010Vo.SelectEmailVo
+                            .builder()
+                                .orgName(orgName)
+                                .ceoName(ceoName)
+                                .hpNo(hpNo)
+                            .build()));
+    }
+
+    @Override
+    public ResponseEntity<?> updatePwd(S021200010Dto.InitializePwd reqDto) {
+        try {
+            s021200010Store.updatePwd(
+                    S021200010Vo.UpdatePwdVo
+                            .builder()
+                            .pwd(passwordEncoder.encode(reqDto.getPwd()))
+                            .email(reqDto.getEmail())
+                            .orgName(reqDto.getOrgName())
+                            .ceoName(reqDto.getCeoName())
+                            .build()
+            );
+
+            return responseDto.success("비밀번호 변경에 성공했습니다.");
+        } catch (Exception e) {
+            throw e;
         }
     }
 }

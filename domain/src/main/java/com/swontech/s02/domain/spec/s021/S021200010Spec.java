@@ -5,4 +5,6 @@ import org.springframework.http.ResponseEntity;
 
 public interface S021200010Spec {
     ResponseEntity<?> logIn(S021200010Dto.LogInReqDto reqDto) throws Exception;
+    ResponseEntity<?> findEmail(String orgName, String ceoName, String hpNo);
+    ResponseEntity<?> updatePwd(S021200010Dto.InitializePwd reqDto);
 }

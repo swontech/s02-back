@@ -28,8 +28,18 @@ public class S022300010Logic implements S022300010Spec {
     }
 
     @Override
-    public ResponseEntity<?> retrieveCostPayProTotList(S022300010Vo.ParamsVo paramsVo) {
-        return response.success(s022300010Store.selectCostPayProTotList(paramsVo));
+    public ResponseEntity<?> retrieveCostPayProTotList(S022300010Dto.RetrieveCostPayList reqDto) {
+        return response.success(s022300010Store.selectCostPayProTotList(
+                S022300010Vo.ParamsVo
+                        .builder()
+                        .memberName(reqDto.getMemberName())
+                        .fromUsedDate(reqDto.getFromUsedDate())
+                        .toUsedDate(reqDto.getToUsedDate())
+                        .namePathPriortiy(reqDto.getNamePathPriortiy())
+                        .useProStatus(reqDto.getUseProStatus())
+                        .orgId(reqDto.getOrgId())
+                        .build()
+        ));
     }
 
     @Override

@@ -26,14 +26,9 @@ public class S022300010Controller {
     }
     /*비용 요청 조회*/
     @GetMapping("/cost-pay-list")
-    public ResponseEntity<?> retrieveCostPayProTotList(@RequestParam Map<String, Object> mapParams)
-    {
-        logger.info("비용요청조회 params =>" + mapParams );
-        ObjectMapper mapper = new ObjectMapper();
-        S022300010Vo.ParamsVo paramsVo = mapper.convertValue(mapParams, S022300010Vo.ParamsVo.class);
-        logger.info("비용요청조회 params convert =>" + mapParams );
+    public ResponseEntity<?> retrieveCostPayProTotList(S022300010Dto.RetrieveCostPayList reqDto) {
 
-        return s022300010Spec.retrieveCostPayProTotList(paramsVo);
+        return s022300010Spec.retrieveCostPayProTotList(reqDto);
     }
     /*비용 요청 조회 상세*/
     @GetMapping("/cost-pay-detail")

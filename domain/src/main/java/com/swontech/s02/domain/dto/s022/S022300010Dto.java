@@ -10,6 +10,17 @@ import javax.validation.constraints.NotNull;
 
 public class S022300010Dto {
 
+    @Getter
+    public static class RetrieveCostPayList {
+        private String memberName;
+        private String fromUsedDate;
+        private String toUsedDate;
+        private String namePathPriortiy;
+        private String useProStatus;
+        private int orgId;
+    }
+
+
     /*비용 요청 조회*/
     @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
     public static class CostPayProTotList {

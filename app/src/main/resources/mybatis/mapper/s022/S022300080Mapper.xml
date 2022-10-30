@@ -3,7 +3,7 @@
 
 <mapper namespace="S022300080">
     <select id="selectEventLov" parameterType="java.lang.Integer" resultType="com.swontech.s02.domain.dto.s022.S022300080Dto$SelectEventLov">
-        SELECT 	EVENT_NAME,
+        SELECT 	EVENT_NM,
                 EVENT_ID
         FROM 	TB_S020.EVENT_HIERARCHY_VIEW  VI
         WHERE	VI.ORG_ID = #{orgId}

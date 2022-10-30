@@ -12,7 +12,7 @@ import org.springframework.http.ResponseEntity;
 
 public interface S022300010Spec {
     /*비용 요청 조회*/
-    ResponseEntity<?> retrieveCostPayProTotList(S022300010Vo.ParamsVo paramsVo);
+    ResponseEntity<?> retrieveCostPayProTotList(S022300010Dto.RetrieveCostPayList reqDto);
     /*비용 요청 조회 상세*/
     ResponseEntity<?> retrieveCostPayProTotDetail(int eventUsedId);
     /*비용지급 처리 */

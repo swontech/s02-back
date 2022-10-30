@@ -39,7 +39,7 @@
                 FROM TB_S020.TB_S020_MEMBER010 M010
                 WHERE EVENT_HOST_ID =  M010.MEMBER_ID)  AS EVENT_HOST_NAME	-- 책임자명
         FROM    DD
-        ORDER BY EVENT_ID DESC limt 4
+        ORDER BY EVENT_ID DESC LIMIT 4
     </select>
 
     <select id="mobileInitUserInfo" parameterType="com.swontech.s02.domain.vo.s022.S0221A0010Vo$MobileInitUserInfoVo" resultType="com.swontech.s02.domain.dto.s022.S0221A0010Dto$MobileInitUserInfo">

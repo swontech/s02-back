@@ -9,8 +9,8 @@ public class S022300080Dto {
 
     @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
     public static class SelectEventLov {
+        private String eventNm;
         private int eventId;
-        private String eventName;
     }
 
     @Setter

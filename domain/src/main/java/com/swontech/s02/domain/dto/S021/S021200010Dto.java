@@ -37,6 +37,7 @@ public class S021200010Dto {
         private String memberName;
         private String memberTp;
         private int orgId;
+        private String orgName;
         private String refreshToken;
         private String accessToken;
     }

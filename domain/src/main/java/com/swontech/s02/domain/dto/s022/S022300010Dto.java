@@ -4,13 +4,16 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 public class S022300010Dto {
 
+    @Setter
     @Getter
+    @AllArgsConstructor
     public static class RetrieveCostPayList {
         private String memberName;
         private String fromUsedDate;

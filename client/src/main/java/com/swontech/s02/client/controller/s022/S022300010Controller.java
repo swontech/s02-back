@@ -7,6 +7,7 @@ import com.swontech.s02.domain.vo.s022.S022300010Vo;
 import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 
 @RestController
+@Slf4j
 @RequestMapping("/rest/v1/s022300010")
 @Api(tags = "비용요청진행현황(S022300010) API", description = "비용요청조회 및 지급처리 기능 API ")
 public class S022300010Controller {
@@ -27,6 +29,7 @@ public class S022300010Controller {
     /*비용 요청 조회*/
     @GetMapping("/cost-pay-list")
     public ResponseEntity<?> retrieveCostPayProTotList(S022300010Dto.RetrieveCostPayList reqDto) {
+        log.info(reqDto.getFromUsedDate());
 
         return s022300010Spec.retrieveCostPayProTotList(reqDto);
     }

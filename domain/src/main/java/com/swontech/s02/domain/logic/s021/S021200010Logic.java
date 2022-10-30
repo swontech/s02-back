@@ -107,7 +107,7 @@ public class S021200010Logic implements S021200010Spec {
                                 .orgName(orgName)
                                 .ceoName(ceoName)
                                 .hpNo(hpNo)
-                            .build()));
+                            .build()), "이메일 조회", HttpStatus.OK);
     }
 
     @Override

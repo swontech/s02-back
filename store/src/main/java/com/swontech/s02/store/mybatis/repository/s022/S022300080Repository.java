@@ -29,4 +29,9 @@ public class S022300080Repository implements S022300080Store {
     public int deleteEnter(List<S022300080Vo.DeleteEnterVo> deleteEnterVo) {
         return sqlSessionTemplate.delete("S022300080.deleteEnter", deleteEnterVo);
     }
+
+    @Override
+    public List<S022300080Dto.SelectEventLov> selectEventLov(int orgId) {
+        return sqlSessionTemplate.selectList("S022300080.selectEventLov", orgId);
+    }
 }

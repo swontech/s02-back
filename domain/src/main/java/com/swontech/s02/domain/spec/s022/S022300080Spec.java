@@ -11,4 +11,6 @@ public interface S022300080Spec {
     ResponseEntity<?> registerAttend(List<S022300080Dto.RegisterAttend> reqDto);
 
     ResponseEntity<?> deleteAttend(List<S022300080Dto.DeleteAttend> reqDto);
+
+    ResponseEntity<?> retrieveEventLov(int orgId);
 }

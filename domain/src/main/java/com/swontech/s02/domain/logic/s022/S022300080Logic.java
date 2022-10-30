@@ -64,4 +64,9 @@ public class S022300080Logic implements S022300080Spec {
 
         return response.success(s022300080Store.deleteEnter(list));
     }
+
+    @Override
+    public ResponseEntity<?> retrieveEventLov(int orgId) {
+        return response.success(s022300080Store.selectEventLov(orgId), "정상적으로 조회되었습니다.", HttpStatus.OK);
+    }
 }

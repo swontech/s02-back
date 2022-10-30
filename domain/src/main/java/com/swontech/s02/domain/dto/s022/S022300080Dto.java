@@ -1,10 +1,17 @@
 package com.swontech.s02.domain.dto.s022;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.swontech.s02.domain.vo.s022.S022300080Vo;
 import lombok.Getter;
 import lombok.Setter;
 
 public class S022300080Dto {
+
+    @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
+    public static class SelectEventLov {
+        private int eventId;
+        private String eventName;
+    }
 
     @Setter
     @Getter

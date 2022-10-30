@@ -2,6 +2,7 @@ package com.swontech.s02.client.controller.s022;
 
 import com.swontech.s02.domain.dto.s022.S022300080Dto;
 import com.swontech.s02.domain.spec.s022.S022300080Spec;
+import io.swagger.models.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,5 +29,10 @@ public class S022300080Controller {
     @PostMapping("/delete-attend")
     public ResponseEntity<?> deleteAttend(@RequestBody List<S022300080Dto.DeleteAttend> reqDto) {
         return s022300080Spec.deleteAttend(reqDto);
+    }
+
+    @GetMapping("/event-lov")
+    public ResponseEntity<?> retrieveEventLov(@RequestParam("orgId") int orgId) {
+        return s022300080Spec.retrieveEventLov(orgId);
     }
 }

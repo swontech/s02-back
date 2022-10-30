@@ -11,4 +11,6 @@ public interface S022300080Store {
     int insertEnter(List<S022300080Vo.InsertEnterVo> insertEnterVo);
 
     int deleteEnter(List<S022300080Vo.DeleteEnterVo> deleteEnterVo);
+
+    List<S022300080Dto.SelectEventLov> selectEventLov(int orgId);
 }

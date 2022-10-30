@@ -16,7 +16,11 @@ public class CommonController {
     }
 
     @GetMapping("/retrieve-code")
-    public ResponseEntity<?> retrieveCode(@RequestParam("category")String category, @RequestParam("cdTp")String cdTp, @RequestParam("orgId")Integer orgId) {
-        return commonSpec.retrieveCode(category, cdTp, orgId);
+    public ResponseEntity<?> retrieveCode(
+            @RequestParam("category")String category,
+            @RequestParam("cdTp")String cdTp,
+            @RequestParam("orgId")Integer orgId,
+            @RequestParam("cdV")String cdV) {
+        return commonSpec.retrieveCode(category, cdTp, orgId, cdV);
     }
 }

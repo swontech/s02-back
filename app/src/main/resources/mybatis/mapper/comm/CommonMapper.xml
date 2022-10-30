@@ -6,8 +6,18 @@
         SELECT 	CD_V,
                 CD_V_MEANING
         FROM 	tb_s020.tb_s020_code010
-        WHERE 	CATEGORY = #{category}
+        WHERE 	1 = 1
+        <if test='category != null and category != ""'>
+        AND     CATEGORY = #{category}
+        </if>
+        <if test='cdTp != null and cdTp != ""'>
         AND 	CD_TP = #{cdTp}
+        </if>
+        <if test='orgId != null and orgId != ""'>
         AND 	ORG_ID = #{orgId}
+        </if>
+        <if test='cdV != null and cdV != ""'>
+            AND     CD_V = #{cdV}
+        </if>
     </select>
 </mapper>

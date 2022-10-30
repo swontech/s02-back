@@ -9,5 +9,6 @@ public class CommonVo {
         private String category;
         private String cdTp;
         private int orgId;
+        private String cdV;
     }
 }

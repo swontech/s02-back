@@ -15,7 +15,7 @@ public class CommonLogic implements CommonSpec {
     }
 
     @Override
-    public ResponseEntity<?> retrieveCode(String category, String cdTp, Integer orgId) {
+    public ResponseEntity<?> retrieveCode(String category, String cdTp, Integer orgId, String cdV) {
         return response.success(
                 commonStore.selectCodeList(
                     CommonVo.SelectCodeVo
@@ -23,6 +23,7 @@ public class CommonLogic implements CommonSpec {
                             .category(category)
                             .cdTp(cdTp)
                             .orgId(orgId)
+                            .cdV(cdV)
                         .build()
                     )
                 );

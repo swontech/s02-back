@@ -34,4 +34,9 @@ public class S021100030Repository implements S021100030Store {
     public int updateMemberTp(S021100030Vo.UpdateMemberTp updateMemberTpVo) {
         return sqlSessionTemplate.update("S021100030.updateMemberTp", updateMemberTpVo);
     }
+
+    @Override
+    public String getPayerFlag(int memberId) {
+        return sqlSessionTemplate.selectOne("S021100030.getPayerFlag", memberId);
+    }
 }

@@ -11,4 +11,5 @@ public interface S021100030Store {
     S021100030Dto.MemberDetailInfo selectMemberDetailInfo(int memberId);
     int deleteMember(S021100030Vo.UpdateMemberTp updateMemberTpVo);
     int updateMemberTp(S021100030Vo.UpdateMemberTp updateMemberTpVo);
+    String getPayerFlag(int memberId);
 }

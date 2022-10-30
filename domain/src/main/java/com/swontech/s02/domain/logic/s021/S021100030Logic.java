@@ -39,15 +39,23 @@ public class S021100030Logic implements S021100030Spec {
 
     @Override
     public ResponseEntity<?> deleteMember(S021100030Dto.UpdateMemberTp reqDto) {
-        int result = s021100030Store.deleteMember(S021100030Vo.UpdateMemberTp
-                .builder()
-                .memberId(reqDto.getMemberId())
-                .loginId(reqDto.getLoginId()) /*2022.10.27 kjy*/
-                .build());
-        if(result > 0) {
-            return response.success("회원정보를 정상적으로 삭제했습니다.");
+        try {
+            String returnMessage = s021100030Store.getPayerFlag(reqDto.getMemberId());
+
+            if(returnMessage == null || "".equals(returnMessage)) {
+                int result = s021100030Store.deleteMember(S021100030Vo.UpdateMemberTp
+                        .builder()
+                        .memberId(reqDto.getMemberId())
+                        .loginId(reqDto.getLoginId()) /*2022.10.27 kjy*/
+                        .build());
+                if(result > 0) {
+                    return response.success("회원정보를 정상적으로 삭제했습니다.");
+                }
+            }
+            return response.success(returnMessage);
+        } catch (Exception e) {
+            throw e;
         }
-        return response.fail("회원 삭제에 실패했습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @Override

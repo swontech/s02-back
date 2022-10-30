@@ -3,128 +3,60 @@
 
 <mapper namespace="S021100080">
     <select id="selectList" parameterType="com.swontech.s02.domain.vo.s021.S021100080Vo$SelectListVo" resultType="com.swontech.s02.domain.dto.s021.S021100080Dto$SelectListResponse">
-    with  recursive cte as (
-            SELECT	e010.event_id,
-                    e010.event_nm,
-                    GROUP_CONCAT(if(e020.EVENT_PAY_LEVEL = 1, e020.event_pay_user_id, NULL)) AS pay_level_1,
-                    GROUP_CONCAT(if(e020.EVENT_PAY_LEVEL = 1, e020.EVENT_PAY_ROLE_CD, NULL)) AS pay_nm_1,
-                    GROUP_CONCAT(if(e020.EVENT_PAY_LEVEL = 2, e020.event_pay_user_id, NULL)) AS pay_level_2,
-                    GROUP_CONCAT(if(e020.EVENT_PAY_LEVEL = 2, e020.EVENT_PAY_ROLE_CD, NULL)) AS pay_nm_2,
-                    GROUP_CONCAT(if(e020.EVENT_PAY_LEVEL = 3, e020.event_pay_user_id, NULL)) AS pay_level_3,
-                    GROUP_CONCAT(if(e020.EVENT_PAY_LEVEL = 3, e020.EVENT_PAY_ROLE_CD, NULL)) AS pay_nm_3,
-                    GROUP_CONCAT(if(e020.EVENT_PAY_LEVEL = 4, e020.event_pay_user_id, NULL)) AS pay_level_4,
-                    GROUP_CONCAT(if(e020.EVENT_PAY_LEVEL = 4, e020.EVENT_PAY_ROLE_CD, NULL)) AS pay_nm_4,
-                    e010.EVENT_BUDGET_AMOUNT,
-                    e010.EVENT_LEVEL	as lev,
-                    e010.event_nm		as menu_path,
-                    e010.EVENT_HOST_ID,
-                    -- null	as event_host_name,
-                    e010.PAY_FLAG,
-                    e010.high_event_id,
-                    cast(e010.event_id as char) as id_path,
-                    e010.event_id as id_path_priority
-            FROM 	tb_s020.tb_s020_event010 e010
-                    left outer join tb_s020.tb_s020_event020  e020
-                    on e010.event_id = e020.event_id
-            where	e010.ORG_ID = #{orgId}
-            and		event_level = 0
-            and		e010.event_nm like CONCAT('%', #{eventNm}, '%')
-            group by 	e010.event_id,
-                        e010.event_nm,
-                        e010.EVENT_BUDGET_AMOUNT,
-                        e010.EVENT_FINAL_FLAG,
-                        e010.EVENT_HOST_ID,
-                        e010.EVENT_LEVEL,
-                        e010.PAY_FLAG
-            union all
-
-            select	e010_2.event_id,
-                    e010_2.event_nm,
-                    temp.pay_level_1	AS	pay_level_1,
-                    temp.pay_nm_1		AS	pay_nm_1,
-                    temp.pay_level_2	AS	pay_level_2,
-                    temp.pay_nm_2		AS	pay_nm_2,
-                    temp.pay_level_3	AS	pay_level_3,
-                    temp.pay_nm_3		AS	pay_nm_3,
-                    temp.pay_level_4	AS	pay_level_4,
-                    temp.pay_nm_4		AS	pay_nm_4,
-                    e010_2.EVENT_BUDGET_AMOUNT,
-                    temp.lev + 1	as lev,
-                    concat(temp.menu_path,'-', e010_2.event_nm)		as menu_path,
-                    e010_2.EVENT_HOST_ID,
-                    e010_2.PAY_FLAG,
-                    e010_2.high_event_id,
-                    concat(temp.id_path,'-', e010_2.event_id)		as id_path,
-                    temp.id_path_priority
-            from	tb_s020.tb_s020_event010  e010_2
-                    inner join cte  temp on e010_2.high_event_id = temp.event_id )
-    select
-                id_path_priority,												-- 최상위 event_id
-                SUBSTRING_INDEX(menu_path, '-', 1)   as event_nm_0,				-- 최상위 부서/행사명
-                pay_level_1,													-- 0_Level 1차결제자 ID
-                (SELECT m010.MEMBER_NAME
-                FROM 	tb_s020.tb_s020_member010   m010
-                where	m010.MEMBER_ID =  pay_level_1)	as pay_level0_1_name,	-- 0_Level 1차결제자명
-                pay_nm_1,														-- 0_Level 1차결제자 직책
-                pay_level_2,													-- 0_Level 2차결제자 ID
-                (SELECT m010.MEMBER_NAME
-                FROM 	tb_s020.tb_s020_member010   m010
-                where	m010.MEMBER_ID =  pay_level_2)	as pay_level0_2_name,	-- 0_Level 2차결제자명
-                pay_nm_2,														-- 0_Level 2차결제자 직책
-                pay_level_3,													-- 0_Level 3차결제자ID
-                (SELECT m010.MEMBER_NAME
-                FROM 	tb_s020.tb_s020_member010   m010
-                where	m010.MEMBER_ID =  pay_level_3)	as pay_level0_3_name,	-- 0_Level 3차결제자명
-                pay_nm_3,														-- 0_Level 3차결제자 직책
-                pay_level_4,													-- 0_Level 4차결제자 ID
-                (SELECT m010.MEMBER_NAME
-                FROM 	tb_s020.tb_s020_member010   m010
-                where	m010.MEMBER_ID =  pay_level_4)	as pay_level0_4_name,	-- 0_Level 4차결제자명
-                pay_nm_4,														-- 0_Level 4차결제자 직책
-                case when lev = 1 then event_nm -- SUBSTRING_INDEX(SUBSTRING_INDEX(menu_path, '-', 2), '-', -1)
-                    else null
-                end as event_nm_1,												-- 1 Level 행사(사역)명
-                case when lev = 1 then  EVENT_HOST_ID
-                    else null
-                end as event_EVENT_HOST_ID_1,									-- 1 Level 행사(사역) 책임자ID
-                case when lev = 1 then  (SELECT m010.MEMBER_NAME
-                                            FROM 	tb_s020.tb_s020_member010   m010
-                                            where	m010.MEMBER_ID =  EVENT_HOST_ID)
-                    else null
-                end as event_EVENT_HOST_NM_1,									-- 1 Level 행사(사역) 책임자명
-                case when lev = 2 then event_nm -- SUBSTRING_INDEX(SUBSTRING_INDEX(menu_path, '-', -2), '-', 1)
-                    else null
-                end as event_nm_2,												-- 2 Level 행사(사역)명
-                case when lev = 2 then EVENT_HOST_ID
-                    else null
-                end as event_EVENT_HOST_ID_2,									-- 2 Level 행사(사역) 책임자ID
-                case when lev = 2 then  (SELECT m010.MEMBER_NAME
-                                            FROM 	tb_s020.tb_s020_member010   m010
-                                            where	m010.MEMBER_ID =  EVENT_HOST_ID)
-                    else null
-                end as event_EVENT_HOST_NM_2,									-- 2 Level 행사(사역) 책임자명
-                case when lev = 3 then event_nm -- SUBSTRING_INDEX(menu_path, '-', -1)
-                    else null
-                end as event_nm_3,												-- 3 Level 행사(사역) 명
-                case when lev = 3 then EVENT_HOST_ID
-                    else null
-                end as event_EVENT_HOST_ID_3,									-- 3 Level 행사(사역) 책임자 ID
-                case when lev = 3 then  (SELECT m010.MEMBER_NAME
-                                            FROM 	tb_s020.tb_s020_member010   m010
-                                            where	m010.MEMBER_ID =  EVENT_HOST_ID)
-                    else null
-                end as event_EVENT_HOST_NM_3,									-- 3 Level 행사(사역) 책임자명
-                EVENT_BUDGET_AMOUNT,											-- 예산금액
-                lev,															-- Level
-                menu_path,														-- 메뉴 path
-                PAY_FLAG,														-- 결제 여부
-                high_event_id,													-- 상위 event_id
-                id_path,														-- event_id  path
-                event_id,														-- event_id
-                event_nm														-- 행사명
-        from	cte
-    order by 	id_path_priority,
-                id_path,
-                lev desc
+        SELECT	E010.EVENT_ID,
+                E010.EVENT_NM	AS EVENT_NM_0,
+                E010.EVENT_HOST_ID,
+                (SELECT M010.MEMBER_NAME
+                FROM	TB_S020.TB_S020_MEMBER010  M010
+                WHERE	M010.MEMBER_ID = E010.EVENT_HOST_ID) AS	EVENT_HOST_NAME,
+                GROUP_CONCAT(IF(E020.EVENT_PAY_LEVEL = 1,
+                E020.EVENT_PAY_USER_ID, NULL)) AS PAY_LEVEL_1,
+                GROUP_CONCAT(IF(E020.EVENT_PAY_LEVEL = 1,
+                (SELECT MEMBER_NAME FROM TB_S020.TB_S020_MEMBER010  M010
+                WHERE   M010.MEMBER_ID = E020.EVENT_PAY_USER_ID), NULL)) AS PAY_LEVEL0_1_NAME,
+                GROUP_CONCAT(IF(E020.EVENT_PAY_LEVEL = 1,
+                E020.EVENT_PAY_ROLE_CD, NULL)) AS PAY_NM_1,
+                GROUP_CONCAT(IF(E020.EVENT_PAY_LEVEL = 2,
+                E020.EVENT_PAY_USER_ID, NULL)) AS PAY_LEVEL_2,
+                GROUP_CONCAT(IF(E020.EVENT_PAY_LEVEL = 2,
+                (SELECT MEMBER_NAME FROM TB_S020.TB_S020_MEMBER010  M010
+                WHERE   M010.MEMBER_ID = E020.EVENT_PAY_USER_ID), NULL)) AS PAY_LEVEL0_2_NAME,
+                GROUP_CONCAT(IF(E020.EVENT_PAY_LEVEL = 2,
+                E020.EVENT_PAY_ROLE_CD, NULL)) AS PAY_NM_2,
+                GROUP_CONCAT(IF(E020.EVENT_PAY_LEVEL = 3,
+                E020.EVENT_PAY_USER_ID, NULL)) AS PAY_LEVEL_3,
+                GROUP_CONCAT(IF(E020.EVENT_PAY_LEVEL = 3,
+                (SELECT MEMBER_NAME FROM TB_S020.TB_S020_MEMBER010  M010
+                WHERE M010.MEMBER_ID = E020.EVENT_PAY_USER_ID), NULL)) AS PAY_LEVEL0_3_NAME,
+                GROUP_CONCAT(IF(E020.EVENT_PAY_LEVEL = 3,
+                E020.EVENT_PAY_ROLE_CD, NULL)) AS PAY_NM_3,
+                GROUP_CONCAT(IF(E020.EVENT_PAY_LEVEL = 4,
+                E020.EVENT_PAY_USER_ID, NULL)) AS PAY_LEVEL_4,
+                GROUP_CONCAT(IF(E020.EVENT_PAY_LEVEL = 4,
+                (SELECT MEMBER_NAME FROM TB_S020.TB_S020_MEMBER010  M010
+                WHERE   M010.MEMBER_ID = E020.EVENT_PAY_USER_ID), NULL)) AS PAY_LEVEL0_4_NAME,
+                GROUP_CONCAT(IF(E020.EVENT_PAY_LEVEL = 4, E020.EVENT_PAY_ROLE_CD, NULL)) AS PAY_NM_4,
+                E010.EVENT_BUDGET_AMOUNT,
+                E010.EVENT_LEVEL,
+                E010.PAY_FLAG,
+                E010.HIGH_EVENT_ID,
+                E010.EVENT_ID,
+                E010.EVENT_NM,
+                E010.EVENT_TP,
+                E010.EVENT_COMMENT
+        FROM 	TB_S020.TB_S020_EVENT010  E010
+                LEFT OUTER JOIN TB_S020.TB_S020_EVENT020  E020
+                ON E010.EVENT_ID	= E020.EVENT_ID
+        WHERE	E010.ORG_ID = #{orgId}
+        AND		E010.EVENT_NM LIKE CONCAT('%', #{eventNm}, '%')
+        AND		E010.EVENT_LEVEL = 0
+        AND		E010.DATA_END_STATUS IS NULL
+        GROUP BY 	E010.EVENT_ID,
+                    E010.EVENT_NM,
+                    E010.EVENT_BUDGET_AMOUNT,
+                    E010.EVENT_FINAL_FLAG,
+                    E010.EVENT_HOST_ID,
+                    E010.EVENT_LEVEL,
+                    E010.PAY_FLAG
     </select>
 </mapper>

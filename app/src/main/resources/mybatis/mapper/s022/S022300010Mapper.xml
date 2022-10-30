@@ -3,40 +3,37 @@
 
 <mapper namespace="S022300010">
     <select id="selectCostPayProTotList" parameterType="com.swontech.s02.domain.vo.s022.S022300010Vo$ParamsVo" resultType="com.swontech.s02.domain.dto.s022.S022300010Dto$CostPayProTotList">
-        SELECT	E030.EVENT_USE_ID,
-                E030.EVENT_USER_ID,
-                M010.MEMBER_NAME,
-                PRI.NAME_PATH_PRIORTIY,
-                PRI.EVENT_NM,
-                E030.USE_SUBJECT,
-                E030.USED_DATE,
-                E030.USE_AMOUNT,
-                E030.USE_PRO_STATUS,
-                C010.CD_V_MEANING AS	STATUS_NM,
-                E020.EVENT_PAY_USER_ID,
-                (SELECT M010_1.MEMBER_NAME
-                FROM	TB_S020.TB_S020_MEMBER010	M010_1
-                WHERE	E020.EVENT_PAY_USER_ID = M010_1.MEMBER_ID  ) AS PAYER_NAME
-        FROM 	TB_S020.TB_S020_EVENT030 E030
-        INNER JOIN TB_S020.EVENT_HIERARCHY_VIEW PRI
-        ON PRI.EVENT_ID = E030.EVENT_ID
-        INNER JOIN TB_S020.TB_S020_MEMBER010	M010
-        ON  E030.EVENT_USER_ID = M010.MEMBER_ID
-        AND	PRI.ORG_ID = M010.ORG_ID
-        INNER JOIN TB_S020.TB_S020_CODE010 C010
-        ON	E030.USE_PRO_STATUS = C010.CD_V
-        AND	C010.CD_TP = 'USE_PRO_STATUS'
-        AND	C010.ORG_ID = PRI.ORG_ID
-        AND C010.CATEGORY = '000'
-        INNER JOIN TB_S020.TB_S020_EVENT020 E020
-        ON	E020.EVENT_ID = PRI.ID_PATH_PRIORTIY
-        AND	E020.EVENT_PAY_LEVEL = E030.PAY_CURRENT_STEP
-        WHERE	E030.USED_DATE BETWEEN #{fromUsedDate} AND #{toUsedDate}					/*조회일자 FROM, TO*/
-          AND	M010.MEMBER_NAME LIKE CONCAT('%', IFNULL( #{memberName}, '') , '%')		    /*대표자명*/
-          AND	PRI.NAME_PATH_PRIORTIY LIKE CONCAT('%',IFNULL(  #{namePathPriortiy}, '') , '%')	/*발의부서*/
-          AND	E030.USE_PRO_STATUS = #{useProStatus} 						/*진행상태*/
-          AND	PRI.ORG_ID = #{orgId}									    /*ORG_ID*/
-        ORDER BY E030.EVENT_USE_ID ;
+        SELECT	E030.EVENT_USE_ID,													-- 비용등록ID
+                E030.EVENT_USER_ID,													-- 작성자ID
+                M010.MEMBER_NAME,													-- 작성자
+                PRI.NAME_PATH_PRIORTIY,												-- 발의부서
+                PRI.EVENT_NM,														-- 행사명
+                E030.USE_SUBJECT,													-- 비용사용제목
+                E030.USED_DATE,														-- 사용일자
+                E030.USE_AMOUNT,													-- 사용금액
+                E030.USE_PRO_STATUS,												-- 진행상태코드
+                C010.CD_V_MEANING AS	STATUS_NM,									-- 진행상태명
+                (SELECT	MEMBER_NAME
+                FROM	TB_S020.TB_S020_EVENT020 E020
+                INNER JOIN  TB_S020.TB_S020_MEMBER010	M010
+                ON E020.EVENT_PAY_USER_ID = M010.MEMBER_ID
+                WHERE	E020.EVENT_ID = PRI.ID_PATH_PRIORTIY
+                AND	E020.EVENT_PAY_LEVEL = E030.PAY_CURRENT_STEP )	AS PAYER_NM	-- 결제자명,
+                FROM 	TB_S020.EVENT_HIERARCHY_VIEW PRI
+                INNER JOIN TB_S020.TB_S020_EVENT030 E030
+                ON PRI.EVENT_ID = E030.EVENT_ID
+                INNER JOIN TB_S020.TB_S020_MEMBER010	M010
+                ON  E030.EVENT_USER_ID = M010.MEMBER_ID
+                INNER JOIN TB_S020.TB_S020_CODE010 C010
+                ON	E030.USE_PRO_STATUS = C010.CD_V
+                AND	C010.CD_TP = 'USE_PRO_STATUS'
+                AND	C010.ORG_ID = 0
+                AND C010.CATEGORY = '000'
+        WHERE	E030.USED_DATE BETWEEN #{fromUsedDate} AND #{toUsedDate}								-- 사용일자 FROM / TO
+        AND		M010.MEMBER_NAME LIKE CONCAT('%', IFNULL( #{memberName}, '') , '%')		-- 작성자명
+        AND		PRI.NAME_PATH_PRIORTIY LIKE CONCAT('%',IFNULL(#{namePathPriortiy}, '') , '%')	-- 발의부서명
+        AND		E030.USE_PRO_STATUS = #{useProStatus} 										-- 진행상태코드
+        AND		PRI.ORG_ID = #{orgId}													-- 로그인 사용자의 org_id
     </select>
 
     <select id="selectCostPayProTotDetail" parameterType="java.lang.Integer" resultType="com.swontech.s02.domain.dto.s022.S022300010Dto$CostPayProTotDetail">

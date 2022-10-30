@@ -18,7 +18,7 @@
                 INNER JOIN  TB_S020.TB_S020_MEMBER010	M010
                 ON E020.EVENT_PAY_USER_ID = M010.MEMBER_ID
                 WHERE	E020.EVENT_ID = PRI.ID_PATH_PRIORTIY
-                AND	E020.EVENT_PAY_LEVEL = E030.PAY_CURRENT_STEP )	AS PAYER_NM	-- 결제자명,
+                AND	    E020.EVENT_PAY_LEVEL = E030.PAY_CURRENT_STEP )	AS PAYER_NM	-- 결제자명,
                 FROM 	TB_S020.EVENT_HIERARCHY_VIEW PRI
                 INNER JOIN TB_S020.TB_S020_EVENT030 E030
                 ON PRI.EVENT_ID = E030.EVENT_ID
@@ -29,14 +29,14 @@
                 AND	C010.CD_TP = 'USE_PRO_STATUS'
                 AND	C010.ORG_ID = 0
                 AND C010.CATEGORY = '000'
-        WHERE	E030.USED_DATE BETWEEN #{fromUsedDate} AND #{toUsedDate}								-- 사용일자 FROM / TO
-        AND		M010.MEMBER_NAME LIKE CONCAT('%', IFNULL( #{memberName}, '') , '%')		-- 작성자명
+        WHERE	E030.USED_DATE BETWEEN #{fromUsedDate} AND #{toUsedDate}						-- 사용일자 FROM / TO
+        AND		M010.MEMBER_NAME LIKE CONCAT('%', IFNULL(#{memberName}, '') , '%')		        -- 작성자명
         AND		PRI.NAME_PATH_PRIORTIY LIKE CONCAT('%',IFNULL(#{namePathPriortiy}, '') , '%')	-- 발의부서명
-        AND		E030.USE_PRO_STATUS = #{useProStatus} 										-- 진행상태코드
-        AND		PRI.ORG_ID = #{orgId}													-- 로그인 사용자의 org_id
+        AND		E030.USE_PRO_STATUS = IFNULL(#{useProStatus}, E030.USE_PRO_STATUS)				-- 진행상태코드
+        AND		PRI.ORG_ID = #{orgId}
     </select>
 
-    <select id="selectCostPayProTotDetail" parameterType="java.lang.Integer" resultType="com.swontech.s02.domain.dto.s022.S022300010Dto$CostPayProTotDetail">
+    <select id="selectCostPayProTotDetailHead" parameterType="java.lang.Integer" resultType="com.swontech.s02.domain.dto.s022.S022300010Dto$CostPayProTotDetailHead">
         SELECT	E030.EVENT_USE_ID,
                 E030.EVENT_USER_ID,
                 M010.MEMBER_NAME,
@@ -49,32 +49,38 @@
                 E030.USE_RECEIPT_ID,
                 E030.USE_SUBJECT,
                 PRI.EVENT_NM,
-                E030.USE_COMMENT,
-                E040.EVENT_USE_PAY_ID,
-                E040.PAY_MEMBER_ID,
-                (SELECT M010_1.MEMBER_NAME
-                   FROM	TB_S020.TB_S020_MEMBER010	M010_1
-                  WHERE	E040.PAY_MEMBER_ID = M010_1.MEMBER_ID  ) AS PAYER_NAME,
-                E040.PAY_RESULT_FLAG,
-                E040.PAY_DATE,
-                E040.PAY_COMMENT,
-                M010.ACCOUNT_NO,  /*계좌번호*/
-                M010.BANK_NM      /*은행명*/
+                E030.USE_COMMENT
         FROM 	TB_S020.TB_S020_EVENT030 E030
-            INNER JOIN TB_S020.EVENT_HIERARCHY_VIEW PRI
-               ON PRI.EVENT_ID = E030.EVENT_ID
-            INNER JOIN TB_S020.TB_S020_MEMBER010	M010
-               ON E030.EVENT_USER_ID = M010.MEMBER_ID
-              AND PRI.ORG_ID = M010.ORG_ID
-            INNER JOIN TB_S020.TB_S020_CODE010 C010
-               ON E030.USE_PRO_STATUS = C010.CD_V
-              AND	C010.CD_TP = 'USE_PRO_STATUS'
-              AND	C010.ORG_ID = PRI.ORG_ID
-              AND C010.CATEGORY = '000'
-            LEFT OUTER JOIN TB_S020.TB_S020_EVENT040 E040
-              ON E030.EVENT_USE_ID = E040.EVENT_USE_ID
-        WHERE	E030.EVENT_USE_ID	= #{eventUsedId}  /*선택한 EVENT_USE_ID*/
+        INNER JOIN TB_S020.EVENT_HIERARCHY_VIEW PRI
+        ON PRI.EVENT_ID = E030.EVENT_ID
+        INNER JOIN TB_S020.TB_S020_MEMBER010	M010
+        ON  E030.EVENT_USER_ID = M010.MEMBER_ID
+        AND	PRI.ORG_ID = M010.ORG_ID
+        INNER JOIN TB_S020.TB_S020_CODE010 C010
+        ON	E030.USE_PRO_STATUS = C010.CD_V
+        AND	C010.CD_TP = 'USE_PRO_STATUS'
+        AND	C010.ORG_ID = 0
+        AND C010.CATEGORY = '000'
+        WHERE	E030.EVENT_USE_ID = #{eventUseId}					-- 선택한 event_use_id
     </select>
+    <select id="selectCostPayProTotDetailLine" parameterType="java.lang.Integer" resultType="com.swontech.s02.domain.dto.s022.S022300010Dto$CostPayProTotDetailLine">
+        SELECT	E040.EVENT_USE_PAY_ID,
+                E040.PAY_MEMBER_ID,
+                M010_1.MEMBER_NAME AS PAYER_NAME,
+                E040.PAY_RESULT_FLAG,
+                CASE	WHEN E040.PAY_RESULT_FLAG = 'Y' THEN '승인'
+                WHEN E040.PAY_RESULT_FLAG = 'N' THEN '반려'
+                END		PAY_RESULT_NM,		-- 행사 비용 사용 결제결과코드명
+                E040.PAY_DATE,
+                E040.PAY_COMMENT
+        FROM 	TB_S020.TB_S020_EVENT030 E030
+        LEFT OUTER JOIN TB_S020.TB_S020_EVENT040 E040
+        ON	E030.EVENT_USE_ID = E040.EVENT_USE_ID
+        INNER JOIN TB_S020.TB_S020_MEMBER010	M010_1
+        ON	E040.PAY_MEMBER_ID =  M010_1.MEMBER_ID
+        WHERE	E030.EVENT_USE_ID = #{eventUseId}
+    </select>
+
     <insert id="insertCostPayHistory" parameterType="com.swontech.s02.domain.vo.s022.S022300010Vo$RegisterCostPayReqVo">
         INSERT INTO TB_S020.TB_S020_EVENT040
         (EVENT_USE_PAY_ID,

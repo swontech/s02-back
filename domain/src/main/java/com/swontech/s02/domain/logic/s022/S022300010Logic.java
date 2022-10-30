@@ -16,6 +16,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class S022300010Logic implements S022300010Spec {
     private final CustomResponse response;
     private final S022300010Store s022300010Store;
@@ -44,7 +47,11 @@ public class S022300010Logic implements S022300010Spec {
 
     @Override
     public ResponseEntity<?> retrieveCostPayProTotDetail(int eventUsedId) {
-        return response.success(s022300010Store.selectCostPayProTotDetail(eventUsedId));
+        Map<String, Object> returnMap = new HashMap<String, Object>();
+        returnMap.put("head", s022300010Store.selectCostPayProTotDetailHead(eventUsedId));
+        returnMap.put("line", s022300010Store.selectCostPayProTotDetailLine(eventUsedId));
+
+        return response.success(returnMap);
     }
     /* 비용지급 처리 : 회계 담당자가 비용지급 처리 내용을 등록처리
      * 1.해당 행사비용의 지급 상태 변경 : tb_s020_event030의 진행 상태 update

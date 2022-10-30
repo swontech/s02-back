@@ -38,30 +38,34 @@ public class S022300010Dto {
         private String payerName;
     }
 
-    /*비용 요청 조회 상세*/
+    /*비용 요청 조회 상세 Head*/
     @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
-    public static class CostPayProTotDetail {
-        private int eventUseId;
-        private int eventUserId;
+    public static class CostPayProTotDetailHead {
+        private String eventUseId;
+        private String eventUSerId;
         private String memberName;
-        private String priNamePathPriortiy;
+        private String namePathPriortiy;
         private String usedDate;
         private int useAmount;
         private String useProStatus;
         private String statusNm;
         private String useReceiptName;
-        private String useReceiptId;   /*영수증첨부파일ID*/
+        private String useReceiptId;
         private String useSubject;
-        private String priEventNm;
+        private String eventNm;
         private String useComment;
-        private int eventUsePayId;
-        private int payMemberId;
+    }
+
+    /*비용 요청 조회 상세 Line*/
+    @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
+    public static class CostPayProTotDetailLine {
+        private String eventUsePayId;
+        private String payMemberId;
         private String payerName;
         private String payResultFlag;
+        private String payResultNm;
         private String payDate;
         private String payComment;
-        private String accountNo;
-        private String bankNm;
     }
 
     @Getter

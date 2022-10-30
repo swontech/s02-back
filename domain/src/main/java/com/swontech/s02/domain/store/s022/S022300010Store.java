@@ -15,7 +15,8 @@ public interface S022300010Store {
     /*비용 요청 조회*/
     List<S022300010Dto.CostPayProTotList> selectCostPayProTotList(S022300010Vo.ParamsVo paramsVo);
     /*비용 요청 조회 상세*/
-    S022300010Dto.CostPayProTotDetail selectCostPayProTotDetail(int eventUsedId);
+    S022300010Dto.CostPayProTotDetailHead selectCostPayProTotDetailHead(int eventUsedId);
+    List<S022300010Dto.CostPayProTotDetailLine> selectCostPayProTotDetailLine(int eventUsedId);
     /*비용지금 이력 등록*/
     int insertCostPayHistory(S022300010Vo.RegisterCostPayReqVo registerCostPayReqVo);
     /*비용지금 진행상태 update */

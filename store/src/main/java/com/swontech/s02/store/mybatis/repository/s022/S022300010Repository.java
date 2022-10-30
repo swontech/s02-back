@@ -27,9 +27,15 @@ public class S022300010Repository implements S022300010Store {
     }
     /*비용 요청 조회 상세*/
     @Override
-    public S022300010Dto.CostPayProTotDetail selectCostPayProTotDetail(int eventUsedId) {
-        return sqlSessionTemplate.selectOne("S022300010.selectCostPayProTotDetail", eventUsedId);
+    public S022300010Dto.CostPayProTotDetailHead selectCostPayProTotDetailHead(int eventUsedId) {
+        return sqlSessionTemplate.selectOne("S022300010.selectCostPayProTotDetailHead", eventUsedId);
     }
+
+    @Override
+    public List<S022300010Dto.CostPayProTotDetailLine> selectCostPayProTotDetailLine(int eventUsedId) {
+        return sqlSessionTemplate.selectList("S022300010.selectCostPayProTotDetailLine", eventUsedId);
+    }
+
     /*비용지금 이력 등록*/
     @Override
     public int insertCostPayHistory(S022300010Vo.RegisterCostPayReqVo registerCostPayReqVo) {

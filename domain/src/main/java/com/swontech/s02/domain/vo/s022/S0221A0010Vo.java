@@ -5,6 +5,12 @@ import lombok.Builder;
 public class S0221A0010Vo {
 
     @Builder
+    public static class MobileInitRecentEventVO {
+        private int orgId;
+        private String eventCode;
+    }
+
+    @Builder
     public static class MobileInitUserInfoVo {
         private String eventCode;
         private String hpNo;

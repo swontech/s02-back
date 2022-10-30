@@ -5,6 +5,16 @@ import lombok.Setter;
 
 public class S0221A0010Dto {
 
+    @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
+    public static class MobileInitRecentEvent {
+        private int eventId;
+        private String eventNm;
+        private String eventStartDate;
+        private String eventEndDate;
+        private int EventHostId;
+        private String eventHostName;
+    }
+
     @Setter
     @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
     public static class MobileInitUserInfo {

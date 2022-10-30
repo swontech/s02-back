@@ -30,4 +30,9 @@ public class S0221A0010Repository implements S0221A0010Store {
     public List<S0221A0010Dto.MobileInitPayCnt> selectMobileInitPayCnt(S0221A0010Vo.MobileInitPayCntVo mobileInitPayCntVo) {
         return sqlSessionTemplate.selectList("S0221A0010.mobileInitPayCnt", mobileInitPayCntVo);
     }
+
+    @Override
+    public List<S0221A0010Dto.MobileInitRecentEvent> selectMobileInitRecentEvent(S0221A0010Vo.MobileInitRecentEventVO mobileInitRecentEventVO) {
+        return sqlSessionTemplate.selectList("S0221A0010.mobileInitRecentEvent", mobileInitRecentEventVO);
+    }
 }

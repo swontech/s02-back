@@ -29,4 +29,9 @@ public class S0221A0010Logic implements S0221A0010Spec {
     public ResponseEntity<?> retrieveMobileInitPayCnt(String eventCode, String hpNo) {
         return response.success(s0221A0010Store.selectMobileInitPayCnt(S0221A0010Vo.MobileInitPayCntVo.builder().eventCode(eventCode).hpNo(hpNo).build()));
     }
+
+    @Override
+    public ResponseEntity<?> retrieveMobileInitRecentEvent(int orgId, String eventCode) {
+        return response.success(s0221A0010Store.selectMobileInitRecentEvent(S0221A0010Vo.MobileInitRecentEventVO.builder().orgId(orgId).eventCode(eventCode).build()));
+    }
 }

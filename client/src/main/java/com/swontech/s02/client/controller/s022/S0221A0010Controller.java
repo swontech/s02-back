@@ -31,4 +31,9 @@ public class S0221A0010Controller {
         return s0221A0010Spec.retrieveMobileInitPayCnt(eventCode, hpNo);
     }
 
+    @GetMapping("mobile-init-recent-event")
+    public ResponseEntity<?> retrieveMobileInitRecentEvent(@RequestParam("orgId") int orgId, @RequestParam("eventCode")String eventCode) {
+        return s0221A0010Spec.retrieveMobileInitRecentEvent(orgId, eventCode);
+    }
+
 }

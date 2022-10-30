@@ -14,7 +14,6 @@
                 MEMBER010.MEMBER_NAME,
                 MEMBER010.MEMBER_TP,
                 MEMBER010.ORG_ID,
-                MEMBER010.ORG_NAME,
                 (SELECT     ORG010.ORG_NAME
                 FROM        tb_s020_ORG010 ORG010
                 WHERE       ORG010.ORG_ID = MEMBER010.ORG_ID) AS ORG_NAME

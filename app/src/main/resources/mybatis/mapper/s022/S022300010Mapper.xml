@@ -12,7 +12,7 @@
                 E030.USED_DATE,                                          -- 사용일자
                 E030.USE_AMOUNT,                                       -- 사용금액
                 E030.USE_PRO_STATUS,                                    -- 진행상태코드
-                C010.CD_V_MEANING AS   STATUS_NM,                           -- 진행상태명
+                C010.CD_V_MEANING AS  STATUS_NM,                           -- 진행상태명
         (SELECT   MEMBER_NAME
         FROM   TB_S020.TB_S020_EVENT020 E020
         INNER JOIN  TB_S020.TB_S020_MEMBER010   M010

@@ -38,7 +38,7 @@ public class S022300010Dto {
         private String useProStatus;
         private String statusNm;
         private int eventPayUserId;
-        private String payerName;
+        private String payerNm;
     }
 
     /*비용 요청 조회 상세 Head*/

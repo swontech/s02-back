@@ -57,6 +57,8 @@ public class S022300010Dto {
         private String useSubject;
         private String eventNm;
         private String useComment;
+        private String accountNo;
+        private String bankNm;
     }
 
     /*비용 요청 조회 상세 Line*/

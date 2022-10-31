@@ -50,7 +50,9 @@
                 E030.USE_RECEIPT_ID,
                 E030.USE_SUBJECT,
                 PRI.EVENT_NM,
-                E030.USE_COMMENT
+                E030.USE_COMMENT,
+                M010.ACCOUNT_NO,
+                M010.BANK_NM
         FROM 	TB_S020.TB_S020_EVENT030 E030
         INNER JOIN TB_S020.EVENT_HIERARCHY_VIEW PRI
         ON PRI.EVENT_ID = E030.EVENT_ID

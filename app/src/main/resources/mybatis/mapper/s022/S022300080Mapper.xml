@@ -32,9 +32,9 @@
                 ON M010.MEMBER_ID = ENT010.MEMBER_ID
                 AND VI.EVENT_ID = ENT010.EVENT_ID
         WHERE	VI.EVENT_ID = #{eventId}
-        and		M010.member_name like CONCAT('%', IFNULL(#{memberName}, '') , '%')		-- 성명
-        and		M010.hp_no like CONCAT('%', IFNULL(#{hpNo}, '') , '%')			-- HP 번호
-        and		ifnull(ent010.enter_flag, 'N')= #{enterFlag}
+        and		M010.member_name like CONCAT('%', IFNULL(#{memberName}, '') , '%')	-- 성명
+        and		M010.hp_no like CONCAT('%', IFNULL(#{hpNo}, '') , '%')			    -- HP 번호
+        and		IFNULL(ent010.enter_flag, 'N') = IFNULL(NULL , 'N')
         AND		VI.DATA_END_STATUS IS NULL
         AND		VI.EVENT_FINAL_FLAG = 'Y'
         AND		SYSDATE() BETWEEN VI.EVENT_START_DATE AND VI.EVENT_END_DATE

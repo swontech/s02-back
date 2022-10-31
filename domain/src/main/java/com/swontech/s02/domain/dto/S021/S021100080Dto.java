@@ -7,26 +7,27 @@ public class S021100080Dto {
     @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
     public static class SelectListResponse {
         private int eventId;
-        private String eventNm;
-        private String payNm4;
-        private int payLevel4;
-        private String payerNm4;
-        private String payNm3;
-        private int payLevel3;
-        private String payerNm3;
-        private String payNm2;
-        private int payLevel2;
-        private String payerNm2;
-        private String payNm1;
-        private int payLevel1;
-        private String payerNm1;
-        private int lev;
-        private String menuPath;
+        private String eventNm0;
         private int eventHostId;
-        private String chargeNm;
+        private String eventHostName;
+        private String payLevel1;
+        private String payLevel01Name;
+        private String payNm1;
+        private String payLevel2;
+        private String payLevel02Name;
+        private String payNm2;
+        private String payLevel3;
+        private String payLevel03Name;
+        private String payNm3;
+        private String payLevel4;
+        private String payLevel04Name;
+        private String payNm4;
+        private String eventBudgetAmount;
+        private String eventLevel;
         private String payFlag;
-        private int highEventId;
-        private String idPath;
-        private int idPathPriority; /* kjy add */
+        private String highEventId;
+        private String eventNm;
+        private String eventTp;
+        private String eventComment;
     }
 }

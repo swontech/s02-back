@@ -12,7 +12,11 @@
         ORDER BY E020.EVENT_ID  LIMIT 1
     </select>
 
-    <select id="selectMemberList" parameterType="com.swontech.s02.domain.vo.s021.S021100030Vo$SelectMemberListVo" resultType="com.swontech.s02.domain.dto.s021.S021100030Dto$MemberListResponse">
+    <select id="selectMemberList"
+            parameterType="com.swontech.s02.domain.vo.s021.S021100030Vo$SelectMemberListVo"
+            resultType="com.swontech.s02.domain.dto.s021.S021100030Dto$MemberListResponse">
+
+        <include refid="common.pagingTop"/>
         SELECT 		ORG010.ORG_ID,						-- 단체ID
                     ORG010.ORG_NAME,					-- 단체명
                     MEMBER010.MEMBER_ID,				-- 회원ID
@@ -38,6 +42,8 @@
         AND         DATE_ADD(STR_TO_DATE(#{toDt}, '%Y-%m-%d %H:%i%S'), INTERVAL 1 DAY)
         AND			MEMBER010.MEMBER_NAME LIKE CONCAT('%', #{memberName}, '%')
         AND			MEMBER010.MEMBER_TP LIKE CONCAT('%', #{memberTp}, '%')
+        <include refid="common.pagingBottom"/>
+
     </select>
 
     <select id="selectMemberDetailInfo" parameterType="java.lang.Integer" resultType="com.swontech.s02.domain.dto.s021.S021100030Dto$MemberDetailInfo">
@@ -72,4 +78,44 @@
             , LAST_OBJECT_ID = #{loginId}   /*2022.10.27 kjy*/
         WHERE	MEMBER_ID           = #{memberId}
     </update>
+
+    <insert id="insertUploadMember" parameterType="com.swontech.s02.domain.vo.s021.S021100030Vo$UploadMemberVo">
+        INSERT INTO tb_s020.tb_s020_member010 (
+            MEMBER_ID,
+            CREATE_TIMESTAMP,
+            CREATE_PROGRAM_ID,
+            UPDATE_TIMESTAMP,
+            UPDATE_PROGRAM_ID,
+            ORG_ID,
+            MEMBER_NAME,
+            BIRTH,
+            HP_NO,
+            ZIP_CODE,
+            ADDRESS,
+            DETAIL_ADDRESS,
+            EMAIL,
+            MEMBER_TP,
+            ACCOUNT_NO,
+            BANK_NM
+            , CREATE_OBJECT_ID, LAST_OBJECT_ID /*로그인 member_id*/
+        ) VALUES (
+            NEXTVAL(tb_s020.sq_s020_member010),
+            SYSDATE(),
+            'S021100030',
+            SYSDATE(),
+            'S021100030',
+            #{orgId}, 		            /*사용자 ORG_ID*/
+            #{memberName},			    /*입력한 성명*/
+            #{birth},			        /* 생년월일*/
+        CONCAT(substring(#{hpNo},1,3) ,'-', substring(#{hpNo},4,4) ,'-', substring(#{hpNo},8,4) ),  /*핸드폰번호*/
+            #{zipCode},			        /*우편번호*/
+            #{address},			        /*주소*/
+            #{detailAddress},			/*상세주소*/
+            #{email},		            /*email주소*/
+            'A',                        /*회원구분*/
+            #{accountNo}, 		        /*화면의 입력한 계좌번호*/
+            #{bankNm}                   /*화면의 입력한 은행*/
+            ,#{loginId}, #{loginId}	/*로그인 member_id*/
+        )
+    </insert>
 </mapper>

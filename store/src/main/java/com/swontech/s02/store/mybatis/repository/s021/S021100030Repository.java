@@ -39,4 +39,11 @@ public class S021100030Repository implements S021100030Store {
     public String getPayerFlag(int memberId) {
         return sqlSessionTemplate.selectOne("S021100030.getPayerFlag", memberId);
     }
+
+    /*2022.10.31 kjy 회원관리-업로드:일괄등록*/
+    @Override
+    public int insertUploadMember(S021100030Vo.UploadMemberVo uploadMemberVo) {
+        return sqlSessionTemplate.insert("S021100030.insertUploadMember", uploadMemberVo);
+    }
+
 }

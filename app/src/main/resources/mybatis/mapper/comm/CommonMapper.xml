@@ -20,4 +20,29 @@
             AND     CD_V = #{cdV}
         </if>
     </select>
+
+    <sql id="pagingTop">
+    SELECT /*페이징 조회*/
+        T3.*
+      FROM (
+        SELECT /*전체 row*/
+            @rownum:=@rownum+1 AS SEQ, T2.*
+          FROM (
+            SELECT T1.*, COUNT(*) OVER(PARTITION BY '1') TOT_CNT
+            FROM (
+    </sql>
+
+    <sql id="pagingBottom">
+            ) T1
+            order by (
+                <choose>
+                    <when test="column==null || column==''">1</when>
+                    <otherwise>${column}</otherwise>
+                </choose>
+                    ) ${order}
+        ) T2, (SELECT @rownum:=0) AS R
+    ) T3
+    WHERE T3.SEQ &gt; #{limit} * (#{curPage}-1)  /*시작페이지행번호 = 한페이지 row수 * (현재페이지번호-1) */
+      AND T3.SEQ &lt;= (#{limit} * #{curPage}) /* 한페이지 row수 * 현재페이지번호 */
+    </sql>
 </mapper>

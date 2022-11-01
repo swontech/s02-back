@@ -11,4 +11,14 @@ public class CommonVo {
         private int orgId;
         private String cdV;
     }
+
+    @Builder
+    public static class PagingVo {
+        private int seq;
+        private int totCnt;
+        private String column;  /*sort column*/
+        private String order;   /*sorting*/
+        private int limit;   /*페이지당 출력 row수*/
+        private int curPage; /*현재페이지번호*/
+    }
 }

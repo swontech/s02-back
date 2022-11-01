@@ -32,6 +32,7 @@ public class S0221A0010Dto {
         private String orgName;
         private String eventRole;
         private int defaultEventId;
+        private String useRegFlag; /*2022.11.01 kjy add */
     }
 
     @Setter

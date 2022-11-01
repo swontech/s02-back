@@ -63,6 +63,12 @@
         from	tb_s020.tb_s020_event010  e010_1
         where	e010_1.org_id	= e010.org_id
         and		default_event_flag = 'Y')	default_event_id
+            /*2022.11.01 kjy add */
+            ,(select USE_REG_FLAG
+                from tb_s020.tb_s020_event020
+               where event_id =	e010.event_id
+                 and event_pay_user_id	=	m010.member_id) as USE_REG_FLAG
+
         from	tb_s020.tb_s020_event010  e010
         inner join tb_s020.tb_s020_org010 org010
         on	org010.org_id = e010.org_id

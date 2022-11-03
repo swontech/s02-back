@@ -20,6 +20,11 @@ public class S022300080Dto {
         private String memberName;
         private String hpNo;
         private String enterFlag;
+        /*2022.11.02 kjy paging*/
+        private String column;  /*sort column*/
+        private String order;   /*sorting*/
+        private int limit;   /*v페이지당 출력 row수*/
+        private int curPage; /*현재페이지번호*/
     }
 
     @Setter
@@ -39,6 +44,7 @@ public class S022300080Dto {
     @Setter
     @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
     public static class AttendListResponse {
+        private int seq;       /*2022.11.02 kjy paging*/
         private int memberId;
         private String memberName;
         private String hpNo;
@@ -50,5 +56,9 @@ public class S022300080Dto {
         private String eventEndDate;
         private int orgId;
         private String orgName;
+        /*2022.11.02 kjy paging*/
+        private int totCnt;
     }
+
+
 }

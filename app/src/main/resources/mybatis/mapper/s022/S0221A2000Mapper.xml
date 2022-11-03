@@ -2,25 +2,47 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="S0221A2000">
-    <select id="moblieQRScanEventList" resultType="com.swontech.s02.domain.dto.s022.S0221A2000Dto$MoblieQRScanEventList" parameterType="com.swontech.s02.domain.vo.s022.S0221A2000Vo$MoblieQRScanEventListVo">
-        select 	event_id,
-                event_nm,
-                PAY_FLAG,
-                high_event_id,
-                id_path_priortiy,
-                org_id,
-                event_code,
-                event_final_flag,
-                event_start_date,
-                event_end_date,
-                event_tp,
-                event_status
-        from	tb_s020.event_hierarchy_view
-        where 	event_final_flag = 'Y'
-        and		now() between event_start_date and event_end_date
-        and		event_tp = 'A'
-        and		event_status = 'A'
-        and		org_id = #{orgId}
-        and		event_code = #{eventCode}
+    <select id="moblieQRScanEventList" resultType="com.swontech.s02.domain.dto.s022.S0221A2000Dto$MoblieQRScanEventList"
+            parameterType="com.swontech.s02.domain.vo.s022.S0221A2000Vo$MoblieQRScanEventListVo">
+        select 	vi.event_id,
+            vi.event_nm,
+            vi.PAY_FLAG,
+            vi.high_event_id,
+            vi.id_path_priortiy,
+            vi.org_id,
+            vi.event_code,
+            vi.event_final_flag,
+            vi.event_start_date,
+            vi.event_end_date,
+            vi.event_tp,
+            vi.event_status,
+            vi.event_host_id,
+            m010.member_name,
+            vi.event_path
+        from	tb_s020.event_hierarchy_view   vi
+            left outer join tb_s020.tb_s020_member010  m010
+            on vi.event_host_id = m010.member_id
+        where 	vi.event_final_flag = 'Y'
+        and		now() between vi.event_start_date and vi.event_end_date
+        and		vi.event_tp = 'A'
+        and		vi.event_status = 'A'
+        and		vi.org_id = #{orgId}
+        and		vi.event_code = #{eventCode}
+    </select>
+
+    <select id="moblieQRScanEventDetail" parameterType="java.lang.Integer"
+                                         resultType="com.swontech.s02.domain.dto.s022.S0221A2000Dto$MoblieQRScanEventDetail" >
+        SELECT
+            VI.EVENT_ID,					/*event_id*/
+            VI.EVENT_PATH,					/*행사 Full 명*/
+            VI.EVENT_NM,					/*행사명*/
+            VI.EVENT_START_DATE,			/*행사 시작일자*/
+            VI.EVENT_END_DATE,				/*행사 종료일자*/
+            VI.EVENT_LOC,					/*행사장소*/
+            M010.MEMBER_NAME				/*책임자명*/
+         FROM TB_S020.EVENT_HIERARCHY_VIEW   VI
+            LEFT OUTER JOIN TB_S020.TB_S020_MEMBER010 M010
+            ON	VI.EVENT_HOST_ID = M010.MEMBER_ID
+        WHERE VI.EVENT_ID = #{eventId}
     </select>
 </mapper>

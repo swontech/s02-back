@@ -33,6 +33,11 @@ public class S022300080Logic implements S022300080Spec {
                             .enterFlag(reqDto.getEnterFlag())
                             .memberName(reqDto.getMemberName())
                             .hpNo(reqDto.getHpNo())
+                            /*2022.11.02 kjy paging*/
+                            .column(reqDto.getColumn())
+                            .order(reqDto.getOrder())
+                            .limit(reqDto.getLimit())
+                            .curPage(reqDto.getCurPage())
                         .build()
         ));
     }

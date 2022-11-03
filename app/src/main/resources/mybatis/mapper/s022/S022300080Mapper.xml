@@ -12,7 +12,8 @@
         AND		SYSDATE() BETWEEN EVENT_START_DATE AND EVENT_END_DATE
     </select>
 
-    <select id="selectEnterList" resultType="com.swontech.s02.domain.dto.s022.S022300080Dto$AttendListResponse" parameterType="com.swontech.s02.domain.vo.s022.S022300080Vo$SelectEnterListVo">
+    <select id="selectEnterList" resultType="com.swontech.s02.domain.dto.s022.S022300080Dto$AttendListResponse"
+                                 parameterType="com.swontech.s02.domain.vo.s022.S022300080Vo$SelectEnterListVo">
         <include refid="common.pagingTop"/>
         SELECT 	M010.MEMBER_ID,
                 M010.MEMBER_NAME,
@@ -23,6 +24,7 @@
                 VI.EVENT_START_DATE,
                 VI.EVENT_END_DATE,
                 VI.ORG_ID
+                ,VI.EVENT_NM    /* 2022.11.03 kjy */
         FROM 	TB_S020.EVENT_HIERARCHY_VIEW  VI
                 INNER JOIN TB_S020.TB_S020_EVENT020 E020
                 ON  VI.ID_PATH_PRIORTIY = E020.EVENT_ID

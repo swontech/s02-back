@@ -20,4 +20,9 @@ public class S0221A2000Controller {
         return s0221A2000Spec.retrieveEventList(eventCode, orgId);
     }
 
+    @GetMapping("/event-detail")
+    public ResponseEntity<?> retrieveEventDteail(@RequestParam("eventId")int eventId) {
+        return s0221A2000Spec.retrieveEventDetail(eventId);
+    }
+
 }

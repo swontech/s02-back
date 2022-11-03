@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface S0221A2000Store {
     List<S0221A2000Dto.MoblieQRScanEventList> selectEventList(S0221A2000Vo.MoblieQRScanEventListVo moblieQRScanEventListVo);
+    /*2022.11.03 kjy */
+    S0221A2000Dto.MoblieQRScanEventDetail selectEventDetail(int eventId);
 }

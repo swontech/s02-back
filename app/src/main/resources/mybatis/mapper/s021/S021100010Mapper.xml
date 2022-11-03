@@ -2,23 +2,26 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="S021100010">
-    <select id="selectOrgList" parameterType="com.swontech.s02.domain.vo.s021.S021100010Vo$SelectOrgListVo" resultType="com.swontech.s02.domain.dto.s021.S021100010Dto$OrgListResponse">
-        select 	org.org_id,							-- ORG_ID
-            org.org_name,						-- 단체명
-            org.tel_no,							-- 대표 연락처
-            mem.member_name,					-- 대표자명
-            mem.email,							-- 대표자 EMAIL
+    <select id="selectOrgList" parameterType="com.swontech.s02.domain.vo.s021.S021100010Vo$SelectOrgListVo"
+                                resultType="com.swontech.s02.domain.dto.s021.S021100010Dto$OrgListResponse">
+        <include refid="common.pagingTop"/>
+        select 	org.org_id,							/*ORG_ID*/
+            org.org_name,						/* 단체명*/
+            org.tel_no,							/* 대표 연락처*/
+            mem.member_name,					/* 대표자명*/
+            mem.email,							/*대표자 EMAIL*/
             (select COUNT(MEMBER_ID)
                from	tb_s020.tb_s020_member010 mem_1
-              where	mem_1.org_id = org.org_id)	member_cnt,     -- 회원수
-            org.org_code						-- 단체코드 (2022.09.28 추가)
+              where	mem_1.org_id = org.org_id)	member_cnt,     /*회원수*/
+            org.org_code						/*단체코드 (2022.09.28 추가)*/
         from	tb_s020.tb_s020_org010	org
             inner join tb_s020.tb_s020_member010   mem
             on	org.org_id    = mem.org_id
         where	mem.member_tp = 'C'
         and		org.data_end_status IS NULL
-        and		org.org_name	LIKE	concat('%',ifnull(null, #{orgName}),'%')	    -- 검색조건의 단체명
-        and		mem.member_name	LIKE	concat('%',ifnull(null, #{memberName}),'%')		-- 검색조건의 대표자명
+        and		org.org_name	LIKE	concat('%',ifnull(null, #{orgName}),'%')	    /*검색조건의 단체명*/
+        and		mem.member_name	LIKE	concat('%',ifnull(null, #{memberName}),'%')		/*검색조건의 대표자명*/
+        <include refid="common.pagingBottom"/>
     </select>
 
     <update id="updateOrgStatus" parameterType="java.lang.Integer">

@@ -41,6 +41,11 @@ public class S022300010Logic implements S022300010Spec {
                             .namePathPriortiy(reqDto.getNamePathPriortiy())
                             .useProStatus(reqDto.getUseProStatus())
                             .orgId(reqDto.getOrgId())
+                            /*2022.11.02 kjy paging*/
+                            .column(reqDto.getColumn())
+                            .order(reqDto.getOrder())
+                            .limit(reqDto.getLimit())
+                            .curPage(reqDto.getCurPage())
                         .build()
         ));
     }

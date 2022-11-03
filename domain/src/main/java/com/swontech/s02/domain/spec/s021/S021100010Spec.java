@@ -6,6 +6,6 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 public interface S021100010Spec {
-    ResponseEntity<?> retrieveOrgList(String orgName, String memberName);
+    ResponseEntity<?> retrieveOrgList(S021100010Dto.OrgListParamsDto orgListParamsDto);
     ResponseEntity<?> deleteOrgList(List<Integer> orgIdList);
 }

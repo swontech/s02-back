@@ -21,12 +21,18 @@ public class S022300010Dto {
         private String namePathPriortiy;
         private String useProStatus;
         private int orgId;
+        /*2022.11.02 kjy paging*/
+        private String column;  /*sort column*/
+        private String order;   /*sorting*/
+        private int limit;   /*v페이지당 출력 row수*/
+        private int curPage; /*현재페이지번호*/
     }
 
 
     /*비용 요청 조회*/
     @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
     public static class CostPayProTotList {
+        private int seq;       /*2022.11.02 kjy paging*/
         private int eventUseId;
         private int eventUserId;
         private String memberName;
@@ -39,6 +45,8 @@ public class S022300010Dto {
         private String statusNm;
         private int eventPayUserId;
         private String payerNm;
+        /*2022.11.02 kjy paging*/
+        private int totCnt;
     }
 
     /*비용 요청 조회 상세 Head*/

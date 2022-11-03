@@ -1,6 +1,7 @@
 package com.swontech.s02.client.controller.s021;
 
 import com.swontech.s02.domain.spec.s021.S021100010Spec;
+import com.swontech.s02.domain.dto.s021.S021100010Dto;
 import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.ResponseEntity;
@@ -19,8 +20,23 @@ public class S021100010Controller {
 
     @Operation(summary = "단체 정보 리스트 조회", description = "등록된 단체 정보 리스트를 조회한다.")
     @GetMapping("/org-list")
-    public ResponseEntity<?> retrieveOrgList(@RequestParam("orgName")String orgName, @RequestParam("memberName")String memberName) {
-        return s021100010Spec.retrieveOrgList(orgName, memberName);
+    public ResponseEntity<?> retrieveOrgList(@RequestParam("orgName")String orgName
+                                            , @RequestParam("memberName")String memberName
+                                            , @RequestParam("column")String column
+                                            , @RequestParam("order")String order
+                                            , @RequestParam("limit")int limit
+                                            , @RequestParam("curPage")int curPage
+    ) {
+
+        return s021100010Spec.retrieveOrgList(S021100010Dto.OrgListParamsDto.builder()
+                                                .orgName(orgName)
+                                                .memberName(memberName)
+                                                /*2022.11.02 kjy paging*/
+                                                .column(column)
+                                                .order(order)
+                                                .limit(limit)
+                                                .curPage(curPage).build()
+                                            );
     }
 
     @Operation(summary = "단체 정보 리스트 삭제", description = "단체 정보 리스트를 신규로 등록한다.")

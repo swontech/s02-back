@@ -13,6 +13,7 @@
     </select>
 
     <select id="selectEnterList" resultType="com.swontech.s02.domain.dto.s022.S022300080Dto$AttendListResponse" parameterType="com.swontech.s02.domain.vo.s022.S022300080Vo$SelectEnterListVo">
+        <include refid="common.pagingTop"/>
         SELECT 	M010.MEMBER_ID,
                 M010.MEMBER_NAME,
                 M010.HP_NO,
@@ -38,6 +39,7 @@
         AND		VI.DATA_END_STATUS IS NULL
         AND		VI.EVENT_FINAL_FLAG = 'Y'
         AND		SYSDATE() BETWEEN VI.EVENT_START_DATE AND VI.EVENT_END_DATE
+        <include refid="common.pagingBottom"/>
     </select>
 
     <insert id="insertEnter" parameterType="java.util.List">

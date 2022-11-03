@@ -7,6 +7,7 @@ import com.swontech.s02.domain.vo.s021.S021100010Vo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import com.swontech.s02.domain.dto.s021.S021100010Dto;
 
 import java.util.List;
 
@@ -21,13 +22,18 @@ public class S021100010Logic implements S021100010Spec {
 
 
     @Override
-    public ResponseEntity<?> retrieveOrgList(String orgName, String memberName) {
+    public ResponseEntity<?> retrieveOrgList(S021100010Dto.OrgListParamsDto reqDto) {
         return response.success(
                 s021100010Store.selectOrgList(
                         S021100010Vo.SelectOrgListVo
                             .builder()
-                                .orgName(orgName)
-                                .memberName(memberName)
+                                .orgName(reqDto.getOrgName())
+                                .memberName(reqDto.getMemberName())
+                                /*2022.11.02 kjy paging*/
+                                .column(reqDto.getColumn())
+                                .order(reqDto.getOrder())
+                                .limit(reqDto.getLimit())
+                                .curPage(reqDto.getCurPage())
                             .build()));
     }
 

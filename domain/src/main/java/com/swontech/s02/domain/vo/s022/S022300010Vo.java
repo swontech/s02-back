@@ -21,6 +21,11 @@ public class S022300010Vo {
         private String namePathPriortiy;
         private String useProStatus;
         private int orgId;
+        /*2022.11.02 kjy paging*/
+        private String column;  /*sort column*/
+        private String order;   /*sorting*/
+        private int limit;   /*페이지당 출력 row수*/
+        private int curPage; /*현재페이지번호*/
     }
 
     @Getter

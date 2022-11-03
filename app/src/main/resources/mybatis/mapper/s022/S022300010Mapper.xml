@@ -2,7 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="S022300010">
-    <select id="selectCostPayProTotList" parameterType="com.swontech.s02.domain.vo.s022.S022300010Vo$ParamsVo" resultType="com.swontech.s02.domain.dto.s022.S022300010Dto$CostPayProTotList">
+    <select id="selectCostPayProTotList" parameterType="com.swontech.s02.domain.vo.s022.S022300010Vo$ParamsVo"
+                                        resultType="com.swontech.s02.domain.dto.s022.S022300010Dto$CostPayProTotList">
+        <include refid="common.pagingTop"/>
         SELECT  E030.EVENT_USE_ID,                     -- 비용등록ID
                 E030.EVENT_USER_ID,                                       -- 작성자ID
                 M010.MEMBER_NAME,                                       -- 작성자
@@ -35,6 +37,7 @@
         AND      PRI.NAME_PATH_PRIORTIY LIKE CONCAT('%',#{namePathPriortiy}, '%')  -- 발의부서명
         AND      E030.USE_PRO_STATUS = IF(#{useProStatus} = "", E030.USE_PRO_STATUS, #{useProStatus})             -- 진행상태코드
         AND      PRI.ORG_ID = #{orgId}
+        <include refid="common.pagingBottom"/>
     </select>
 
     <select id="selectCostPayProTotDetailHead" parameterType="java.lang.Integer" resultType="com.swontech.s02.domain.dto.s022.S022300010Dto$CostPayProTotDetailHead">

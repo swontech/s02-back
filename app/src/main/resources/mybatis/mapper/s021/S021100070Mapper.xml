@@ -34,7 +34,9 @@
                 E010.EVENT_FINAL_FLAG,            -- 행사최하위여부(Y:최하위 /NULL:최하위 아님)
                 CASE  WHEN E010.EVENT_TP = 'A' AND E010.EVENT_FINAL_FLAG = 'Y' THEN 'Y'
                       WHEN E010.EVENT_TP = 'D' AND (SELECT COUNT(*)  FROM TB_S020.EVENT_HIERARCHY_VIEW
-                                                     WHERE ID_PATH_PRIORTIY = E010.EVENT_ID) > 1 THEN 'Y'
+                                                     WHERE ID_PATH_PRIORTIY = E010.EVENT_ID
+                                                       AND DATA_END_STATUS IS NULL  /*2022.11.08 kjy */
+                                                    ) = 1 THEN 'Y'
                       ELSE   'N'
                       END   AS DEL_FLAG      -- 부서(행사)삭제가능여부 (Y - 삭제 가능 / N - 삭제불가)
         FROM	tb_s020.tb_s020_event010  E010

@@ -16,6 +16,7 @@
             AND		EVENT_TP ='A'
             AND		EVENT_STATUS = 'A'
             AND		SYSDATE() BETWEEN EVENT_START_DATE AND EVENT_END_DATE
+            AND		DATA_END_STATUS IS NULL /*2022.11.08 kjy */
             UNION ALL
             SELECT 	EVENT_ID,
                     EVENT_NM,
@@ -29,6 +30,7 @@
             AND		EVENT_STATUS = 'A'
             AND		SYSDATE() BETWEEN EVENT_START_DATE AND EVENT_END_DATE
             AND		LEV = 0
+            AND		DATA_END_STATUS IS NULL /*2022.11.08 kjy */
         )
         SELECT	EVENT_ID,								-- EVENT_ID
                 EVENT_NM,								-- 행사명

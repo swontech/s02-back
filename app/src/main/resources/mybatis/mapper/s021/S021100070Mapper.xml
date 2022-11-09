@@ -205,9 +205,18 @@
 
     <update id="updateEventFinalFlag" parameterType="com.swontech.s02.domain.vo.s021.S021100070Vo$ParamsVo">
         update tb_s020.tb_s020_event010
-           set EVENT_FINAL_FLAG = null
-         where org_id = #{orgId}		-- org_id
-           and event_id = #{eventId}	-- 등록 시 선택한 상위 event_id
+           set EVENT_FINAL_FLAG = #{eventFinalFlag} /*1.등록:null, 2.삭제:'Y'*/
+        <choose>
+            <when test='eventFinalFlag == "Y"'>
+                where event_id = (select high_event_id from tb_s020.tb_s020_event010
+                                   where event_id = #{eventId})
+            </when>
+            <otherwise>
+                where event_id = #{eventId} /* 상위 event_id */
+            </otherwise>
+        </choose>
+                AND EVENT_TP = 'A'
+                AND DATA_END_STATUS IS NULL
     </update>
 
     <update id="updateDefaultEventFlag" parameterType="com.swontech.s02.domain.vo.s021.S021100070Vo$ParamsVo">
@@ -224,6 +233,29 @@
               , DATA_END_TIMESTAMP  = SYSDATE()
               , DATA_END_OBJECT_ID  = #{memberId}
          WHERE	EVENT_ID            = #{eventId}
+           AND EVENT_TP = 'A'
     </update>
 
+    <select id="selectSameLevel" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT /* kjy 해당 eventId 에 동일 level 의 사역정보 유무 조회 */
+               COUNT(*)
+          FROM TB_S020.TB_S020_EVENT010
+         WHERE HIGH_EVENT_ID =(SELECT HIGH_EVENT_ID
+                                 FROM TB_S020.TB_S020_EVENT010
+                                WHERE EVENT_ID = #{eventId})
+        AND EVENT_ID <![CDATA[<>]]>  #{eventId}
+        AND EVENT_FINAL_FLAG = 'Y'
+        AND EVENT_TP = 'A'
+        AND DATA_END_STATUS IS NULL
+    </select>
+    <select id="selectNoneSameLevelDept" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT /*kjy 해당 eventId 에 동일 사역 level 이 없고(selectSameLevel VO) 상위 eventId 가 부서(D) 유무 조회 */
+               COUNT(*)
+          FROM TB_S020.TB_S020_EVENT010
+          WHERE EVENT_ID =(SELECT HIGH_EVENT_ID
+                            FROM TB_S020.TB_S020_EVENT010
+                            WHERE EVENT_ID = #{eventId} AND EVENT_FINAL_FLAG = 'Y')
+           AND EVENT_TP = 'D'
+           AND DATA_END_STATUS IS NULL
+    </select>
 </mapper>

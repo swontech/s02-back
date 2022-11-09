@@ -176,8 +176,9 @@ public class S021100070Logic implements S021100070Spec {
                      * : 최하위부서만 행사최하위여부( EVENT_FINAL_FLAG)='Y' 임.
                      */
                     paramsVo = S021100070Vo.ParamsVo.builder()
-                            .orgId(registerEventDto.getOrgId())
+//                            .orgId(registerEventDto.getOrgId())
                             .eventId(registerEventDto.getHighEventId())
+                            .eventFinalFlag(null)
                             .build();
                     s021100070Store.updateEventFinalFlag(paramsVo);
                 }
@@ -239,9 +240,37 @@ public class S021100070Logic implements S021100070Spec {
     @Override
     public ResponseEntity<?> deleteEvent(int eventId, int memberId) {
 
+        boolean isUpdated = false;
+        /* 2022.11.08 kjy
+        * 1.삭제시 최하위 여부 변경처리 추가 : EVENT_FINAL_FLAG)='Y'
+        * 2.최하위 여부 변경처리 예외 체크로직 추가
+        *   1)해당 eventId 에 동일 level 의 사역정보가 있는경우
+        *   2)해당 eventId 에 동일 level 이 없고 상위 eventId 가 부서(D)인 경우
+        * */
+        int cnt = s021100070Store.selectSameLevel(eventId);
+        logger.info("[S021100070] 해당 eventId 에 동일 level 의 사역정보 조회 : " + cnt);
+        if( cnt == 0 ) {
+            /* 해당 eventId 에 동일 level 의 사역정보가 없으면 */
+            isUpdated = true;
+
+            cnt = s021100070Store.selectNoneSameLevelDept(eventId);
+            logger.info("[S021100070] 해당 eventId 에 동일 level 이 없고 상위 eventId 가 부서(D)인 경우 : " + cnt);
+            if(cnt > 0) {
+                /*해당 eventId 에 동일 level 이 없고 상위 eventId 가 부서(D)인 경우*/
+                isUpdated = false;
+            }
+        }
+        //삭제대상 event 의 상위 event 최하위여부 update 처리
+        if(isUpdated) {
+            logger.info("[S021100070]== event 삭제시 상위 event 최하위여부 update 대상 =========");
+            s021100070Store.updateEventFinalFlag(S021100070Vo.ParamsVo.builder()
+                    .eventId(eventId).eventFinalFlag("Y")
+                    .build());
+        }
+        //해당 event 삭제
         int result = s021100070Store.deleteEvent(S021100070Vo.DeleteEventVo.builder()
-                .eventId(eventId)
-                .memberId(memberId).build());
+                                                .eventId(eventId)
+                                                .memberId(memberId).build());
 
         return response.success(result, "부서(행사) 정보 삭제 성공했습니다.", HttpStatus.OK);
     }

@@ -28,6 +28,7 @@
         and		vi.event_status = 'A'
         and		vi.org_id = #{orgId}
         and		vi.event_code = #{eventCode}
+        AND     vi.DATA_END_STATUS IS NULL
     </select>
 
     <select id="moblieQRScanEventDetail" parameterType="java.lang.Integer"

@@ -37,7 +37,9 @@
         WHERE	VI.EVENT_ID = #{eventId}
         and		M010.member_name like CONCAT('%', IFNULL(#{memberName}, '') , '%')	-- 성명
         and		M010.hp_no like CONCAT('%', IFNULL(#{hpNo}, '') , '%')			    -- HP 번호
-        and		IFNULL(ent010.enter_flag, 'N') = IFNULL(NULL , 'N')
+        <if test='enterFlag != null and enterFlag != ""'>
+            and	ent010.enter_flag = #{enterFlag}    /*kjy 2022.11.08*/
+        </if>
         AND		VI.DATA_END_STATUS IS NULL
         AND		VI.EVENT_FINAL_FLAG = 'Y'
         AND		SYSDATE() BETWEEN VI.EVENT_START_DATE AND VI.EVENT_END_DATE

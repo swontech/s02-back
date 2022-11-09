@@ -45,4 +45,9 @@ public interface S021100070Store {
     int updateEventFinalFlag(S021100070Vo.ParamsVo paramsVo);
 
     int updateDefaultEventFlag(S021100070Vo.ParamsVo paramsVo);
+
+    /* 해당 eventId 에 동일 level 의 사역정보 유무 조회 */
+    int selectSameLevel(int eventId);
+    /* 해당 eventId 의 상위 eventId 가 부서(D) 유무 조회 */
+    int selectNoneSameLevelDept(int eventId);
 }

@@ -86,4 +86,14 @@ public class S021100070Repository implements S021100070Store {
         return sqlSessionTemplate.update("S021100070.updateDefaultEventFlag", paramsVo);
     }
 
+    @Override
+    public int selectSameLevel(int eventId) {
+        return sqlSessionTemplate.selectOne("S021100070.selectSameLevel", eventId);
+    }
+
+    @Override
+    public int selectNoneSameLevelDept(int eventId) {
+        return sqlSessionTemplate.selectOne("S021100070.selectNoneSameLevelDept", eventId);
+    }
+
 }

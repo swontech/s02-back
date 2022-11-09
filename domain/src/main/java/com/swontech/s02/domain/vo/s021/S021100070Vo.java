@@ -12,6 +12,7 @@ public class S021100070Vo {
     public static class ParamsVo {
         private int orgId;
         private int eventId;
+        private String eventFinalFlag;
     }
     @Getter
     @Setter

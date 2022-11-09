@@ -27,4 +27,13 @@ public class S0221A0010Vo {
         private String eventCode;
         private String hpNo;
     }
+    /*2022.11.09 kjy:부서코드조회 검색조건항목*/
+    @Builder
+    public static class SelectEventCodeVo {
+        private String orgName;
+        private String ceoName;
+        private String memberName;
+        private String eventNm;
+    }
+
 }

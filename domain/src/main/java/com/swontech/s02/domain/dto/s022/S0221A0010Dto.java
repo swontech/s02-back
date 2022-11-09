@@ -1,6 +1,8 @@
 package com.swontech.s02.domain.dto.s022;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import lombok.Builder;
+import lombok.Getter;
 import lombok.Setter;
 
 public class S0221A0010Dto {
@@ -47,5 +49,15 @@ public class S0221A0010Dto {
     @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
     public static class MobileInitPayCnt {
         private int payCnt;
+    }
+
+    /*2022.11.09 kjy:부서코드조회 검색조건항목*/
+    @Getter
+    @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
+    public static class SelectEventCodeParams {
+        private String orgName;
+        private String ceoName;
+        private String memberName;
+        private String eventNm;
     }
 }

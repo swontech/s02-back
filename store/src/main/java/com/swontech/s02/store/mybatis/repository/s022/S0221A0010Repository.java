@@ -35,4 +35,9 @@ public class S0221A0010Repository implements S0221A0010Store {
     public List<S0221A0010Dto.MobileInitRecentEvent> selectMobileInitRecentEvent(S0221A0010Vo.MobileInitRecentEventVO mobileInitRecentEventVO) {
         return sqlSessionTemplate.selectList("S0221A0010.mobileInitRecentEvent", mobileInitRecentEventVO);
     }
+    /*2022.11.09 kjy : 부서코드 검색 */
+    @Override
+    public String selectEventCode(S0221A0010Vo.SelectEventCodeVo selectEventCodeVo) {
+        return sqlSessionTemplate.selectOne("S0221A0010.findEventCode", selectEventCodeVo);
+    }
 }

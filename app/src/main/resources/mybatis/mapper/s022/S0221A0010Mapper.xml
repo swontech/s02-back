@@ -116,4 +116,23 @@
         and		vi.event_final_flag = 'Y'
         and		e030.use_pro_status in ('A', 'B')
     </select>
+
+    <select id="findEventCode" parameterType="com.swontech.s02.domain.vo.s022.S0221A0010Vo$SelectEventCodeVo"
+                               resultType="java.lang.String">
+        SELECT ENT.EVENT_CODE
+          FROM TB_S020.TB_S020_ORG010 		ORG
+            INNER JOIN TB_S020.TB_S020_MEMBER010   MEM
+            ON	ORG.ORG_ID    = MEM.ORG_ID
+            INNER JOIN TB_S020.TB_S020_EVENT010   ENT
+
+            ON	ORG.ORG_ID    = ENT.ORG_ID
+        WHERE ENT.EVENT_TP = 'D'
+            AND	 ORG.DATA_END_STATUS IS NULL
+            AND	 MEM.DATA_END_STATUS IS NULL
+            AND  ENT.DATA_END_STATUS IS NULL
+            AND  ORG.ORG_NAME = #{orgName}	  /*단체명*/
+            AND	 ORG.CEO_NAME = #{ceoName}	  /*대표자명*/
+            AND  MEM.MEMBER_NAME = #{memberName}    /*책임자명*/
+            AND  ENT.EVENT_NM = #{eventNm}      /*부서명*/
+    </select>
 </mapper>

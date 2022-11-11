@@ -11,5 +11,6 @@ public class S0221A0070Vo {
         private int mobileMemberId;
         private String fromDate;
         private String toDate;
+        private String useProStatus;    /* 2022.11.10 kjy */
     }
 }

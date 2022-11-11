@@ -2,7 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="S0221A0070">
-    <select id="selectCostReqList" resultType="com.swontech.s02.domain.dto.s022.S0221A0070Dto$CostReqResponse" parameterType="com.swontech.s02.domain.vo.s022.S0221A0070Vo$SelectCostReqVo">
+    <select id="selectCostReqList" resultType="com.swontech.s02.domain.dto.s022.S0221A0070Dto$CostReqResponse"
+                                parameterType="com.swontech.s02.domain.vo.s022.S0221A0070Vo$SelectCostReqVo">
         select	e030.event_use_id,				-- event_user_id
         e030.event_id,					-- event_id
         e030.event_user_id,				-- 비용 작성자 ID
@@ -29,6 +30,12 @@
         on 	cte.event_id = e030.event_id
         where	cte.event_code = #{eventCode}
         and		e030.event_user_id = #{mobileMemberId}
-        and		e030.USED_DATE between STR_TO_DATE(#{fromDate}, '%Y-%m-%d') and STR_TO_DATE(#{toDate}, '%Y-%m-%d')
+        <if test='useProStatus != null and useProStatus != ""'>
+            and	e030.USE_PRO_STATUS = #{useProStatus}   /* 2022.11.10 kjy */
+        </if>
+        <if test='fromDate != null and fromDate != "" and toDate != null and toDate != ""'>
+            /* 2022.11.10 kjy */
+            and		e030.USED_DATE between STR_TO_DATE(#{fromDate}, '%Y-%m-%d') and STR_TO_DATE(#{toDate}, '%Y-%m-%d')
+        </if>
     </select>
 </mapper>

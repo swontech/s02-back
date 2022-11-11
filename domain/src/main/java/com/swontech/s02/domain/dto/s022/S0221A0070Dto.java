@@ -1,6 +1,7 @@
 package com.swontech.s02.domain.dto.s022;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import lombok.*;
 
 public class S0221A0070Dto {
 
@@ -18,5 +19,15 @@ public class S0221A0070Dto {
         private String useProStatus;
         private String payName;
         private String useProStatusNm;
+    }
+    /* 2022.11.10 kjy */
+    @Getter
+    @Setter
+    public static class SelectCostReqDto {
+        private String eventCode;
+        private int mobileMemberId;
+        private String fromDate;
+        private String toDate;
+        private String useProStatus;
     }
 }

@@ -40,6 +40,9 @@
         and		vi.pay_flag = 'Y'
         and		vi.event_final_flag = 'Y'
         and		e030.use_pro_status in ('A', 'B')
-        and		e030.USED_DATE BETWEEN STR_TO_DATE(#{fromDate}, '%Y-%m-%d') AND STR_TO_DATE(#{toDate}, '%Y-%m-%d')
+        <if test='fromDate != null and fromDate != "" and toDate != null and toDate != ""'>
+            /* 2022.11.10 kjy */
+            and		e030.USED_DATE BETWEEN STR_TO_DATE(#{fromDate}, '%Y-%m-%d') AND STR_TO_DATE(#{toDate}, '%Y-%m-%d')
+        </if>
     </select>
 </mapper>

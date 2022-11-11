@@ -19,8 +19,8 @@ public class S0221A0090Controller {
     public ResponseEntity<?> retrieveCostPayList(
             @RequestParam("eventCode")String eventCode,
             @RequestParam("eventPayUserId")Integer eventPayUserId,
-            @RequestParam("fromDate") String fromDate,
-            @RequestParam("toDate") String toDate ) {
+            String fromDate,
+            String toDate ) {
         return s0221A0090Spec.retrieveCostPayList(eventCode, eventPayUserId, fromDate, toDate);
     }
 }

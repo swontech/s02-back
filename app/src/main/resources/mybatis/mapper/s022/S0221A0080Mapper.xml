@@ -4,7 +4,7 @@
 <mapper namespace="S0221A0080">
     <select id="selectCostReqCurrInfo" resultType="com.swontech.s02.domain.dto.s022.S0221A0080Dto$SelectCostReqCurrInfoDto" parameterType="java.lang.Integer">
         SELECT	PAY_CURRENT_STEP,
-                USE_PRO_STATUS,
+                USE_PRO_STATUS
             , (SELECT event_pay_dept  /* 2022.11.09 kjy-결제자수 변경된 경우 */
                  FROM TB_S020.EVENT_HIERARCHY_VIEW
                 WHERE EVENT_ID = E030.EVENT_ID) AS PAY_STEP_CNT

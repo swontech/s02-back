@@ -7,8 +7,9 @@
 package com.swontech.s02.domain.spec.s022;
 
 import com.swontech.s02.domain.dto.s022.S022300010Dto;
-import com.swontech.s02.domain.vo.s022.S022300010Vo;
 import org.springframework.http.ResponseEntity;
+
+import java.util.List;
 
 public interface S022300010Spec {
     /*비용 요청 조회*/
@@ -21,4 +22,8 @@ public interface S022300010Spec {
     ResponseEntity<?> registerCostPayHistory(S022300010Dto.RegisterCostPayReqDto registerCostPayReqDto);
     /*비용지금 진행상태 update */
     ResponseEntity<?> patchCostPayProgressStatus(int eventUsedId);
+
+    /*excel download 조회*/
+    ResponseEntity<?> excelCostPayTotalHead(S022300010Dto.ExcelParamsReqDto reqDto);
+    ResponseEntity<?> excelCostPayTotalLine(S022300010Dto.ExcelParamsReqDto reqDto);
 }

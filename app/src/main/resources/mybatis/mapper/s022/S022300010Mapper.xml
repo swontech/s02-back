@@ -128,4 +128,102 @@
         WHERE	EVENT_USE_ID = #{eventUseId}
     </update>
 
+    <select id="excelCostPayTotalHead" parameterType="com.swontech.s02.domain.vo.s022.S022300010Vo$ExcelParamsVo"
+                                      resultType="com.swontech.s02.domain.dto.s022.S022300010Dto$ExcelCostPayTotalHead">
+        WITH  THIS_MONTH_AMOUNT AS (
+            SELECT	SUM(E030.USE_AMOUNT)	AS AMOUNT,
+                    E_PATH.ID_PATH_PRIORTIY
+            FROM 	TB_S020.TB_S020_EVENT030 E030
+                INNER JOIN TB_S020.EVENT_HIERARCHY_VIEW	E_PATH
+                ON E030.EVENT_ID	= E_PATH.EVENT_ID
+            WHERE	E030.USE_PRO_STATUS IN ('C','D')
+              AND	E030.USED_DATE BETWEEN #{fromUsedDate} AND #{toUsedDate}
+            GROUP BY E_PATH.ID_PATH_PRIORTIY
+            )
+        , BEFORE_MONTH_AMOUNT AS (
+            SELECT	SUM(E030.USE_AMOUNT) AS AMOUNT,
+                    E_PATH.ID_PATH_PRIORTIY
+            FROM 	TB_S020.TB_S020_EVENT030 E030
+                INNER JOIN TB_S020.EVENT_HIERARCHY_VIEW	E_PATH
+                ON E030.EVENT_ID	= E_PATH.EVENT_ID
+            WHERE	E030.USE_PRO_STATUS IN ('C','D')
+              AND	E030.USED_DATE BETWEEN MAKEDATE(DATE_FORMAT(#{fromUsedDate}, '%Y'), 1) /*kjy*/
+              AND   DATE_ADD(#{fromUsedDate}, INTERVAL-1 DAY)
+            GROUP BY E_PATH.ID_PATH_PRIORTIY
+            )
+        SELECT	E_PATH.ID_PATH_PRIORTIY,
+            E_PATH.EVENT_BUDGET_AMOUNT,							-- 예산총액
+            IFNULL(THIS_MONTH.AMOUNT, 0) AS THIS_AMOUNT,		-- 당월사용액
+            IFNULL(BEFORE_MONTH.AMOUNT, 0)	AS BEFORE_AMOUNT,	-- 전월사용누계
+            E_PATH.EVENT_BUDGET_AMOUNT - IFNULL(THIS_MONTH.AMOUNT, 0) - IFNULL(BEFORE_MONTH.AMOUNT, 0) AS BALANCE_AMOUNT,	-- 잔여예산
+            E_PATH.EVENT_PATH,									-- 발의부서명
+            M010.MEMBER_NAME									-- 발의부서책임자
+        FROM    TB_S020.EVENT_HIERARCHY_VIEW	E_PATH
+            LEFT OUTER JOIN	 THIS_MONTH_AMOUNT	THIS_MONTH
+            ON	E_PATH.ID_PATH_PRIORTIY = THIS_MONTH.ID_PATH_PRIORTIY
+            LEFT OUTER JOIN	 BEFORE_MONTH_AMOUNT	BEFORE_MONTH
+            ON	E_PATH.ID_PATH_PRIORTIY = BEFORE_MONTH.ID_PATH_PRIORTIY
+            INNER JOIN TB_S020.TB_S020_MEMBER010 M010
+            ON M010.MEMBER_ID = E_PATH.EVENT_HOST_ID
+        WHERE	E_PATH.ID_PATH_PRIORTIY = #{idPathPriortiy}
+        AND		LEV = 0
+    </select>
+    <select id="excelCostPayTotalLine" parameterType="com.swontech.s02.domain.vo.s022.S022300010Vo$ExcelParamsVo"
+            resultType="com.swontech.s02.domain.dto.s022.S022300010Dto$ExcelCostPayTotalLine">
+    WITH  EVENT_PATH AS (
+        SELECT  PRI.EVENT_PATH,
+            CASE WHEN CHAR_LENGTH(PRI.EVENT_PATH) - CHAR_LENGTH(REPLACE(PRI.EVENT_PATH, '-', '')) = 0 THEN EVENT_PATH
+                 ELSE SUBSTRING_INDEX(PRI.EVENT_PATH, '-', 1)
+            END  EVENT_PATH_0,
+            CASE WHEN CHAR_LENGTH(PRI.EVENT_PATH) - CHAR_LENGTH(REPLACE(PRI.EVENT_PATH, '-', '')) >= 1 THEN SUBSTRING_INDEX(SUBSTRING_INDEX(PRI.EVENT_PATH, '-', 2),'-',  -1)
+                 ELSE NULL
+            END  EVENT_PATH_1,
+            CASE WHEN CHAR_LENGTH(PRI.EVENT_PATH) - CHAR_LENGTH(REPLACE(PRI.EVENT_PATH, '-', '')) >= 2 THEN SUBSTRING_INDEX(SUBSTRING_INDEX(PRI.EVENT_PATH, '-', 3),'-',  -1)
+                 ELSE NULL
+            END  EVENT_PATH_2,
+            CASE WHEN CHAR_LENGTH(PRI.EVENT_PATH) - CHAR_LENGTH(REPLACE(PRI.EVENT_PATH, '-', '')) >= 3 THEN SUBSTRING_INDEX(SUBSTRING_INDEX(PRI.EVENT_PATH, '-', 4),'-',  -1)
+                 ELSE NULL
+            END  EVENT_PATH_3,
+            PRI.EVENT_ID,
+            PRI.ID_PATH_PRIORTIY,
+            PRI.EVENT_BUDGET_AMOUNT,
+            PRI.MAIN_EVENT_HOST_ID
+        FROM 	TB_S020.EVENT_HIERARCHY_VIEW	PRI
+        WHERE	EVENT_FINAL_FLAG = 'Y' )
+    SELECT	NULL	AS PAY_METHOD,	/*지급방식*/
+        M010.MEMBER_NAME,			/*수령자, 예금주, 작성자*/
+        M010.BANK_NM,				/*은행*/
+        M010.ACCOUNT_NO,			/*계좌번호*/
+        E030.USE_AMOUNT,			/*금액*/
+        E030.USE_COMMENT,			/*지출내역, 적요*/
+        C010.CD_V_MEANING,			/*상태*/
+        NULL	AS BILL_CD,			/*청구서코드*/
+        '영수증완비'	AS	TAG,		/*분류*/
+        E_PATH.EVENT_PATH_0,		/*발의부서*/
+        (SELECT MEMBER_NAME
+            FROM	TB_S020.TB_S020_MEMBER010 M010
+            WHERE	MEMBER_ID = E_PATH.MAIN_EVENT_HOST_ID
+            AND		M010.DATA_END_STATUS IS NULL)	MAIN_EVENT_HOST_NAME,
+        E_PATH.EVENT_PATH,			/*사용행사*/
+        E030.USED_DATE,				/*작성일*/
+        E040.PAY_DATE,				/*승인일자*/
+        E030.USE_SUBJECT			/*사용제목*/
+    FROM    TB_S020.TB_S020_EVENT030 E030
+        INNER JOIN EVENT_PATH  E_PATH
+        ON E030.EVENT_ID = E_PATH.EVENT_ID
+        INNER JOIN	TB_S020.TB_S020_MEMBER010 M010
+        ON M010.MEMBER_ID = E030.EVENT_USER_ID
+        INNER JOIN	TB_S020.TB_S020_EVENT040 E040
+        ON E030.EVENT_USE_ID = E040.EVENT_USE_ID
+            AND	E040.USE_PRO_STATUS = 'C'
+        INNER JOIN TB_S020.TB_S020_CODE010 C010
+        ON	E030.USE_PRO_STATUS = C010.CD_V
+        AND	C010.CD_TP = 'USE_PRO_STATUS'
+        AND	C010.ORG_ID = 0
+        AND C010.CATEGORY = '000'
+    WHERE	E030.USE_PRO_STATUS IN ('C', 'D')
+    AND		E_PATH.ID_PATH_PRIORTIY = #{idPathPriortiy}
+    AND		E030.USED_DATE BETWEEN #{fromUsedDate} AND #{toUsedDate}
+    </select>
+
 </mapper>

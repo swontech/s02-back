@@ -91,4 +91,43 @@ public class S022300010Dto {
         @NotBlank
         private int payMemberId;
     }
+
+    @Setter
+    @Getter
+    @AllArgsConstructor
+    public static class ExcelParamsReqDto {
+        private String fromUsedDate;
+        private String toUsedDate;
+        private String idPathPriortiy;
+    }
+    @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
+    public static class ExcelCostPayTotalHead {
+        private String idPathPriortiy;
+        private int  eventBudgetAmount; /*예산총액*/
+        private int thisAmount;         /*당월사용액*/
+        private int beforeAmount;       /*전월사용누계*/
+        private int balanceAmount;      /*잔여예산*/
+        private String eventPath;       /*발의부서명*/
+        private String memberName;      /*발의부서책임자*/
+    }
+    @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
+    public static class ExcelCostPayTotalLine {
+        private String payMethod;
+        private String memberName;
+        private String bankNm;
+        private String accountNo;
+        private String useAmount;
+        private String useComment;
+        private String cdVMeaning;
+        private String billCd;
+        private String tag;
+        private String eventPath;
+        private String mainEventHostName;
+        private String eventPath0;
+        private String usedDate;
+        private String payDate;
+        private String useSubject;
+    }
+
+
 }

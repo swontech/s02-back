@@ -25,6 +25,7 @@
             CREATE_PROGRAM_ID,
             UPDATE_TIMESTAMP,
             UPDATE_PROGRAM_ID
+          , USE_PRO_STATUS /* 2022.11.14 kjy */
         ) VALUES (
             nextval(tb_s020.sq_s020_event030),
             #{eventUseId},
@@ -37,6 +38,7 @@
             'S0221A0080',
             SYSDATE(),
             'S0221A0080'
+          , #{useProStatus}
         )
     </insert>
 

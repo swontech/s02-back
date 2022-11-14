@@ -47,4 +47,14 @@ public class S022300010Vo {
         private int eventUseId;
         private int memberId;
     }
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class ExcelParamsVo {
+        private String fromUsedDate;
+        private String toUsedDate;
+        private String idPathPriortiy;
+    }
+
 }

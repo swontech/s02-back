@@ -11,6 +11,7 @@ public class S0221A0080Vo {
         private Integer payMemberId;
         private String payResultFlag;
         private String payComment;
+        private String useProStatus;    /* 2022.11.14 kjy */
     }
 
     @Builder

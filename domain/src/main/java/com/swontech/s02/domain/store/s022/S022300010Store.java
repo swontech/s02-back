@@ -21,4 +21,8 @@ public interface S022300010Store {
     int insertCostPayHistory(S022300010Vo.RegisterCostPayReqVo registerCostPayReqVo);
     /*비용지금 진행상태 update */
     int updateCostPayProgressStatus(int eventUsedId);
+    /*2022.11.14 excel download */
+    List<S022300010Dto.ExcelCostPayTotalHead> excelCostPayTotalHead(S022300010Vo.ExcelParamsVo excelParamsVo);
+
+    List<S022300010Dto.ExcelCostPayTotalLine> excelCostPayTotalLine(S022300010Vo.ExcelParamsVo excelParamsVo);
 }

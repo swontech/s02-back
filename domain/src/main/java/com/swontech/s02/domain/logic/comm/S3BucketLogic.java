@@ -1,6 +1,8 @@
 package com.swontech.s02.domain.logic.comm;
 
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.swontech.s02.domain.spec.comm.S3BucketSpec;
 import lombok.extern.slf4j.Slf4j;
@@ -46,8 +48,8 @@ public class S3BucketLogic implements S3BucketSpec {
     @Override
     public void delete(String fileId, String dir) {
         try {
-            String targetDir = bucket + "/storage/img/s02/" + dir;
-            amazonS3.deleteObject(targetDir, fileId);
+            DeleteObjectRequest deleteObjectRequest = new DeleteObjectRequest(bucket, "storage/img/s02/" + dir + "/" + fileId);
+            amazonS3.deleteObject(deleteObjectRequest);
         } catch (Exception e) {
             throw e;
         }

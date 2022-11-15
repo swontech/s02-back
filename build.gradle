@@ -50,7 +50,7 @@ subprojects {
         implementation "io.springfox:springfox-boot-starter:3.0.0"
 
         // redis session
-//        implementation 'org.springframework.session:spring-session-data-redis'
+        // implementation 'org.springframework.session:spring-session-data-redis'
     }
 }
 

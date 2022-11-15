@@ -33,9 +33,6 @@ management:
 # aws s3설정
 cloud:
   aws:
-    credentials:
-      accessKey: AKIAYHESJUVZA62ODYWW
-      secretKey: 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
     s3:
       bucket: s02-bucket
       dir: /storage/img/s02

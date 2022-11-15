@@ -62,4 +62,16 @@ public class S022300010Controller {
         return s022300010Spec.patchCostPayProgressStatus(eventUsedId);
     }
 
+    @Operation(summary = "비용지급현황(엑셀)", description = "결제 및 지급처리된 비용현황을 조회")
+    @GetMapping("/excel-cost-pay-head")
+    public ResponseEntity<?> excelCostPayTotalHead(S022300010Dto.ExcelParamsReqDto reqDto) {
+        log.info("[S022300010] excelCostPayTotalHead 호출==== " + reqDto.getFromUsedDate());
+        return s022300010Spec.excelCostPayTotalHead(reqDto);
+    }
+    @Operation(summary ="비용지급현황상세(엑셀)", description = "결제 및 지급처리된 비용현황을 조회")
+    @GetMapping("/excel-cost-pay-line")
+    public ResponseEntity<?> excelCostPayTotalLine(S022300010Dto.ExcelParamsReqDto reqDto) {
+
+        return s022300010Spec.excelCostPayTotalLine(reqDto);
+    }
 }

@@ -63,7 +63,6 @@ public class S022300010Logic implements S022300010Spec {
      * 2.행사비용 이력 등록 : tb_s020_event040 해당 행사비용 정보 insert
      * */
     @Override
-
     public ResponseEntity<?> registerCostPay(S022300010Dto.RegisterCostPayReqDto reqDto) {
         int result = 0;
         logger.info("[S022300010] 비용지급처리 : "+ reqDto.getEventUseId());
@@ -107,6 +106,25 @@ public class S022300010Logic implements S022300010Spec {
     public ResponseEntity<?> patchCostPayProgressStatus(int eventUsedId) {
         int result = s022300010Store.updateCostPayProgressStatus(eventUsedId);
         return response.success( "비용지급 상태 수정에 성공했습니다.");
+    }
+
+    @Override
+    public ResponseEntity<?> excelCostPayTotalHead(S022300010Dto.ExcelParamsReqDto reqDto) {
+        return response.success(s022300010Store.excelCostPayTotalHead(
+                S022300010Vo.ExcelParamsVo.builder()
+                        .fromUsedDate(reqDto.getFromUsedDate())
+                        .toUsedDate(reqDto.getToUsedDate())
+                        .idPathPriortiy(reqDto.getIdPathPriortiy()).build())
+                );
+    }
+    @Override
+    public ResponseEntity<?> excelCostPayTotalLine(S022300010Dto.ExcelParamsReqDto reqDto) {
+        return response.success(s022300010Store.excelCostPayTotalLine(
+                S022300010Vo.ExcelParamsVo.builder()
+                        .fromUsedDate(reqDto.getFromUsedDate())
+                        .toUsedDate(reqDto.getToUsedDate())
+                        .idPathPriortiy(reqDto.getIdPathPriortiy()).build())
+        );
     }
 
 }

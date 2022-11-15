@@ -68,6 +68,7 @@ public class S0221A0080Logic implements S0221A0080Spec {
                             .payMemberId(reqDto.getMemberId())
                             .payResultFlag(reqDto.getPayResultFlag())
                             .payComment(reqDto.getPayComment())
+                            .useProStatus(currentUseProStatus) /* 2022.11.14 kjy */
                     .build());
             if(insertResult < 1) {
                 return response.fail("결제내역정보를 Insert 하는 중 오류가 발생했습니다", HttpStatus.INTERNAL_SERVER_ERROR);

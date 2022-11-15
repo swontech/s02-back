@@ -47,4 +47,14 @@ public class S022300010Repository implements S022300010Store {
         return sqlSessionTemplate.update("S022300010.updateCostPayProgressStatus", eventUsedId);
     }
 
+    @Override
+    public List<S022300010Dto.ExcelCostPayTotalHead> excelCostPayTotalHead(S022300010Vo.ExcelParamsVo excelParamsVo) {
+        return sqlSessionTemplate.selectList("S022300010.excelCostPayTotalHead", excelParamsVo);
+    }
+
+    @Override
+    public List<S022300010Dto.ExcelCostPayTotalLine> excelCostPayTotalLine(S022300010Vo.ExcelParamsVo excelParamsVo) {
+        return sqlSessionTemplate.selectList("S022300010.excelCostPayTotalLine", excelParamsVo);
+    }
+
 }

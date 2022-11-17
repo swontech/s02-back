@@ -41,6 +41,7 @@
             VI.EVENT_END_DATE,				/*행사 종료일자*/
             VI.EVENT_LOC,					/*행사장소*/
             M010.MEMBER_NAME				/*책임자명*/
+           ,VI.EVENT_CODE    /*2022.11.17 kjy*/
          FROM TB_S020.EVENT_HIERARCHY_VIEW   VI
             LEFT OUTER JOIN TB_S020.TB_S020_MEMBER010 M010
             ON	VI.EVENT_HOST_ID = M010.MEMBER_ID

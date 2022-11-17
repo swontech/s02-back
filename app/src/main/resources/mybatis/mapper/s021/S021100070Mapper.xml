@@ -233,7 +233,7 @@
               , DATA_END_TIMESTAMP  = SYSDATE()
               , DATA_END_OBJECT_ID  = #{memberId}
          WHERE	EVENT_ID            = #{eventId}
-           AND EVENT_TP = 'A'
+           AND DATA_END_STATUS IS NULL
     </update>
 
     <select id="selectSameLevel" parameterType="java.lang.Integer" resultType="java.lang.Integer">
@@ -242,20 +242,22 @@
           FROM TB_S020.TB_S020_EVENT010
          WHERE HIGH_EVENT_ID =(SELECT HIGH_EVENT_ID
                                  FROM TB_S020.TB_S020_EVENT010
-                                WHERE EVENT_ID = #{eventId})
+                                WHERE EVENT_ID = #{eventId}
+                                  AND EVENT_TP = 'A' )
         AND EVENT_ID <![CDATA[<>]]>  #{eventId}
         AND EVENT_FINAL_FLAG = 'Y'
         AND EVENT_TP = 'A'
         AND DATA_END_STATUS IS NULL
     </select>
     <select id="selectNoneSameLevelDept" parameterType="java.lang.Integer" resultType="java.lang.Integer">
-        SELECT /*kjy 해당 eventId 에 동일 사역 level 이 없고(selectSameLevel VO) 상위 eventId 가 부서(D) 유무 조회 */
+        SELECT /*kjy 해당 eventId 에 동일 사역 level 이 없고(selectSameLevel VO) 상위 eventId 또는 삭제대상 eventId가  부서(D) 유무 조회 */
                COUNT(*)
           FROM TB_S020.TB_S020_EVENT010
-          WHERE EVENT_ID =(SELECT HIGH_EVENT_ID
-                            FROM TB_S020.TB_S020_EVENT010
-                            WHERE EVENT_ID = #{eventId} AND EVENT_FINAL_FLAG = 'Y')
-           AND EVENT_TP = 'D'
+          WHERE ((EVENT_ID =(SELECT HIGH_EVENT_ID
+                               FROM TB_S020.TB_S020_EVENT010
+                              WHERE EVENT_ID = #{eventId} AND EVENT_FINAL_FLAG = 'Y')
+                 ) OR (EVENT_ID = #{eventId} AND EVENT_TP = 'D')
+                )
            AND DATA_END_STATUS IS NULL
     </select>
 </mapper>

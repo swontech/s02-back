@@ -35,6 +35,7 @@ public class S0221A2000Dto {
         private String eventEndDate;
         private String eventLoc;
         private String memberName;
+        private String eventCode;   /*2022.11.17 kjy*/
     }
 
 }

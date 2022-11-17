@@ -208,14 +208,21 @@
            set EVENT_FINAL_FLAG = #{eventFinalFlag} /*1.등록:null, 2.삭제:'Y'*/
         <choose>
             <when test='eventFinalFlag == "Y"'>
-                where event_id = (select high_event_id from tb_s020.tb_s020_event010
-                                   where event_id = #{eventId})
+                where high_event_id = ( SELECT  /* 해당 event 상위 event 의 상위 event 조회 */
+                                                DISTINCT E2.HIGH_EVENT_ID
+                                          FROM   TB_S020.TB_S020_EVENT010 E1
+                                                ,TB_S020.TB_S020_EVENT010 E2
+                                         WHERE  E1.HIGH_EVENT_ID = E2.EVENT_ID
+                                            AND E1.EVENT_ID = #{eventId}
+                                            AND E1.DATA_END_STATUS IS NULL
+                                            AND E2.DATA_END_STATUS IS NULL )
             </when>
             <otherwise>
                 where event_id = #{eventId} /* 상위 event_id */
             </otherwise>
         </choose>
                 AND EVENT_TP = 'A'
+                AND EVENT_LEVEL > 0
                 AND DATA_END_STATUS IS NULL
     </update>
 

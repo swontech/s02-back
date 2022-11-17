@@ -253,12 +253,12 @@ public class S021100070Logic implements S021100070Spec {
             /* 해당 eventId 에 동일 level 의 사역정보가 없으면 */
             isFinalUpdated = true;
 
-            cnt = s021100070Store.selectNoneSameLevelDept(eventId);
-            logger.info("[S021100070] 해당 eventId 에 동일 level 이 없고 상위 eventId 가 부서(D)인 경우 : " + cnt);
-            if(cnt > 0) {
-                /*해당 eventId 에 동일 level 이 없고 상위 eventId 가 부서(D)인 경우*/
-                isFinalUpdated = false;
-            }
+//            cnt = s021100070Store.selectNoneSameLevelDept(eventId);
+//            logger.info("[S021100070] 해당 eventId 에 동일 level 이 없고 상위 eventId 가 부서(D)인 경우 : " + cnt);
+//            if(cnt > 0) {
+//                /*해당 eventId 에 동일 level 이 없고 상위 eventId 가 부서(D)인 경우*/
+//                isFinalUpdated = false;
+//            }
         }
         //삭제대상 event 의 상위 event 최하위여부 update 처리
         if(isFinalUpdated) {

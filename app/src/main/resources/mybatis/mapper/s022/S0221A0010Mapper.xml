@@ -9,7 +9,8 @@
                     EVENT_START_DATE,
                     EVENT_END_DATE,
                     EVENT_HOST_ID
-            FROM 	TB_S020.EVENT_HIERARCHY_VIEW PRI
+                   ,EVENT_CODE  /*2022.11.17 kjy */
+        FROM 	TB_S020.EVENT_HIERARCHY_VIEW PRI
             WHERE 	ORG_ID = #{orgId}
             AND		EVENT_CODE = #{eventCode}
             AND		EVENT_FINAL_FLAG = 'Y'
@@ -17,12 +18,13 @@
             AND		EVENT_STATUS = 'A'
             AND		SYSDATE() BETWEEN EVENT_START_DATE AND EVENT_END_DATE
             AND		DATA_END_STATUS IS NULL /*2022.11.08 kjy */
-            UNION ALL
+            UNION
             SELECT 	EVENT_ID,
                     EVENT_NM,
                     EVENT_START_DATE,
                     EVENT_END_DATE,
                     EVENT_HOST_ID
+                   ,EVENT_CODE  /*2022.11.17 kjy */
             FROM 	TB_S020.EVENT_HIERARCHY_VIEW PRI
             WHERE 	ORG_ID = #{orgId}
             AND		EVENT_FINAL_FLAG = 'Y'
@@ -33,13 +35,14 @@
             AND		DATA_END_STATUS IS NULL /*2022.11.08 kjy */
         )
         SELECT	EVENT_ID,								-- EVENT_ID
-                EVENT_NM,								-- 행사명
-                EVENT_START_DATE,						-- 행사시작일자
-                EVENT_END_DATE,							-- 행사종료일자
-                EVENT_HOST_ID,							-- 책임자id
+                EVENT_CODE,  /*2022.11.17 kjy */
+                EVENT_NM,								/*행사명*/
+                EVENT_START_DATE,						/*행사시작일자*/
+                EVENT_END_DATE,							/*행사종료일자*/
+                EVENT_HOST_ID,							/*책임자id*/
                 (SELECT M010.MEMBER_NAME
                 FROM TB_S020.TB_S020_MEMBER010 M010
-                WHERE EVENT_HOST_ID =  M010.MEMBER_ID)  AS EVENT_HOST_NAME	-- 책임자명
+                WHERE EVENT_HOST_ID =  M010.MEMBER_ID)  AS EVENT_HOST_NAME	/*책임자명*/
         FROM    DD
         ORDER BY EVENT_ID DESC LIMIT 4
     </select>
@@ -118,13 +121,12 @@
     </select>
 
     <select id="findEventCode" parameterType="com.swontech.s02.domain.vo.s022.S0221A0010Vo$SelectEventCodeVo"
-                               resultType="java.lang.String">
-        SELECT ENT.EVENT_CODE
+                               resultType="com.swontech.s02.domain.dto.s022.S0221A0010Dto$SelectEventList">
+        SELECT DISTINCT ENT.EVENT_CODE, ENT.EVENT_NM
           FROM TB_S020.TB_S020_ORG010 		ORG
             INNER JOIN TB_S020.TB_S020_MEMBER010   MEM
             ON	ORG.ORG_ID    = MEM.ORG_ID
             INNER JOIN TB_S020.TB_S020_EVENT010   ENT
-
             ON	ORG.ORG_ID    = ENT.ORG_ID
         WHERE ENT.EVENT_TP = 'D'
             AND	 ORG.DATA_END_STATUS IS NULL
@@ -132,7 +134,5 @@
             AND  ENT.DATA_END_STATUS IS NULL
             AND  ORG.ORG_NAME = #{orgName}	  /*단체명*/
             AND	 ORG.CEO_NAME = #{ceoName}	  /*대표자명*/
-            AND  MEM.MEMBER_NAME = #{memberName}    /*책임자명*/
-            AND  ENT.EVENT_NM = #{eventNm}      /*부서명*/
     </select>
 </mapper>

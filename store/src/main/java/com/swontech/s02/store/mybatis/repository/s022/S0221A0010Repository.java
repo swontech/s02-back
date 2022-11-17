@@ -37,7 +37,7 @@ public class S0221A0010Repository implements S0221A0010Store {
     }
     /*2022.11.09 kjy : 부서코드 검색 */
     @Override
-    public String selectEventCode(S0221A0010Vo.SelectEventCodeVo selectEventCodeVo) {
-        return sqlSessionTemplate.selectOne("S0221A0010.findEventCode", selectEventCodeVo);
+    public List<S0221A0010Dto.SelectEventList> selectEventCode(S0221A0010Vo.SelectEventCodeVo selectEventCodeVo) {
+        return sqlSessionTemplate.selectList("S0221A0010.findEventCode", selectEventCodeVo);
     }
 }

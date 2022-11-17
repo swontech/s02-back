@@ -11,5 +11,5 @@ public interface S0221A0010Store {
     List<S0221A0010Dto.MobileInitPayCnt> selectMobileInitPayCnt(S0221A0010Vo.MobileInitPayCntVo mobileInitPayCntVo);
     List<S0221A0010Dto.MobileInitRecentEvent> selectMobileInitRecentEvent(S0221A0010Vo.MobileInitRecentEventVO mobileInitRecentEventVO);
     /*2022.11.09 kjy : 부서코드 검색 */
-    String selectEventCode(S0221A0010Vo.SelectEventCodeVo selectEventCodeVo);
+    List<S0221A0010Dto.SelectEventList> selectEventCode(S0221A0010Vo.SelectEventCodeVo selectEventCodeVo);
 }

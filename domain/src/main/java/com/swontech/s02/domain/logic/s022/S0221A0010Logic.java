@@ -46,8 +46,7 @@ public class S0221A0010Logic implements S0221A0010Spec {
                                     S0221A0010Vo.SelectEventCodeVo.builder()
                                             .orgName(params.getOrgName())
                                             .ceoName(params.getCeoName())
-                                            .memberName(params.getMemberName())
-                                            .eventNm(params.getEventNm()).build()
+                                            .build()
                                 ));
     }
 }

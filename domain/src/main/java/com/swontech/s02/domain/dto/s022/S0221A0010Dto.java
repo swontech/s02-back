@@ -10,6 +10,7 @@ public class S0221A0010Dto {
     @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
     public static class MobileInitRecentEvent {
         private int eventId;
+        private String eventCode;   /*2022.11.17 kjy */
         private String eventNm;
         private String eventStartDate;
         private String eventEndDate;
@@ -57,7 +58,13 @@ public class S0221A0010Dto {
     public static class SelectEventCodeParams {
         private String orgName;
         private String ceoName;
-        private String memberName;
+//        private String memberName;
+//        private String eventNm;
+    }
+    /*2022.11.18 kjy:부서코드 조회결과 */
+    @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
+    public static class SelectEventList {
+        private String eventCode;
         private String eventNm;
     }
 }

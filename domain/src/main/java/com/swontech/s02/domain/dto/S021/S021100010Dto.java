@@ -1,5 +1,6 @@
 package com.swontech.s02.domain.dto.s021;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -9,9 +10,7 @@ import lombok.Getter;
  */
 public class S021100010Dto {
 
-    @Builder
-    @Getter
-    @AllArgsConstructor
+    @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
     public static class OrgListResponse {
         private int seq;       /*2022.11.02 kjy paging*/
         private int orgId;

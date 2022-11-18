@@ -175,7 +175,7 @@
             #{memberId},	    /* 화면의 로그인 member_id*/
             SYSDATE(),
             'S021100070',
-            IF(#{eventPayLevel} = 0, null, #{eventPayLevel}),	/* 화면의 결제자 Level구분*/
+            IF(#{eventPayLevel} = 0, null, #{eventPayLevel}),  /* 화면의 결제자 Level구분*/
             #{eventPayRoleCd},	/* 화면의 사용자 비고*/
             #{useRegFlag}       /* 등록권한 */
         )

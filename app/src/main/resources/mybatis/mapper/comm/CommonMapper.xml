@@ -22,6 +22,7 @@
     </select>
 
     <sql id="pagingTop">
+        <if test='curPage > 0'>
     SELECT /*페이징 조회*/
         T3.*
       FROM (
@@ -30,9 +31,11 @@
           FROM (
             SELECT T1.*, COUNT(*) OVER(PARTITION BY '1') TOT_CNT
             FROM (
+        </if>
     </sql>
 
     <sql id="pagingBottom">
+        <if test='curPage > 0'>
             ) T1
             order by (
                 <choose>
@@ -44,5 +47,6 @@
     ) T3
     WHERE T3.SEQ &gt; #{limit} * (#{curPage}-1)  /*시작페이지행번호 = 한페이지 row수 * (현재페이지번호-1) */
       AND T3.SEQ &lt;= (#{limit} * #{curPage}) /* 한페이지 row수 * 현재페이지번호 */
+        </if>
     </sql>
 </mapper>

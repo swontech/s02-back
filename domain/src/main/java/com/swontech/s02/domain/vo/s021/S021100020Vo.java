@@ -10,6 +10,7 @@ public class S021100020Vo {
     @AllArgsConstructor
     public static class SelectMemberEmailVo{
         private String email;
+        private String orgName;
     }
 
     @Getter

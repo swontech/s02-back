@@ -2,7 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="S0221A0010">
-    <select id="mobileInitRecentEvent" parameterType="com.swontech.s02.domain.vo.s022.S0221A0010Vo$MobileInitRecentEventVO" resultType="com.swontech.s02.domain.dto.s022.S0221A0010Dto$MobileInitRecentEvent">
+    <select id="mobileInitRecentEvent" parameterType="com.swontech.s02.domain.vo.s022.S0221A0010Vo$MobileInitRecentEventVO"
+                    resultType="com.swontech.s02.domain.dto.s022.S0221A0010Dto$MobileInitRecentEvent">
         WITH DD	AS (
             SELECT 	EVENT_ID,
                     EVENT_NM,
@@ -10,6 +11,7 @@
                     EVENT_END_DATE,
                     EVENT_HOST_ID
                    ,EVENT_CODE  /*2022.11.17 kjy */
+                   ,EVENT_PATH	/*2022.11.21 kjy */
         FROM 	TB_S020.EVENT_HIERARCHY_VIEW PRI
             WHERE 	ORG_ID = #{orgId}
             AND		EVENT_CODE = #{eventCode}
@@ -25,6 +27,7 @@
                     EVENT_END_DATE,
                     EVENT_HOST_ID
                    ,EVENT_CODE  /*2022.11.17 kjy */
+                   ,EVENT_PATH	/*2022.11.21 kjy */
             FROM 	TB_S020.EVENT_HIERARCHY_VIEW PRI
             WHERE 	ORG_ID = #{orgId}
             AND		EVENT_FINAL_FLAG = 'Y'
@@ -43,6 +46,7 @@
                 (SELECT M010.MEMBER_NAME
                 FROM TB_S020.TB_S020_MEMBER010 M010
                 WHERE EVENT_HOST_ID =  M010.MEMBER_ID)  AS EVENT_HOST_NAME	/*책임자명*/
+               ,EVENT_PATH	/*2022.11.21 kjy */
         FROM    DD
         ORDER BY EVENT_ID DESC LIMIT 4
     </select>

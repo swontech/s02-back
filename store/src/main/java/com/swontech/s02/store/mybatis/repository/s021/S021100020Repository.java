@@ -14,8 +14,8 @@ public class S021100020Repository implements S021100020Store {
     }
 
     @Override
-    public String selectMemberEmail(String email) {
-        return sqlSessionTemplate.selectOne("S021100020.selectMemberEmail", email);
+    public String selectMemberEmail(S021100020Vo.SelectMemberEmailVo selectMemberEmailVo) {
+        return sqlSessionTemplate.selectOne("S021100020.selectMemberEmail", selectMemberEmailVo);
     }
 
     @Override

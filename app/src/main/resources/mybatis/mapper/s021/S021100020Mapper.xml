@@ -2,10 +2,14 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="S021100020">
-    <select id="selectMemberEmail" parameterType="java.lang.String" resultType="java.lang.String">
-        SELECT      EMAIL
-        FROM        tb_s020.tb_s020_member010
-        WHERE       EMAIL = #{email}
+    <select id="selectMemberEmail" parameterType="com.swontech.s02.domain.vo.s021.S021100020Vo$SelectMemberEmailVo" resultType="java.lang.String">
+        select mem.EMAIL
+          from tb_s020.tb_s020_org010 		org
+            inner join tb_s020.tb_s020_member010   mem
+            on	org.org_id    = mem.org_id
+           and	mem.member_tp = 'C'
+           and mem.EMAIL =  #{email}
+           and org.ORG_NAME = #{orgName}
     </select>
 
     <select id="selectOrgName" parameterType="com.swontech.s02.domain.vo.s021.S021100020Vo$SelectOrgDuplicationVo"

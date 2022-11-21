@@ -18,6 +18,7 @@ public class S021100070Dto {
         private int mostHighId;
         private int eventLevel;
         private String eventTp;
+        private String eventCode;
         private int eventId;
     }
 

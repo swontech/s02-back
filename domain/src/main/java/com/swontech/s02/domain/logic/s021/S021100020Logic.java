@@ -25,8 +25,11 @@ public class S021100020Logic implements S021100020Spec {
      * @param
      */
     @Override
-    public ResponseEntity<?> duplicationCheckEmail(String email) {
-        if(s021100020Store.selectMemberEmail(email) == null) {
+    public ResponseEntity<?> duplicationCheckEmail(String email, String orgName) {
+        if(s021100020Store.selectMemberEmail(
+                S021100020Vo.SelectMemberEmailVo.builder()
+                    .email(email).orgName(orgName).build()
+                ) == null) {
             return responseDto.success(true, "사용 가능한 이메일 주소입니다.", HttpStatus.OK);
         }
         return responseDto.success(false, "이미 사용중인 이메일 주소입니다.", HttpStatus.OK);

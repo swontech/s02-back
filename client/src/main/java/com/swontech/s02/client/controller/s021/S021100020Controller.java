@@ -22,8 +22,9 @@ public class S021100020Controller {
 
     @Operation(summary = "이메일 중복 체크", description = "클라이언트에서 입력받은 이메일 정보로 이미 등록된 이메일이 있는지 조회한다.")
     @GetMapping("/dup-check-email")
-    public ResponseEntity<?> duplicationCheckEmail(@RequestParam("email")String email) {
-        return s021100020Spec.duplicationCheckEmail(email);
+    public ResponseEntity<?> duplicationCheckEmail(@RequestParam("email")String email
+                                                  ,@RequestParam("orgName")String orgName) {
+        return s021100020Spec.duplicationCheckEmail(email, orgName);
     }
 
     @Operation(summary = "단체명 중복 체크", description = "클라이언트에서 입력받은 단체명의 유무를 조회한다.")

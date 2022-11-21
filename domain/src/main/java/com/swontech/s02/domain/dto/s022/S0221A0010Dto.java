@@ -16,6 +16,7 @@ public class S0221A0010Dto {
         private String eventEndDate;
         private int EventHostId;
         private String eventHostName;
+        private String eventPath;   /*2022.11.21 kjy */
     }
 
     @Setter

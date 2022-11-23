@@ -150,7 +150,9 @@ public class S021100020Logic implements S021100020Spec {
                             .build();
                     result = s021100070Store.insertEvent(registerEventVo);
                     if (result > 0) {
-                        resultMessage = resultMessage + " (신규부서코드=" + newEventCode + ")";
+                        resultMessage = resultMessage + "\n 단체명:"+ reqDto.getOrgName()
+                                + "\n 부서명:" + reqDto.getEventNm()
+                                + "\n 신규부서코드:" + newEventCode ;
                     }
                 }
             }

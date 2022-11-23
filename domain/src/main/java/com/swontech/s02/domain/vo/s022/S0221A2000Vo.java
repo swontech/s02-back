@@ -8,5 +8,6 @@ public class S0221A2000Vo {
     public static class MoblieQRScanEventListVo {
         private int orgId;
         private String eventCode;
+        private String eventNm;     /*2022.11.23 kjy 행사명검색*/
     }
 }

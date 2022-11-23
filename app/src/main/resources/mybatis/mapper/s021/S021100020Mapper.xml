@@ -7,9 +7,10 @@
           from tb_s020.tb_s020_org010 		org
             inner join tb_s020.tb_s020_member010   mem
             on	org.org_id    = mem.org_id
-           and	mem.member_tp = 'C'
            and mem.EMAIL =  #{email}
            and org.ORG_NAME = #{orgName}
+           and org.DATA_END_STATUS is null
+           and mem.DATA_END_STATUS is null
     </select>
 
     <select id="selectOrgName" parameterType="com.swontech.s02.domain.vo.s021.S021100020Vo$SelectOrgDuplicationVo"

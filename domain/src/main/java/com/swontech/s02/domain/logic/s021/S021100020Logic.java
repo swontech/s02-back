@@ -2,23 +2,30 @@ package com.swontech.s02.domain.logic.s021;
 
 import com.swontech.s02.domain.dto.comm.CustomResponse;
 import com.swontech.s02.domain.dto.s021.S021100020Dto;
+import com.swontech.s02.domain.dto.s021.S021100070Dto;
 import com.swontech.s02.domain.spec.s021.S021100020Spec;
 import com.swontech.s02.domain.store.s021.S021100020Store;
+import com.swontech.s02.domain.store.s021.S021100070Store;
 import com.swontech.s02.domain.vo.s021.S021100020Vo;
+import com.swontech.s02.domain.vo.s021.S021100070Vo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.util.StringUtils;
 
 @Slf4j
 public class S021100020Logic implements S021100020Spec {
     private final S021100020Store s021100020Store;
     private final PasswordEncoder passwordEncoder;
     private final CustomResponse responseDto;
-    public S021100020Logic(S021100020Store s021100020Store, PasswordEncoder passwordEncoder, CustomResponse responseDto) {
+    private final S021100070Store s021100070Store;  /* 2022.11.23 kjy*/
+    public S021100020Logic(S021100020Store s021100020Store, PasswordEncoder passwordEncoder, CustomResponse responseDto
+            , S021100070Store s021100070Store) {
         this.s021100020Store = s021100020Store;
         this.passwordEncoder = passwordEncoder;
         this.responseDto = responseDto;
+        this.s021100070Store = s021100070Store;
     }
     /**
      * 이메일 중복 체크
@@ -62,6 +69,7 @@ public class S021100020Logic implements S021100020Spec {
     @Override
     public ResponseEntity<?> registerOrg(S021100020Dto.RegisterOrgReqDto reqDto) {
         try {
+            String resultMessage = "단체 신규등록에 성공했습니다.";
             /**
              * 단체 등록 메소드
              * 컨트롤러로부터 전달받은 request dto parameter를 InsertOrgVo에 담아 DML처리한다.
@@ -81,13 +89,14 @@ public class S021100020Logic implements S021100020Spec {
             s021100020Store.insertOrg(insertOrgVo);
 
             int result = 0;
+            int insertOrgId = insertOrgVo.getOrgId();
             /**
              *  insertOrgVo Mapper(S02100020Mapper.xml)에서 데이터 입력 후, 시퀀스를 통해 자동발번된 org_id를 리턴, insertOrgVo에 담아준다.
              *  컨트롤러로부터 전달받은 request dto 중 대표자정보와 insertOrgVo.orgId 및 전화번호를 초기 패스워드로 암호화 인코딩하여 InsertMemberVo에 담는다.
              */
             S021100020Vo.InsertMemberVo insertMemberVo = S021100020Vo.InsertMemberVo
                     .builder()
-                    .orgId(insertOrgVo.getOrgId())          // 단체 id(insertOrg DML이후 VO에 담긴 orgId)
+                    .orgId(insertOrgId)          // 단체 id(insertOrg DML이후 VO에 담긴 orgId)
                     .memberName(reqDto.getMemberName())
                     .firstHpNo(reqDto.getFirstHpNo())
                     .middleHpNo(reqDto.getMiddleHpNo())
@@ -100,8 +109,9 @@ public class S021100020Logic implements S021100020Spec {
             /* 2022.10.26 kjy
              * 단체 신규 등록시 발번된 memberId 로 org010.created_object_id 추가 update
              */
+            int newMemberId = 0;
             if(result > 0) {
-                int newMemberId = insertMemberVo.getMemberId();
+                newMemberId = insertMemberVo.getMemberId();
                 log.info("[S021100020] 단체신규등록된 memberId : " + newMemberId);
 
                 result = 0;
@@ -114,7 +124,38 @@ public class S021100020Logic implements S021100020Spec {
                 }
             }
 
-            return responseDto.success(insertOrgVo.getOrgId(), "단체 신규등록에 성공했습니다.", HttpStatus.OK);
+            /* 2022.11.23 kjy
+             * 앱화면 단체 신규 등록시 입력된 부서명으로 부서 최최등록 추가 후 발번된 부서코드 리턴
+             * 1.앱화면 등록 여부 체크 : eventNm not null
+             * 2.생성된 orgId 의 orgCode get
+             */
+            if( StringUtils.hasLength(reqDto.getEventNm()) ) {
+                log.info("[S021100020] 앱 단체신규등록 부서신규등록 대상 =====");
+
+                String newEventCode = s021100070Store.selectNewEventCode(insertOrgId);
+                log.info("[S021100020] 앱 단체신규등록시 부서코드 발번조회 : " + newEventCode);
+
+                if( StringUtils.hasLength(newEventCode)) {
+                    S021100070Vo.TbEvent010Vo registerEventVo = S021100070Vo.TbEvent010Vo.builder()
+                            .eventNm(reqDto.getEventNm())
+                            .eventCode(newEventCode)
+                            .eventHostId(newMemberId)
+                            .eventRegId(newMemberId)
+                            .orgId(insertOrgId)
+                            .highEventId(0)
+                            .eventLevel(0)
+                            .eventStatus("A")
+                            .eventTp("D")
+                            .memberId(newMemberId)
+                            .build();
+                    result = s021100070Store.insertEvent(registerEventVo);
+                    if (result > 0) {
+                        resultMessage = resultMessage + " (신규부서코드=" + newEventCode + ")";
+                    }
+                }
+            }
+
+            return responseDto.success(insertOrgVo.getOrgId(), resultMessage, HttpStatus.OK);
         } catch (Exception e) {
             log.error(e.getMessage());
             throw e;

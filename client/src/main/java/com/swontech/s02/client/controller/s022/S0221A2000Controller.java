@@ -16,8 +16,11 @@ public class S0221A2000Controller {
     }
 
     @GetMapping("/event-list")
-    public ResponseEntity<?> retrieveEventList(@RequestParam(value = "eventCode")String eventCode, @RequestParam("orgId")int orgId) {
-        return s0221A2000Spec.retrieveEventList(eventCode, orgId);
+    public ResponseEntity<?> retrieveEventList(@RequestParam(value = "eventCode")String eventCode
+                                             , @RequestParam("orgId")int orgId
+                                             , String eventNm   /*2022.11.23 kjy 행사명검색*/
+                ) {
+        return s0221A2000Spec.retrieveEventList(eventCode, orgId, eventNm);
     }
 
     @GetMapping("/event-detail")

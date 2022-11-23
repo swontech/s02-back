@@ -33,6 +33,8 @@ public class S021100020Dto {
         private int memberId;           /*로그인 memberId*/
         @NotNull
         private String ceoName;         /*대표자명*/
+        /*2022.11.23 kjy : app 단체등록시 부서명으로 최초부서등록 */
+        private String eventNm;         /*부서명*/
     }
 
     @Getter

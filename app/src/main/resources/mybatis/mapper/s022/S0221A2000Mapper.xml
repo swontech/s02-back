@@ -28,6 +28,7 @@
         and		vi.event_status = 'A'
         and		vi.org_id = #{orgId}
         and		vi.event_code = #{eventCode}
+        AND     vi.event_nm LIKE CONCAT('%', #{eventNm}, '%')      /*2022.11.23 kjy 행사명검색*/
         AND     vi.DATA_END_STATUS IS NULL
     </select>
 

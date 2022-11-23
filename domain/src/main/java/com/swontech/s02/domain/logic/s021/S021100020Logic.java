@@ -14,6 +14,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.util.StringUtils;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Slf4j
 public class S021100020Logic implements S021100020Spec {
     private final S021100020Store s021100020Store;
@@ -69,6 +72,7 @@ public class S021100020Logic implements S021100020Spec {
     @Override
     public ResponseEntity<?> registerOrg(S021100020Dto.RegisterOrgReqDto reqDto) {
         try {
+            Map<String, Object> resultMap = new HashMap<String, Object>();
             String resultMessage = "단체 신규등록에 성공했습니다.";
             /**
              * 단체 등록 메소드
@@ -123,6 +127,7 @@ public class S021100020Logic implements S021100020Spec {
                     log.info("[S021100020] 단체신규등록 audit update 처리결과 : " + result);
                 }
             }
+            resultMap.put("orgId", insertOrgId);
 
             /* 2022.11.23 kjy
              * 앱화면 단체 신규 등록시 입력된 부서명으로 부서 최최등록 추가 후 발번된 부서코드 리턴
@@ -150,14 +155,16 @@ public class S021100020Logic implements S021100020Spec {
                             .build();
                     result = s021100070Store.insertEvent(registerEventVo);
                     if (result > 0) {
-                        resultMessage = resultMessage + "\n 단체명:"+ reqDto.getOrgName()
-                                + "\n 부서명:" + reqDto.getEventNm()
-                                + "\n 신규부서코드:" + newEventCode ;
+                        resultMap.put("orgName", reqDto.getOrgName());
+                        resultMap.put("eventNm", reqDto.getEventNm());
+                        resultMap.put("eventCode", newEventCode);
+
+                        log.info("[S021100020] 앱 단체신규등록 부서신규등록 처리결과 :" + resultMap);
                     }
                 }
             }
 
-            return responseDto.success(insertOrgVo.getOrgId(), resultMessage, HttpStatus.OK);
+            return responseDto.success(resultMap, resultMessage, HttpStatus.OK);
         } catch (Exception e) {
             log.error(e.getMessage());
             throw e;

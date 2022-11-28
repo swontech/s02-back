@@ -20,6 +20,7 @@ public class S021100070Dto {
         private String eventTp;
         private String eventCode;
         private int eventId;
+        private int eventHostId;    /*2022.11.28 kjy*/
     }
 
     @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)

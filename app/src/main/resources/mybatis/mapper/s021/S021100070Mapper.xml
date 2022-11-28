@@ -10,6 +10,7 @@
                 LEV AS EVENT_LEVEL,
                 EVENT_TP
             ,EVENT_CODE     /*2022.11.21 kjy*/
+            ,EVENT_HOST_ID  /*2022.11.28 kjy*/
         FROM	tb_s020.event_hierarchy_view  E_VI
         WHERE	ORG_ID = #{orgId}
         AND     E_VI.DATA_END_STATUS IS NULL    /* 2022.10.29 민성현 부서 삭제 시 조회 쿼리 수정 */

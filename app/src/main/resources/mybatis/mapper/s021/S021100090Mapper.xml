@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="S021100090">
+    <select id="selectCustomerList" parameterType="com.swontech.s02.domain.vo.s021.S021100090Vo$ParamsVo"
+                                      resultType="com.swontech.s02.domain.dto.s021.S021100090Dto$CustomerList">
+        SELECT	/* S021100090 거래처조회-리스트화면 S021100090.selectCustomerList Created By KJY */
+                CUSTOMER_ID,
+                CUSTOMER_NAME,
+                BUSINESS_REG_NO,
+                CEO_NAME,
+                CEO_HP_NO,
+                CEO_EMAIL
+          FROM 	TB_S020.TB_S020_CUSTOMER010
+        WHERE	CUSTOMER_NAME LIKE CONCAT('%',#{customerName}, '%')
+          AND	CEO_NAME  LIKE CONCAT('%',#{ceoName}, '%')
+          AND	BUSINESS_REG_NO  LIKE CONCAT('%',#{businessRegNo}, '%')
+          AND   DATA_END_STATUS IS NULL
+    </select>
+    <select id="selectCustomerDetail" parameterType="com.swontech.s02.domain.vo.s021.S021100090Vo$ParamsVo"
+                                    resultType="com.swontech.s02.domain.dto.s021.S021100090Dto$CustomerDetailInfo">
+        SELECT /* S021100090 거래처조회-상세화면 S021100090.selectCustomerDetail Created By KJY */
+              CUSTOMER_NAME
+            , BUSINESS_TYPE
+            , BUSINESS_SERVICE
+            , BUSINESS_REG_NO
+            , BUSINESS_IMG_FILE_ID
+            , BUSINESS_IMG_FILE_NAME
+            , CO_ZIP_CODE
+            , CO_ADDRESS
+            , CO_DETAIL_ADDRESS
+            , CEO_NAME
+            , CEO_HP_NO
+            , CEO_EMAIL
+            , CEO_ZIP_CODE
+            , CEO_ADDRESS
+            , CEO_DETAIL_ADDRESS
+            , CEO_ID_CARD_IMG_FILE_ID
+            , CEO_ID_CARD_IMG_FILE_NAME
+        WHERE ORG_ID = #{orgId}
+          AND CUSTOMER_ID = #{customerId}	/*선택한 customer_id*/
+    </select>
+
+    <select id="selectCustomerMemberList" parameterType="com.swontech.s02.domain.vo.s021.S021100090Vo$ParamsVo"
+                                        resultType="com.swontech.s02.domain.dto.s021.S021100090Dto$CustomerMemberList">
+        SELECT /* S021100090 거래처조회-직원리스트 조회 S021100090.selectCustomerMemberList Created By KJY */
+              SEQ
+            , EMPLOYEE_NAME
+            , EMPLOYEE_HP_NO
+            , EMPLOYEE_EMAIL
+            , DEPT_NAME
+            , EMPLOYEE_COMMENT
+        WHERE CUSTOMER_ID = #{customerId}	/*선택한 customer_id*/
+    </select>
+
+    <insert id="insertCustomer" parameterType="com.swontech.s02.domain.vo.s021.S021100090Vo$TbCustomer010Vo">
+        <selectKey resultType="java.lang.Integer" keyProperty="customerId" order="AFTER">
+            SELECT  MAX(CUSTOMER_ID)
+              FROM  TB_S020.TB_S020_CUSTOMER010
+        </selectKey>
+
+        INSERT INTO TB_S020.TB_S020_CUSTOMER010 (
+            CUSTOMER_ID,
+            CREATE_OBJECT_ID,
+            CREATE_TIMESTAMP,
+            CREATE_PROGRAM_ID,
+            LAST_OBJECT_ID,
+            UPDATE_TIMESTAMP,
+            UPDATE_PROGRAM_ID,
+            ORG_ID,
+            CUSTOMER_NAME,
+            BUSINESS_TYPE,
+            BUSINESS_SERVICE,
+            BUSINESS_REG_NO,
+            BUSINESS_IMG_FILE_ID,
+            BUSINESS_IMG_FILE_NAME,
+            CO_ZIP_CODE,
+            CO_ADDRESS,
+            CO_DETAIL_ADDRESS,
+            CEO_NAME,
+            CEO_HP_NO,
+            CEO_EMAIL,
+            CEO_ZIP_CODE,
+            CEO_ADDRESS,
+            CEO_DETAIL_ADDRESS,
+            CEO_ID_CARD_IMG_FILE_ID,
+            CEO_ID_CARD_IMG_FILE_NAME
+        ) VALUES  (
+             NEXTVAL(tb_s020.sq_s020_customer010)
+            , #{memberId}	    /*로그인 memberId*/
+            , sysdate()
+            , #{createProgramId}
+            , #{memberId}		/*로그인 memberId*/
+            , sysdate()
+            , #{createProgramId}
+            , #{orgId}
+            , #{customerName}           /*상호명*/
+            , #{businessType}		    /*업태*/
+            , #{businessService}		/*종목*/
+            , #{businessRegNo}		    /*사업자번호 10자리*/
+            , #{businessImgFileId}	    /*사업자사본 파일명*/
+            , #{businessImgFileName}	/*첨부파일 사업자사본 */
+            , #{coZipCode}		        /*회사 우편번호*/
+            , #{coAddress}		        /*회사 주소*/
+            , #{coDetailAddress}		/*회사 상세주소*/
+            , #{ceoName}			    /*대표자명*/
+            , #{ceoHpNo}			    /*대표자 Hp*/
+            , #{ceoEmail}		        /*대표자 Email*/
+            , #{ceoZipCode}		        /*대표자 우편번호*/
+            , #{ceoAddress}		        /*대표자 주소*/
+            , #{ceoDetailAddress}	    /*대표자 상세주소*/
+            , #{ceoIdCardImgFileId}	    /*대표자 신분증 파일ID*/
+            , #{ceoIdCardImgFileName}	/*대표자 신분증 파일명*/
+        )
+    </insert>
+    <update id="updateCustomer" parameterType="com.swontech.s02.domain.vo.s021.S021100090Vo$TbCustomer010Vo">
+        UPDATE TB_S020.TB_S020_CUSTOMER010
+           SET LAST_OBJECT_ID   = #{memberId}		            /*로그인 memberId*/
+            , UPDATE_TIMESTAMP  = sysdate()
+            , UPDATE_PROGRAM_ID = #{updateProgramId}
+            , CUSTOMER_NAME     = #{customerName}	            /*상호명*/
+            , BUSINESS_TYPE     = #{businessType}	            /*업태*/
+            , BUSINESS_SERVICE  = #{businessService}	        /*종목*/
+            , BUSINESS_REG_NO   = #{businessRegNo}		        /*사업자번호 10자리*/
+            , BUSINESS_IMG_FILE_ID   = #{businessImgFileId}	    /*사업자사본 파일명*/
+            , BUSINESS_IMG_FILE_NAME = #{businessImgFileName}	/*첨부파일 사업자사본 */
+            , CO_ZIP_CODE       = #{coZipCode}		        /*회사 우편번호*/
+            , CO_ADDRESS        = #{coAddress}		        /*회사 주소*/
+            , CO_DETAIL_ADDRESS = #{coDetailAddress}		/*회사 상세주소*/
+            , CEO_NAME          = #{ceoName}			    /*대표자명*/
+            , CEO_HP_NO         = #{ceoHpNo}			    /*대표자 Hp*/
+            , CEO_EMAIL         = #{ceoEmail}		        /*대표자 Email*/
+            , CEO_ZIP_CODE      = #{ceoZipCode}		        /*대표자 우편번호*/
+            , CEO_ADDRESS       = #{ceoAddress}		        /*대표자 주소*/
+            , CEO_DETAIL_ADDRESS = #{ceoDetailAddress}	    /*대표자 상세주소*/
+            , CEO_ID_CARD_IMG_FILE_ID   = #{ceoIdCardImgFileId}	    /*대표자 신분증 파일ID*/
+            , CEO_ID_CARD_IMG_FILE_NAME = #{ceoIdCardImgFileName}	/*대표자 신분증 파일명*/
+        WHERE CUSTOMER_ID = #{customerId}	/*선택한 customer_id*/
+    </update>
+
+    <insert id="insertCustomerMember" parameterType="com.swontech.s02.domain.vo.s021.S021100090Vo$TbCustomer020Vo">
+        INSERT INTO TB_S020.TB_S020_CUSTOMER020 (
+            CUSTOMER_ID,
+            SEQ,
+            CREATE_OBJECT_ID,
+            CREATE_TIMESTAMP,
+            CREATE_PROGRAM_ID,
+            LAST_OBJECT_ID,
+            UPDATE_TIMESTAMP,
+            UPDATE_PROGRAM_ID,
+            EMPLOYEE_NAME,
+            EMPLOYEE_HP_NO,
+            EMPLOYEE_EMAIL,
+            DEPT_NAME,
+            EMPLOYEE_COMMENT
+        ) VALUES (
+            , #{customerId}
+            , #{seq}
+            , #{memberId}	    /*로그인 memberId*/
+            , sysdate()
+            , #{createProgramId}
+            , #{memberId}	    /*로그인 memberId*/
+            , sysdate()
+            , #{createProgramId}
+            , #{employeeName}    /*화면 직원명*/
+            , #{employeeHpNo}    /*화면 직원 HP_NO*/
+            , #{employeeEmail}   /*화면 Email*/
+            , #{deptName}        /*화면 부서명*/
+            , #{employeeComment} /*화면 비고*/
+        )
+    </insert>
+
+    <update id="deleteCustomer" parameterType="com.swontech.s02.domain.vo.s021.S021100090Vo$TbCustomer020Vo">
+        UPDATE	TB_S020.TB_S020_CUSTOMER010
+           SET	DATA_END_STATUS     = '*'
+              , DATA_END_PROGRAM_ID = #{updateProgramId}
+              , DATA_END_TIMESTAMP  = SYSDATE()
+              , DATA_END_OBJECT_ID  = #{memberId}
+         WHERE CUSTOMER_ID          = #{customerId}
+           AND DATA_END_STATUS IS NULL
+    </update>
+
+    <update id="deleteCustomerMember" parameterType="java.lang.Integer">
+        DELETE FROM TB_S020.TB_S020_CUSTOMER020
+         WHERE CUSTOMER_ID = #{customerId}	/*선택한 customer_id*/
+    </update>
+
+</mapper>

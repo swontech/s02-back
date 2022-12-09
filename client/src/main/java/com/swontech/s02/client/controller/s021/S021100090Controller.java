@@ -59,7 +59,9 @@ public class S021100090Controller {
     }
 
     @PostMapping("/delete-customer")
-    public ResponseEntity<?> deleteCustomer(int orgId, int memberId, List<Integer> customerIdList ) {
+    public ResponseEntity<?> deleteCustomer(@RequestParam("orgId") int orgId
+                                            , @RequestParam("memberId")  int memberId
+                                            , @RequestBody List<Integer> customerIdList ) {
         return s021100090Spec.deleteCustomer(orgId, memberId, customerIdList);
     }
 }

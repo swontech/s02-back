@@ -180,7 +180,7 @@
     <update id="deleteCustomer" parameterType="com.swontech.s02.domain.vo.s021.S021100090Vo$TbCustomer020Vo">
         UPDATE	TB_S020.TB_S020_CUSTOMER010
            SET	DATA_END_STATUS     = '*'
-              , DATA_END_PROGRAM_ID = #{updateProgramId}
+              , DATA_END_PROGRAM_ID = 'S021100090'
               , DATA_END_TIMESTAMP  = SYSDATE()
               , DATA_END_OBJECT_ID  = #{memberId}
          WHERE CUSTOMER_ID          = #{customerId}

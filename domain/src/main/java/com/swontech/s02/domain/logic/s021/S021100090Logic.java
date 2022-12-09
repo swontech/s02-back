@@ -18,6 +18,8 @@ public class S021100090Logic implements S021100090Spec {
     private final CustomResponse response;
     private final S3BucketSpec s3BucketSpec;
     private final S021100090Store s021100090Store;
+    private final String _PROGRAM_ID = "S021100090";
+
     public S021100090Logic(S021100090Store s021100090Store, CustomResponse response, S3BucketSpec s3BucketSpec) {
         this.s021100090Store = s021100090Store;
         this.response = response;
@@ -73,13 +75,14 @@ public class S021100090Logic implements S021100090Spec {
 
     /*거래처 저장 : 등록,수정(직원 포함) */
     @Override
-    public ResponseEntity<?> saveCustomer(int oegId, int customerId
+    public ResponseEntity<?> saveCustomer(int orgId, int customerId
                     , S021100090Dto.RegisterCustomerDto registerCustomerDto
                     , List<S021100090Dto.RegisterCustomerMemberDto> listCustomerMemberDto) {
         try
         {
             int result = 0;
             boolean isSuccess = false;
+            registerCustomerDto.setOrgId(orgId);
             /**
              * customerId 가 있으면 수정, 0 이면 신규등록
              */
@@ -90,7 +93,7 @@ public class S021100090Logic implements S021100090Spec {
                 //기존 거래처의 직원 삭제
                 if(result > 0) {
                     result = s021100090Store.deleteCustomerMember(S021100090Vo.DeleteCustomerVo.builder()
-                                        .orgId(oegId).customerId(customerId).build()
+                                        .orgId(orgId).customerId(customerId).build()
                                 );
                     log.info("[S021100090] 거래처 회원 삭제 결과 : "+ result);
                     isSuccess = true;
@@ -111,6 +114,7 @@ public class S021100090Logic implements S021100090Spec {
                 for (S021100090Dto.RegisterCustomerMemberDto memberDto : listCustomerMemberDto) {
                     result = 0;
                     S021100090Vo.TbCustomer020Vo memberVo = S021100090Vo.TbCustomer020Vo.builder()
+                            .updateProgramId(this._PROGRAM_ID)
                             .seq(memberDto.getSeq())
                             .customerId(customerId)
                             .employeeName(memberDto.getEmployeeName())
@@ -128,11 +132,14 @@ public class S021100090Logic implements S021100090Spec {
                 }
                 isSuccess = true;
             }
-
+            //최종 직원등록까지 정상이면 success
+            if(isSuccess) {
+                return response.success(customerId, "거래처 정보 등록에 성공했습니다.", HttpStatus.OK);
+            }
         } catch (Exception e) {
             log.info(e.getMessage());
         }
-        return null;
+        return response.fail("거래처 저장에 실패했습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @Override
@@ -191,10 +198,6 @@ public class S021100090Logic implements S021100090Spec {
     private int updateCustomer(S021100090Dto.RegisterCustomerDto reqDto) {
         int result = 0;
         try {
-//            S021100090Dto.PatchCustomerDto patchCustomerDto = new S021100090Dto.PatchCustomerDto();
-//            //use : reqDto:getter, patchCustomerDto:setter
-//            BeanUtils.copyProperties(reqDto, patchCustomerDto);
-
             String curComImgFileId = reqDto.getBusinessImgFileId();
             String curCeoImgFileId = reqDto.getCeoIdCardImgFileId();
 
@@ -221,6 +224,7 @@ public class S021100090Logic implements S021100090Spec {
 
     private S021100090Vo.TbCustomer010Vo setCustomerVo(S021100090Dto.RegisterCustomerDto regDto){
         return S021100090Vo.TbCustomer010Vo.builder()
+                .createProgramId(this._PROGRAM_ID)
                 .customerName(regDto.getCustomerName())        /*화면의 상호명*/
                 .businessType(regDto.getBusinessType())		    /*화면의 업태*/
                 .businessService(regDto.getBusinessService())	/*화면의 종목*/

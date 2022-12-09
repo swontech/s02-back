@@ -12,9 +12,16 @@
                 CEO_HP_NO,
                 CEO_EMAIL
           FROM 	TB_S020.TB_S020_CUSTOMER010
-        WHERE	CUSTOMER_NAME LIKE CONCAT('%',#{customerName}, '%')
-          AND	CEO_NAME  LIKE CONCAT('%',#{ceoName}, '%')
-          AND	BUSINESS_REG_NO  LIKE CONCAT('%',#{businessRegNo}, '%')
+        WHERE	1=1
+        <if test='customerName != null and customerName != ""'>
+          AND   CUSTOMER_NAME LIKE CONCAT('%', #{customerName}, '%')
+        </if>
+        <if test='ceoName != null and ceoName != ""'>
+          AND	CEO_NAME  LIKE CONCAT('%', #{ceoName}, '%')
+        </if>
+        <if test='businessRegNo != null and businessRegNo != ""'>
+          AND	BUSINESS_REG_NO  LIKE CONCAT('%', #{businessRegNo}, '%')
+        </if>
           AND   DATA_END_STATUS IS NULL
     </select>
     <select id="selectCustomerDetail" parameterType="com.swontech.s02.domain.vo.s021.S021100090Vo$ParamsVo"
@@ -154,7 +161,7 @@
             DEPT_NAME,
             EMPLOYEE_COMMENT
         ) VALUES (
-            , #{customerId}
+              #{customerId}
             , #{seq}
             , #{memberId}	    /*로그인 memberId*/
             , sysdate()

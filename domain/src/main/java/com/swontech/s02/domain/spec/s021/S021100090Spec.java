@@ -16,13 +16,13 @@ public interface S021100090Spec {
     ResponseEntity<?> registerCustomer(S021100090Dto.RegisterCustomerDto reqDto);
 
     /** 거래처 회원 등록 */
-    ResponseEntity<?> registerCustomerMember(int eventId, List<S021100090Dto.RegisterCustomerMemberDto> listMemberDto );
+    ResponseEntity<?> registerCustomerMember(int customerId, List<S021100090Dto.RegisterCustomerMemberDto> listMemberDto );
 
     /** 거래처 수정 */
     ResponseEntity<?> patchCustomer(S021100090Dto.RegisterCustomerDto reqDto);
 
     /** 거래처 저장 : 화면에서 저장버튼 기능 */
-    ResponseEntity<?> saveCustomer(int oegId, int customerId,
+    ResponseEntity<?> saveCustomer(int orgId, int customerId,
                                    S021100090Dto.RegisterCustomerDto registerCustomerDto,
                                    List<S021100090Dto.RegisterCustomerMemberDto> listCustomerMemberDto);
     /* 거래처 삭제 */

@@ -10,7 +10,7 @@ public interface S021100090Spec {
     ResponseEntity<?> retrieveCustomerList(S021100090Dto.ParamsDto paramsDto);
     ResponseEntity<?> retrieveCustomerDetail(int orgId, int customerId);
 
-    ResponseEntity<?> retrieveCustomerMemberList(int orgId, int customerId);
+    ResponseEntity<?> retrieveCustomerMemberList(int customerId);
 
     /** 거래처 등록 */
     ResponseEntity<?> registerCustomer(S021100090Dto.RegisterCustomerDto reqDto);

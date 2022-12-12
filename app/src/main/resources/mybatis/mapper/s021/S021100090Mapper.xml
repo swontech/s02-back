@@ -58,6 +58,7 @@
             , EMPLOYEE_EMAIL
             , DEPT_NAME
             , EMPLOYEE_COMMENT
+        FROM  TB_S020.TB_S020_CUSTOMER020
         WHERE CUSTOMER_ID = #{customerId}	/*선택한 customer_id*/
     </select>
 

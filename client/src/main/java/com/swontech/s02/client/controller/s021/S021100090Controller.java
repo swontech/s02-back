@@ -38,6 +38,11 @@ public class S021100090Controller {
         return s021100090Spec.retrieveCustomerDetail(orgId, customerId);
     }
 
+    @GetMapping("/customer-member")
+    public ResponseEntity<?> retrieveCustomerMemberList(@RequestParam("customerId") int customerId) {
+        return s021100090Spec.retrieveCustomerMemberList(customerId);
+    }
+
     @PostMapping("/save-customer")
     public ResponseEntity<?> saveCustomer(@RequestParam("orgId") int orgId
                                         , @RequestParam("customerId") @Parameter(name = "customerId", description = "신규:부서등록시 발번된 eventId, 기존:해당부서의 eventId") int customerId

@@ -45,9 +45,9 @@ public class S021100090Logic implements S021100090Spec {
     }
 
     @Override
-    public ResponseEntity<?> retrieveCustomerMemberList(int orgId, int customerId) {
+    public ResponseEntity<?> retrieveCustomerMemberList(int customerId) {
         return response.success(s021100090Store.selectCustomerMemberList(S021100090Vo.ParamsVo.builder()
-                .orgId(orgId).customerId(customerId).build()
+                .customerId(customerId).build()
         ));
     }
 

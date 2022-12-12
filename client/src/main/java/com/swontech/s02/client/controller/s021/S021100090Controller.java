@@ -27,6 +27,7 @@ public class S021100090Controller {
 
     @GetMapping("/customer")
     public ResponseEntity<?> retrieveCustomerList(S021100090Dto.ParamsDto paramsDto) {
+
         return s021100090Spec.retrieveCustomerList(paramsDto);
     }
 

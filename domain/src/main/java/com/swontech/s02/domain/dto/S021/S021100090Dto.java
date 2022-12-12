@@ -1,13 +1,11 @@
 package com.swontech.s02.domain.dto.s021;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 public class S021100090Dto {
     @Getter
+    @Setter
     @AllArgsConstructor
     @NoArgsConstructor
     public static class ParamsDto {

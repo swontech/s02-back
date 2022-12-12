@@ -132,11 +132,11 @@ public class S021100090Logic implements S021100090Spec {
 
                     log.info("[S021100090] 거래처 회원등록 처리결과: " + result);
                 }
-                isSuccess = true;
+                if(result > 0) isSuccess = true;
             }
             //최종 직원등록까지 정상이면 success
             if(isSuccess) {
-                return response.success(customerId, "거래처 정보 등록에 성공했습니다.", HttpStatus.OK);
+                return response.success(customerId, "거래처 정보 저장에 성공했습니다.", HttpStatus.OK);
             }
         } catch (Exception e) {
             log.info(e.getMessage());
@@ -171,14 +171,8 @@ public class S021100090Logic implements S021100090Spec {
         try {
             //사업자 사본 이미지 첨부
             String comImgFileId = this.imgUpload(null, regDto.getComImgBase64String(), "customer");
-//            if (StringUtils.hasLength(regDto.getComImgBase64String())) {
-//                comImgFileId = s3BucketSpec.upload(regDto.getComImgBase64String(), "customer");
-//            }
             //대표자 사진 첨부
             String ceoImgFileId = this.imgUpload(null, regDto.getCeoImgBase64String(), "ceo");
-//            if (StringUtils.hasLength(regDto.getCeoImgBase64String())) {
-//                ceoImgFileId = s3BucketSpec.upload(regDto.getCeoImgBase64String(), "ceo");
-//            }
             log.info("[S021100090] 거래처 사업자 사본 이미지첨부 결과 : " + comImgFileId);
             log.info("[S021100090] 거래처 대표자 사진 첨부 결과 : " + ceoImgFileId);
 
@@ -205,21 +199,22 @@ public class S021100090Logic implements S021100090Spec {
 
             log.info("[S021100090] 거래처 기존 사업자 사본 : " + curComImgFileId);
             log.info("[S021100090] 거래처 기존 대표자 사진 : " + curCeoImgFileId);
-//            if (StringUtils.hasLength(curComImgFileId)) {
-//                s3BucketSpec.delete(curComImgFileId, "customer");    //기존 파일 삭제
-//            }
-//            if (StringUtils.hasLength(curComImgFileId)) {
-//                s3BucketSpec.delete(curComImgFileId, "ceo");    //기존 파일 삭제
-//            }
-            //사업자 사본 이미지
-            String comImgFileId = this.imgUpload(curComImgFileId, reqDto.getComImgBase64String(), "customer");
-            //대표자 사진 첨부
-            String ceoImgFileId = this.imgUpload(curCeoImgFileId, reqDto.getCeoImgBase64String(), "ceo");
 
             S021100090Vo.TbCustomer010Vo registerVo = this.setCustomerVo(reqDto);
-            registerVo.setBusinessImgFileId(comImgFileId);
-            registerVo.setCeoIdCardImgFileId(ceoImgFileId);
             registerVo.setCustomerId(reqDto.getCustomerId());
+
+            if (StringUtils.hasLength(reqDto.getComImgBase64String())) {
+                //사업자 사본 이미지
+                String comImgFileId = this.imgUpload(curComImgFileId, reqDto.getComImgBase64String(), "customer");
+                registerVo.setBusinessImgFileId(comImgFileId);
+                log.info("[S021100090] 거래처 사업자 사본 첨부화일 수정 : " + comImgFileId);
+            }
+            if (StringUtils.hasLength(reqDto.getComImgBase64String())) {
+                //대표자 사진 첨부
+                String ceoImgFileId = this.imgUpload(curCeoImgFileId, reqDto.getCeoImgBase64String(), "ceo");
+                registerVo.setCeoIdCardImgFileId(ceoImgFileId);
+                log.info("[S021100090] 거래처 대표자 첨부화일 수정 : " + ceoImgFileId);
+            }
 
             result = s021100090Store.updateCustomer(registerVo);
 
@@ -239,8 +234,7 @@ public class S021100090Logic implements S021100090Spec {
                 .businessType(regDto.getBusinessType())		    /*화면의 업태*/
                 .businessService(regDto.getBusinessService())	/*화면의 종목*/
                 .businessRegNo(regDto.getBusinessRegNo())		/*화면의 사업자번호 10자리*/
-//        .businessImgFileId(regDto.getBusinessImgFileId())	/*화면의 사업자사본 파일명*/
-//        .businessImgFileName()		/*첨부파일 사업자사본 */
+                .businessImgFileName(regDto.getBusinessImgFileName())		/*화면의 사업자사본 파일명 */
                 .coZipCode(regDto.getCoZipCode())				/*회사 우편번호*/
                 .coAddress(regDto.getCoAddress())				/*회사 주소*/
                 .coDetailAddress(regDto.getCoDetailAddress())	/*회사 상세주소*/
@@ -257,11 +251,14 @@ public class S021100090Logic implements S021100090Spec {
     private String imgUpload(String imgFileId, String base64String, String flag) {
 
         String rsImgFileId = null;
-        //imgFileId != 널이면 수정이므로 기존 파일 삭제 후 첨부
-        if (StringUtils.hasLength(imgFileId)) {
-            s3BucketSpec.delete(imgFileId, flag);    //기존 파일 삭제
-        }
+        /* 첨부화일 처리 조건
+         * : base64String 항목값 유무에 따라 기존화일 삭제 체크
+         */
         if (StringUtils.hasLength(base64String)) {
+            //imgFileId != 널이면 수정이므로 기존 파일 삭제 후 첨부
+            if (StringUtils.hasLength(imgFileId)) {
+                s3BucketSpec.delete(imgFileId, flag);    //기존 파일 삭제
+            }
             rsImgFileId = s3BucketSpec.upload(base64String, flag);  //신규 화일 첨부
         }
         return rsImgFileId;

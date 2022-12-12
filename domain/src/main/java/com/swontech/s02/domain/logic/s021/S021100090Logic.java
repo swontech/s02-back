@@ -32,6 +32,7 @@ public class S021100090Logic implements S021100090Spec {
         return response.success(s021100090Store.selectCustomerList(S021100090Vo.ParamsVo.builder()
                             .orgId(paramsDto.getOrgId())
                             .customerName(paramsDto.getCustomerName())
+                            .businessRegNo(paramsDto.getCustomerName())
                             .ceoName(paramsDto.getCeoName()).build()
                         ));
     }

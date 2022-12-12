@@ -36,11 +36,11 @@ public class S021100090Logic implements S021100090Spec {
                         ));
     }
     @Override
-    public ResponseEntity<?> retrieveCustomerDetail(S021100090Dto.ParamsDto paramsDto) {
+    public ResponseEntity<?> retrieveCustomerDetail(int orgId, int customerId) {
+        log.info("거래처 상세조회 customerId :"+ customerId);
         return response.success(s021100090Store.selectCustomerDetail(S021100090Vo.ParamsVo.builder()
-                            .orgId(paramsDto.getOrgId())
-                            .customerName(paramsDto.getCustomerName())
-                            .ceoName(paramsDto.getCeoName()).build()
+                            .orgId(orgId)
+                            .customerId(customerId).build()
             ));
     }
 
@@ -87,6 +87,7 @@ public class S021100090Logic implements S021100090Spec {
              * customerId 가 있으면 수정, 0 이면 신규등록
              */
             if(customerId > 0) {
+                registerCustomerDto.setCustomerId(customerId);
                 result = this.updateCustomer(registerCustomerDto);
                 log.info("[S021100090] 거래처 수정 결과 : "+ result);
 
@@ -214,7 +215,12 @@ public class S021100090Logic implements S021100090Spec {
             //대표자 사진 첨부
             String ceoImgFileId = this.imgUpload(curCeoImgFileId, reqDto.getCeoImgBase64String(), "ceo");
 
-//            result = s021100090Store.updateCustomer();
+            S021100090Vo.TbCustomer010Vo registerVo = this.setCustomerVo(reqDto);
+            registerVo.setBusinessImgFileId(comImgFileId);
+            registerVo.setCeoIdCardImgFileId(ceoImgFileId);
+            registerVo.setCustomerId(reqDto.getCustomerId());
+
+            result = s021100090Store.updateCustomer(registerVo);
 
         } catch (Exception e) {
             log.error(e.getMessage());
@@ -225,6 +231,9 @@ public class S021100090Logic implements S021100090Spec {
     private S021100090Vo.TbCustomer010Vo setCustomerVo(S021100090Dto.RegisterCustomerDto regDto){
         return S021100090Vo.TbCustomer010Vo.builder()
                 .createProgramId(this._PROGRAM_ID)
+                .updateProgramId(this._PROGRAM_ID)
+                .orgId(regDto.getOrgId())
+                .memberId(regDto.getMemberId())
                 .customerName(regDto.getCustomerName())        /*화면의 상호명*/
                 .businessType(regDto.getBusinessType())		    /*화면의 업태*/
                 .businessService(regDto.getBusinessService())	/*화면의 종목*/

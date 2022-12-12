@@ -8,7 +8,7 @@ import java.util.List;
 public interface S021100090Spec {
     /*거래처 리스트*/
     ResponseEntity<?> retrieveCustomerList(S021100090Dto.ParamsDto paramsDto);
-    ResponseEntity<?> retrieveCustomerDetail(S021100090Dto.ParamsDto paramsDto);
+    ResponseEntity<?> retrieveCustomerDetail(int orgId, int customerId);
 
     ResponseEntity<?> retrieveCustomerMemberList(int orgId, int customerId);
 

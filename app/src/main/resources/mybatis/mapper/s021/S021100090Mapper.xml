@@ -44,6 +44,7 @@
             , CEO_DETAIL_ADDRESS
             , CEO_ID_CARD_IMG_FILE_ID
             , CEO_ID_CARD_IMG_FILE_NAME
+         FROM TB_S020.TB_S020_CUSTOMER010
         WHERE ORG_ID = #{orgId}
           AND CUSTOMER_ID = #{customerId}	/*선택한 customer_id*/
     </select>

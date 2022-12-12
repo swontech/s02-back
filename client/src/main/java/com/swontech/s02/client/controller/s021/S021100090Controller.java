@@ -31,8 +31,11 @@ public class S021100090Controller {
     }
 
     @GetMapping("/customer-detail")
-    public ResponseEntity<?> retrieveCustomerDetail(S021100090Dto.ParamsDto paramsDto) {
-        return s021100090Spec.retrieveCustomerDetail(paramsDto);
+    public ResponseEntity<?> retrieveCustomerDetail(@RequestParam("orgId") int orgId
+                                                  , @RequestParam("customerId") int customerId)
+    {
+        log.info("거래처 상세조회 api 호출 customerId :"+ customerId);
+        return s021100090Spec.retrieveCustomerDetail(orgId, customerId);
     }
 
     @PostMapping("/save-customer")

@@ -81,8 +81,10 @@ public class S021100090Logic implements S021100090Spec {
                     , List<S021100090Dto.RegisterCustomerMemberDto> listCustomerMemberDto) {
         try
         {
-            int result = 0;
+            int   result      = 0;
+            int   iMemberCnt  = listCustomerMemberDto.size();
             boolean isSuccess = false;
+
             registerCustomerDto.setOrgId(orgId);
             /**
              * customerId 가 있으면 수정, 0 이면 신규등록
@@ -107,9 +109,9 @@ public class S021100090Logic implements S021100090Spec {
                 customerId = result; //신규등록시 발번된 sequence
                 isSuccess = true;
             }
-
+            log.info("[S021100090] 거래처 회원등록 처리 대상건수 : " + iMemberCnt);
             //거래처 직원 등록 처리
-            if(isSuccess) {
+            if(isSuccess && iMemberCnt > 0) {
                 isSuccess = false;
 
                 // 회원정보 insert : 넘겨받은 회원정보수 만큼 vo로 변환하여 looping
@@ -126,14 +128,13 @@ public class S021100090Logic implements S021100090Spec {
                             .employeeComment(memberDto.getEmployeeComment())
                             .memberId(memberDto.getMemberId())
                             .build();
-                    log.info("[S021100090] 거래처 회원등록 대상 MemberId: " + memberVo.getMemberId() );
-
                     result = s021100090Store.insertCustomerMember(memberVo);
 
-                    log.info("[S021100090] 거래처 회원등록 처리결과: " + result);
+                    log.info("[S021100090] 거래처 직원등록 처리결과: " + result);
                 }
-                if(result > 0) isSuccess = true;
+                if(result == iMemberCnt) isSuccess = true;
             }
+            
             //최종 직원등록까지 정상이면 success
             if(isSuccess) {
                 return response.success(customerId, "거래처 정보 저장에 성공했습니다.", HttpStatus.OK);
@@ -164,7 +165,6 @@ public class S021100090Logic implements S021100090Spec {
         }
         return response.success("","거래처 삭제처리되었습니다", HttpStatus.OK);
     }
-
 
     private int insertCustomer(S021100090Dto.RegisterCustomerDto regDto) {
         int newCustomerId = 0;
@@ -208,12 +208,16 @@ public class S021100090Logic implements S021100090Spec {
                 String comImgFileId = this.imgUpload(curComImgFileId, reqDto.getComImgBase64String(), "customer");
                 registerVo.setBusinessImgFileId(comImgFileId);
                 log.info("[S021100090] 거래처 사업자 사본 첨부화일 수정 : " + comImgFileId);
+            } else {
+                registerVo.setBusinessImgFileId(curComImgFileId);
             }
             if (StringUtils.hasLength(reqDto.getComImgBase64String())) {
                 //대표자 사진 첨부
                 String ceoImgFileId = this.imgUpload(curCeoImgFileId, reqDto.getCeoImgBase64String(), "ceo");
                 registerVo.setCeoIdCardImgFileId(ceoImgFileId);
                 log.info("[S021100090] 거래처 대표자 첨부화일 수정 : " + ceoImgFileId);
+            } else {
+                registerVo.setCeoIdCardImgFileId(curCeoImgFileId);
             }
 
             result = s021100090Store.updateCustomer(registerVo);
@@ -258,6 +262,7 @@ public class S021100090Logic implements S021100090Spec {
             //imgFileId != 널이면 수정이므로 기존 파일 삭제 후 첨부
             if (StringUtils.hasLength(imgFileId)) {
                 s3BucketSpec.delete(imgFileId, flag);    //기존 파일 삭제
+                log.info("[S021100090] 거래처 대표자 첨부화일 삭제 : " + imgFileId);
             }
             rsImgFileId = s3BucketSpec.upload(base64String, flag);  //신규 화일 첨부
         }

@@ -57,4 +57,10 @@ public class S022300010Repository implements S022300010Store {
         return sqlSessionTemplate.selectList("S022300010.excelCostPayTotalLine", excelParamsVo);
     }
 
+    /*2023.02.27 재정청구서 엑셀*/
+    @Override
+    public List<S022300010Dto.ExcelOjicFinBillUpload> excelExcelOjicFinBillUpload(S022300010Vo.ExcelParamsVo excelParamsVo) {
+        return sqlSessionTemplate.selectList("S022300010.excelExcelOjicFinBillUpload", excelParamsVo);
+    }
+
 }

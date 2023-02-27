@@ -74,4 +74,11 @@ public class S022300010Controller {
 
         return s022300010Spec.excelCostPayTotalLine(reqDto);
     }
+
+    @Operation(summary ="제정청구양식(엑셀)", description = "재정청구양식 업로드용 엑셀 조회")
+    @GetMapping("/excel-ojic-bill")
+    public ResponseEntity<?> excelExcelOjicFinBillUpload(S022300010Dto.ExcelParamsReqDto reqDto) {
+
+        return s022300010Spec.excelExcelOjicFinBillUpload(reqDto);
+    }
 }

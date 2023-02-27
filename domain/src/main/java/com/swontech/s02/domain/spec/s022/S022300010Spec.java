@@ -26,4 +26,6 @@ public interface S022300010Spec {
     /*excel download 조회*/
     ResponseEntity<?> excelCostPayTotalHead(S022300010Dto.ExcelParamsReqDto reqDto);
     ResponseEntity<?> excelCostPayTotalLine(S022300010Dto.ExcelParamsReqDto reqDto);
+    /*2023.02.27 재정청구서 엑셀*/
+    ResponseEntity<?> excelExcelOjicFinBillUpload(S022300010Dto.ExcelParamsReqDto reqDto);
 }

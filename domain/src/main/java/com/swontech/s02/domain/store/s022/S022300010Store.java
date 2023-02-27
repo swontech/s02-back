@@ -25,4 +25,6 @@ public interface S022300010Store {
     List<S022300010Dto.ExcelCostPayTotalHead> excelCostPayTotalHead(S022300010Vo.ExcelParamsVo excelParamsVo);
 
     List<S022300010Dto.ExcelCostPayTotalLine> excelCostPayTotalLine(S022300010Vo.ExcelParamsVo excelParamsVo);
+    /*2023.02.27 재정청구서 엑셀*/
+    List<S022300010Dto.ExcelOjicFinBillUpload> excelExcelOjicFinBillUpload(S022300010Vo.ExcelParamsVo excelParamsVo);
 }

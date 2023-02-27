@@ -224,5 +224,45 @@
     AND		E_PATH.ID_PATH_PRIORTIY = #{idPathPriortiy}
     AND		E030.USED_DATE BETWEEN #{fromUsedDate} AND #{toUsedDate}
     </select>
-
+    <select id="excelExcelOjicFinBillUpload" parameterType="com.swontech.s02.domain.vo.s022.S022300010Vo$ExcelParamsVo"
+            resultType="com.swontech.s02.domain.dto.s022.S022300010Dto$ExcelOjicFinBillUpload">
+        WITH  EVENT_PATH AS (
+        SELECT  PRI.EVENT_PATH,
+        CASE WHEN CHAR_LENGTH(PRI.EVENT_PATH) - CHAR_LENGTH(REPLACE(PRI.EVENT_PATH, '-', '')) = 0 THEN EVENT_PATH
+        ELSE SUBSTRING_INDEX(PRI.EVENT_PATH, '-', 1)
+        END  EVENT_PATH_0,
+        CASE WHEN CHAR_LENGTH(PRI.EVENT_PATH) - CHAR_LENGTH(REPLACE(PRI.EVENT_PATH, '-', '')) >= 1 THEN SUBSTRING_INDEX(SUBSTRING_INDEX(PRI.EVENT_PATH, '-', 2),'-',  -1)
+        ELSE NULL
+        END  EVENT_PATH_1,
+        CASE WHEN CHAR_LENGTH(PRI.EVENT_PATH) - CHAR_LENGTH(REPLACE(PRI.EVENT_PATH, '-', '')) >= 2 THEN SUBSTRING_INDEX(SUBSTRING_INDEX(PRI.EVENT_PATH, '-', 3),'-',  -1)
+        ELSE NULL
+        END  EVENT_PATH_2,
+        CASE WHEN CHAR_LENGTH(PRI.EVENT_PATH) - CHAR_LENGTH(REPLACE(PRI.EVENT_PATH, '-', '')) >= 3 THEN SUBSTRING_INDEX(SUBSTRING_INDEX(PRI.EVENT_PATH, '-', 4),'-',  -1)
+        ELSE NULL
+        END  EVENT_PATH_3,
+        PRI.EVENT_ID,
+        PRI.ID_PATH_PRIORTIY,
+        PRI.EVENT_BUDGET_AMOUNT,
+        PRI.MAIN_EVENT_HOST_ID
+        FROM 	TB_S020.EVENT_HIERARCHY_VIEW	PRI
+        WHERE	EVENT_FINAL_FLAG = 'Y' )
+        SELECT
+        ID_PATH_PRIORTIY
+        ,USED_DATE,
+        NULL	AS PAY_MTHD,		-- 지급방식
+        M010.MEMBER_NAME,			-- 수령자
+        M010.BANK_NM,				-- 은행
+        M010.MEMBER_NAME,			-- 예금주
+        M010.ACCOUNT_NO,			-- 계좌번호
+        E030.USE_AMOUNT,			-- 금액
+        E030.USE_COMMENT			-- 지출내역, 적요
+        FROM    TB_S020.TB_S020_EVENT030 E030
+        INNER JOIN EVENT_PATH  E_PATH
+        ON E030.EVENT_ID = E_PATH.EVENT_ID
+        INNER JOIN	TB_S020.TB_S020_MEMBER010 M010
+        ON M010.MEMBER_ID = E030.EVENT_USER_ID
+        WHERE	E030.USE_PRO_STATUS IN ('A', 'B', 'C', 'D')
+         AND	E_PATH.ID_PATH_PRIORTIY = #{idPathPriortiy}			/* 발의부서 ID*/
+         AND	E030.USED_DATE BETWEEN #{fromUsedDate} AND #{toUsedDate}	/*조회 기간  */
+    </select>
 </mapper>

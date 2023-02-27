@@ -129,5 +129,17 @@ public class S022300010Dto {
         private String useSubject;
     }
 
+    @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
+    public static class ExcelOjicFinBillUpload {
+        private String idPathPriortiy;
+        private String usedDate;
+        private String payMethod;
+        private String memberName;
+        private String bankNm;
+        private int payComment;
+        private String accountNo;
+        private String useAmount;
+        private String useComment;
+    }
 
 }

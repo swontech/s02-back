@@ -126,5 +126,15 @@ public class S022300010Logic implements S022300010Spec {
                         .idPathPriortiy(reqDto.getIdPathPriortiy()).build())
         );
     }
+    /*2023.02.27 재정청구서 엑셀*/
+    @Override
+    public ResponseEntity<?> excelExcelOjicFinBillUpload(S022300010Dto.ExcelParamsReqDto reqDto) {
+        return response.success(s022300010Store.excelExcelOjicFinBillUpload(
+                S022300010Vo.ExcelParamsVo.builder()
+                        .fromUsedDate(reqDto.getFromUsedDate())
+                        .toUsedDate(reqDto.getToUsedDate())
+                        .idPathPriortiy(reqDto.getIdPathPriortiy()).build())
+        );
+    }
 
 }

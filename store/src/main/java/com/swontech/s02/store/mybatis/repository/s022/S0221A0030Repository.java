@@ -38,5 +38,10 @@ public class S0221A0030Repository implements S0221A0030Store {
         return sqlSessionTemplate.update("S0221A0030.updateMobileId", updateMobileIdVo);
     }
 
+    @Override
+    public int updatePushToken(S0221A0030Vo.UpdateTokenVo updateTokenVo) {
+        return sqlSessionTemplate.update("S0221A0030.updateToken", updateTokenVo);
+    }
+
 
 }

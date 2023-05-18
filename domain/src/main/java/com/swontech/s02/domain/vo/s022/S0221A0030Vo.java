@@ -19,6 +19,7 @@ public class S0221A0030Vo {
         private int orgId;
         private String memberName;
         private String hpNo;
+        private String pushToken;
     }
 
     @Builder
@@ -37,5 +38,11 @@ public class S0221A0030Vo {
     public static class UpdateMobileIdVo {
         private String mobileId;
         private int memberId;
+    }
+
+    @Builder
+    public static class UpdateTokenVo {
+        private int memberId;
+        private String pushToken;
     }
 }

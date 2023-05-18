@@ -1,6 +1,7 @@
 package com.swontech.s02.domain.vo.s022;
 
 import lombok.Builder;
+import lombok.Getter;
 
 public class S0221A0060Vo {
 
@@ -18,7 +19,9 @@ public class S0221A0060Vo {
     }
 
     @Builder
+    @Getter
     public static class InsertEventCostVo {
+        private int eventUseId;
         private int eventUserId;
         private String useSubject;
         private int eventId;

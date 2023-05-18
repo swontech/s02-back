@@ -119,6 +119,10 @@
             SYSDATE(),
             'S0221A0060'
         )
+        <selectKey resultType="java.lang.Integer" keyProperty="eventUseId" order="AFTER">
+            SELECT  MAX(EVENT_USE_ID)
+            FROM    tb_s020.tb_s020_event030
+        </selectKey>
     </insert>
 
     <update id="deleteEventCost" parameterType="java.lang.Integer">

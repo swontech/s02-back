@@ -19,5 +19,6 @@ public class S0221A0030Dto {
         private Integer orgId;
         private String eventCode;
         private String eventPayUserId;
+        private String pushToken;
     }
 }

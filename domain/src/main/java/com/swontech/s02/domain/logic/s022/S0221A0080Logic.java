@@ -1,9 +1,12 @@
 package com.swontech.s02.domain.logic.s022;
 
+import com.swontech.s02.domain.common.util.PushNotificationLogic;
 import com.swontech.s02.domain.dto.comm.CustomResponse;
 import com.swontech.s02.domain.dto.s022.S0221A0080Dto;
+import com.swontech.s02.domain.dto.s022.S0221A0090Dto;
 import com.swontech.s02.domain.spec.s022.S0221A0080Spec;
 import com.swontech.s02.domain.store.s022.S0221A0080Store;
+import com.swontech.s02.domain.store.s022.S0221A0090Store;
 import com.swontech.s02.domain.vo.s022.S0221A0080Vo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -13,23 +16,28 @@ import org.springframework.http.ResponseEntity;
 public class S0221A0080Logic implements S0221A0080Spec {
     private final CustomResponse response;
     private final S0221A0080Store s0221A0080Store;
-    public S0221A0080Logic(CustomResponse response, S0221A0080Store s0221A0080Store) {
+    private final PushNotificationLogic pushNotificationLogic;
+    private final S0221A0090Store s0221A0090Store;
+
+    public S0221A0080Logic(CustomResponse response, S0221A0080Store s0221A0080Store, PushNotificationLogic pushNotificationLogic, S0221A0090Store s0221A0090Store) {
         this.response = response;
         this.s0221A0080Store = s0221A0080Store;
+        this.pushNotificationLogic = pushNotificationLogic;
+        this.s0221A0090Store = s0221A0090Store;
     }
 
     @Override
     public ResponseEntity<?> retrieveCostReqDetail(int eventUseId) {
         S0221A0080Dto.CostReqDetailHeader header = s0221A0080Store.selectCostReqDetailHeader(eventUseId);
-        if(header == null) {
+        if (header == null) {
             return response.fail("등록된 행사비용 사용 내역이 없습니다.", HttpStatus.BAD_REQUEST);
         }
         return response.success(
-            S0221A0080Dto.CostReqDetailResponse
-                    .builder()
+                S0221A0080Dto.CostReqDetailResponse
+                        .builder()
                         .header(header)
                         .detail(s0221A0080Store.selectCostReqDetailTail(eventUseId))
-                    .build()
+                        .build()
         );
     }
 
@@ -48,7 +56,7 @@ public class S0221A0080Logic implements S0221A0080Spec {
              *  eventUseId의 현재결제진행정보tb_s020_event030를 가져온다.
              *  ******************************************* */
             S0221A0080Dto.SelectCostReqCurrInfoDto currentInfo = s0221A0080Store.selectCostReqCurrInfo(reqDto.getEventUseId());
-            if(currentInfo == null) {
+            if (currentInfo == null) {
                 return response.fail("등록된 비용요청 정보가 없습니다.", HttpStatus.BAD_REQUEST);
             } else {
                 payStepCnt = currentInfo.getPayStepCnt();
@@ -61,23 +69,23 @@ public class S0221A0080Logic implements S0221A0080Spec {
              *  결제내역 정보를 tb_s020_event040에 insert한다.
              *  ******************************************* */
             int insertResult = s0221A0080Store.insertCostReqProcess(
-                S0221A0080Vo.InsertCostReqProcessVo
-                    .builder()
+                    S0221A0080Vo.InsertCostReqProcessVo
+                            .builder()
                             .eventUseId(reqDto.getEventUseId())
                             .payCurrentStep(reqDto.getPayCurrentStep())
                             .payMemberId(reqDto.getMemberId())
                             .payResultFlag(reqDto.getPayResultFlag())
                             .payComment(reqDto.getPayComment())
                             .useProStatus(currentUseProStatus) /* 2022.11.14 kjy */
-                    .build());
-            if(insertResult < 1) {
+                            .build());
+            if (insertResult < 1) {
                 return response.fail("결제내역정보를 Insert 하는 중 오류가 발생했습니다", HttpStatus.INTERNAL_SERVER_ERROR);
             }
 
 
             /** case 1.승인처리인 경우  *
              *  pay_result_flag = Y */
-            if("Y".equals(reqDto.getPayResultFlag())) {
+            if ("Y".equals(reqDto.getPayResultFlag())) {
                 /** ===============================================================================
                  * 1-1. 현재 행사비용진행상태(useProStatus) 비용요청인지 결제진행인지 반려상태인지 본다
                  * --------------------------------------------------------------------------------
@@ -93,12 +101,12 @@ public class S0221A0080Logic implements S0221A0080Spec {
                  *  payCurrentStep  = 현재 결제진행상태
                  *  --------------------------------------------------------------------------------
                  * */
-                switch(currentUseProStatus) {
+                switch (currentUseProStatus) {
                     // 현재 결제 진행상태가 비용요청상태인 경우 전제결제진행단계가 현재결제진행상태의 다음단계와 같다면
                     // 최종결제완료(C)로 상태를 update하지만
                     // 그렇지 않다면 결제진행상태(B)로 update한다.
                     case "A":
-                        if(payStepCnt < nextPayCurrentStep) {
+                        if (payStepCnt < nextPayCurrentStep) {
                             nextUseProStatus = "C";    // 최종 결제완료
                         } else {
                             nextUseProStatus = "B";    // 진행 중 결제완료
@@ -109,7 +117,7 @@ public class S0221A0080Logic implements S0221A0080Spec {
                     // 최종결제완료(C)로 상태를 update하지만
                     // 그렇지 않다면 결제진행상태(B)로 유지한다.
                     case "B":
-                        if(payStepCnt < nextPayCurrentStep) {
+                        if (payStepCnt < nextPayCurrentStep) {
                             nextUseProStatus = "C";                 // 최종 결제 완료
                         } else {
                             nextUseProStatus = currentUseProStatus; // 현상태로 유지
@@ -120,7 +128,7 @@ public class S0221A0080Logic implements S0221A0080Spec {
                     // 최종결제완료(C)로 상태를 update하지만
                     // 그렇지 않다면 결제진행상태(B)로 유지한다.
                     case "E":
-                            nextUseProStatus = "A";    // 비용요청
+                        nextUseProStatus = "A";    // 비용요청
                         break;
                     default:
                         // case C(결제완료)/D(지급완료)/F(요청취소)
@@ -128,25 +136,46 @@ public class S0221A0080Logic implements S0221A0080Spec {
                 }
                 // update처리
                 s0221A0080Store.updateCostReqProcess(S0221A0080Vo.UpdateCostReqProcessVo
-                   .builder()
-                            .eventUseId(reqDto.getEventUseId())
-                            .payCurrentStep(nextPayCurrentStep)
-                            .useProStatus(nextUseProStatus)
-                   .build()
+                        .builder()
+                        .eventUseId(reqDto.getEventUseId())
+                        .payCurrentStep(nextPayCurrentStep)
+                        .useProStatus(nextUseProStatus)
+                        .build()
                 );
 
 
-            /** case 1.반려처리인 경우  *
-             *  pay_result_flag = N */
-            } else if("N".equals(reqDto.getPayResultFlag())) {
+                /** case 1.반려처리인 경우  *
+                 *  pay_result_flag = N */
+            } else if ("N".equals(reqDto.getPayResultFlag())) {
                 s0221A0080Store.updateCostReqProcess(S0221A0080Vo.UpdateCostReqProcessVo
                         .builder()
-                                .eventUseId(reqDto.getEventUseId())
-                                .payCurrentStep(0)              // 현재 결제진행 단계: 초기(0)
-                                .useProStatus("E")              // 현재 결제진행 상태: 반려상태(E)
+                        .eventUseId(reqDto.getEventUseId())
+                        .payCurrentStep(0)              // 현재 결제진행 단계: 초기(0)
+                        .useProStatus("E")              // 현재 결제진행 상태: 반려상태(E)
                         .build()
                 );
             }
+
+            // 푸시알림 발송
+            S0221A0090Dto.AppPushUser appPushUser = s0221A0090Store.selectAppPushUser(reqDto.getEventUseId());
+            if (appPushUser != null) {
+                String sendToken = null;
+                String sendBody = "";
+                if (appPushUser.getUseProStatus().equals("A") || appPushUser.getUseProStatus().equals("B")) {
+                    sendToken = appPushUser.getPayToken();
+                    sendBody = appPushUser.getReqUserName() + "님이 결제를 요청했습니다.";
+                } else if (appPushUser.getUseProStatus().equals("C")) {
+                    sendToken = appPushUser.getReqToken();
+                    sendBody = appPushUser.getReqUserName() + "님이 요청하신 결제가 완료되었습니다.";
+                } else if (appPushUser.getUseProStatus().equals("E")) {
+                    sendToken = appPushUser.getReqToken();
+                    sendBody = appPushUser.getReqUserName() + "님이 요청하신 결제가 반려되었습니다.";
+                }
+                if (sendToken != null) {
+                    pushNotificationLogic.sendPushNotification(sendToken, "", sendBody);
+                }
+            }
+
             return response.success("비용처리가 성공적으로 완료되었습니다.");
         } catch (Exception e) {
             log.error(e.getMessage());

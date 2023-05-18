@@ -19,4 +19,8 @@ public class S0221A0090Repository implements S0221A0090Store {
     public List<S0221A0090Dto.CostPayList> selectCostPayList(S0221A0090Vo.CostPayListVo costPayListVo) {
         return sqlSessionTemplate.selectList("S0221A0090.costPayList", costPayListVo);
     }
+    @Override
+    public S0221A0090Dto.AppPushUser selectAppPushUser(int eventUseId) {
+        return sqlSessionTemplate.selectOne("S0221A0090.appPushUser", eventUseId);
+    }
 }

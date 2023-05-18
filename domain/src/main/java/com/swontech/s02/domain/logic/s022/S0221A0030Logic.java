@@ -16,21 +16,22 @@ import org.springframework.http.ResponseEntity;
 public class S0221A0030Logic implements S0221A0030Spec {
     private final S0221A0030Store s0221A0030Store;
     private final CustomResponse response;
+
     public S0221A0030Logic(S0221A0030Store s0221A0030Store, CustomResponse response) {
         this.s0221A0030Store = s0221A0030Store;
         this.response = response;
     }
 
 
-
     @Override
-    public ResponseEntity<?> signUp(String eventCode, String hpNo, String memberName) throws NoSuchAlgorithmException {
+    public ResponseEntity<?> signUp(String eventCode, String hpNo, String memberName, String token) throws NoSuchAlgorithmException {
         String returnMassage = "";  // <-- 리턴 메시지
 
         Integer memberId = null;
         String eventPayUserId = null;
         String mobileId = null;
         Integer orgId = null;
+        String pushToken = null;
 
 
         try {
@@ -42,22 +43,24 @@ public class S0221A0030Logic implements S0221A0030Spec {
                     .build();
 
             S0221A0030Dto.MobileMemberExistFlag memberExistFlag = s0221A0030Store.selectMemberExistFlag(selectMemberExistFlagVo);
-            if(memberExistFlag == null) return response.success("등록되지 않은 부서코드입니다.");
+            if (memberExistFlag == null) return response.success("등록되지 않은 부서코드입니다.");
 
             memberId = memberExistFlag.getMemberId();
             eventPayUserId = memberExistFlag.getEventPayUserId();
             orgId = memberExistFlag.getOrgId();
             mobileId = memberExistFlag.getMobileId();
+            pushToken = memberExistFlag.getPushToken();
 
             // ① 회원정보 (tb_s020_member010) insert 처리
             // ② 부서별 회원정보 (tb_s020_event020) insert 처리
-            if(memberId == null && eventPayUserId == null) {
+            if (memberId == null && eventPayUserId == null) {
                 log.info("case: 1");
                 S0221A0030Vo.InsertMobileMemberVo insertMobileMemberVo = S0221A0030Vo.InsertMobileMemberVo
                         .builder()
-                            .orgId(orgId)
-                            .memberName(memberName)
-                            .hpNo(hpNo)
+                        .orgId(orgId)
+                        .memberName(memberName)
+                        .hpNo(hpNo)
+                        .pushToken(pushToken)
                         .build();
                 s0221A0030Store.insertMobileMember(insertMobileMemberVo);
                 int newMemberId = insertMobileMemberVo.getMemberId();
@@ -66,50 +69,68 @@ public class S0221A0030Logic implements S0221A0030Spec {
 
                 s0221A0030Store.insertMobileMemberEvent(S0221A0030Vo.InsertMobileMemberEventVo
                         .builder()
-                                .memberId(newMemberId)
-                                .eventId(memberExistFlag.getEventId())
+                        .memberId(newMemberId)
+                        .eventId(memberExistFlag.getEventId())
                         .build());
             }
 
             // ③ 회원정보 (tb_s020_member010) 로그인정보 update 처리
             // ② 부서별 회원정보 (tb_s020_event020) insert 처리
-            if(memberId != null && mobileId == null && eventPayUserId == null) {
+            if (memberId != null && mobileId == null && eventPayUserId == null) {
                 log.info("case: 2");
                 s0221A0030Store.updateMobileMember(S0221A0030Vo.UpdateMobileMemberVo
                         .builder()
-                            .mobileId(encodingMobileId(memberId, hpNo))
-                            .memberId(memberId)
+                        .mobileId(encodingMobileId(memberId, hpNo))
+                        .memberId(memberId)
                         .build());
 
                 s0221A0030Store.insertMobileMemberEvent(S0221A0030Vo.InsertMobileMemberEventVo
                         .builder()
-                            .memberId(memberId)
-                            .eventId(memberExistFlag.getEventId())
+                        .memberId(memberId)
+                        .eventId(memberExistFlag.getEventId())
                         .build());
             }
 
-            if(memberId != null && mobileId != null && eventPayUserId != null) {
+            if (memberId != null && mobileId != null && eventPayUserId != null) {
                 log.info("case: 3");
                 // skip
             }
 
-            if(memberId != null && mobileId != null && eventPayUserId == null) {
+            if (memberId != null && mobileId != null && eventPayUserId == null) {
                 log.info("case: 4");
                 s0221A0030Store.insertMobileMemberEvent(S0221A0030Vo.InsertMobileMemberEventVo
                         .builder()
-                                .eventId(memberExistFlag.getEventId())
-                                .memberId(memberId)
+                        .eventId(memberExistFlag.getEventId())
+                        .memberId(memberId)
                         .build());
             }
 
-            if(memberId != null && mobileId == null && eventPayUserId != null) {
+            if (memberId != null && mobileId == null && eventPayUserId != null) {
                 log.info("case: 5");
                 s0221A0030Store.updateMobileMember(S0221A0030Vo.UpdateMobileMemberVo
                         .builder()
-                                .mobileId(encodingMobileId(memberId, hpNo))
-                                .memberId(memberId)
+                        .mobileId(encodingMobileId(memberId, hpNo))
+                        .memberId(memberId)
                         .build());
             }
+
+            // 토큰 갱신
+            if (token != null) {
+                if (memberId != null && pushToken == null) {
+                    s0221A0030Store.updatePushToken(S0221A0030Vo.UpdateTokenVo
+                            .builder()
+                            .pushToken(token)
+                            .memberId(memberId)
+                            .build());
+                } else if (memberId != null && !pushToken.equals(token)) {
+                    s0221A0030Store.updatePushToken(S0221A0030Vo.UpdateTokenVo
+                            .builder()
+                            .pushToken(token)
+                            .memberId(memberId)
+                            .build());
+                }
+            }
+
             return response.success("정상적으로 처리되었습니다.");
         } catch (Exception e) {
             log.error(e.getMessage());

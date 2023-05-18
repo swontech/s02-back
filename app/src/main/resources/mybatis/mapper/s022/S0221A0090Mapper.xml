@@ -45,4 +45,29 @@
             and		e030.USED_DATE BETWEEN STR_TO_DATE(#{fromDate}, '%Y-%m-%d') AND STR_TO_DATE(#{toDate}, '%Y-%m-%d')
         </if>
     </select>
+
+    <select id="appPushUser" resultType="com.swontech.s02.domain.dto.s022.S0221A0090Dto$AppPushUser" parameterType="java.lang.Integer">
+        SELECT 	E030.EVENT_ID,				            -- 행사 ID
+                E030.EVENT_USE_ID,			            -- 행사 사용 ID
+                E030.USE_PRO_STATUS,		            -- 비용요청상태  (A:비용요청, B:결제진행, C:결제완료, D:지급완료, E:결제반려)
+                E030.USE_SUBJECT,			            -- 비용요청제목
+                E030.EVENT_USER_ID,			            -- 비용요청자 ID
+                M010.MEMBER_NAME	REQ_USER_NAME,		-- 비용요청자 성명
+                M010.PUSH_TOKEN AS REQ_TOKEN,			-- 비용요청자 토큰
+                CASE WHEN E030.USE_PRO_STATUS IN ('A', 'B') THEN (SELECT	M010.PUSH_TOKEN
+                FROM 	TB_S020.TB_S020_EVENT020  E020
+                INNER JOIN TB_S020.TB_S020_MEMBER010  M010
+                ON M010.MEMBER_ID = E020.EVENT_PAY_USER_ID
+                WHERE	E020.EVENT_ID = VI.ID_PATH_PRIORTIY
+                AND	E020.EVENT_PAY_LEVEL = E030.PAY_CURRENT_STEP )
+                END	PAY_TOKEN			                -- 결제자 토큰
+        FROM 	TB_S020.TB_S020_EVENT030	E030
+                INNER JOIN TB_S020.EVENT_HIERARCHY_VIEW VI
+                ON	E030.EVENT_ID = VI.EVENT_ID
+                INNER JOIN TB_S020.TB_S020_MEMBER010 M010
+                ON M010.MEMBER_ID = E030.EVENT_USER_ID
+        WHERE	E030.EVENT_USE_ID = #{eventUseId}
+        AND		USE_PRO_STATUS IN ('A', 'B', 'C', 'D', 'E')
+        AND		VI.PAY_FLAG = 'Y'
+    </select>
 </mapper>

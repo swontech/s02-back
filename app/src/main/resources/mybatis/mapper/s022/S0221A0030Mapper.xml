@@ -38,7 +38,8 @@
             MEMBER_NAME,
             HP_NO,
             MEMBER_TP,
-            MOBILE_LOGIN_DATE
+            MOBILE_LOGIN_DATE,
+            PUSH_TOKEN
         ) VALUES (
             NEXTVAL(tb_s020.sq_s020_member010),
             LASTVAL(tb_s020.sq_s020_member010),
@@ -51,7 +52,8 @@
             #{memberName},
             #{hpNo},
             'A',
-            SYSDATE()
+            SYSDATE(),
+            #{pushToken}
         )
         <selectKey resultType="java.lang.Integer" keyProperty="memberId" order="AFTER">
             SELECT  MAX(MEMBER_ID)
@@ -91,6 +93,12 @@
     <update id="updateMobileId" parameterType="com.swontech.s02.domain.vo.s022.S0221A0030Vo$UpdateMobileIdVo">
         UPDATE  tb_s020.tb_s020_member010
         SET     MOBILE_ID = #{mobileId}
+        WHERE   MEMBER_ID = #{memberId}
+    </update>
+
+    <update id="updateToken" parameterType="com.swontech.s02.domain.vo.s022.S0221A0030Vo$UpdateTokenVo">
+        UPDATE  tb_s020.tb_s020_member010
+        SET     PUSH_TOKEN = #{pushToken}
         WHERE   MEMBER_ID = #{memberId}
     </update>
 </mapper>

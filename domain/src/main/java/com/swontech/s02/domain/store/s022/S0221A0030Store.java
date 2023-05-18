@@ -10,4 +10,5 @@ public interface S0221A0030Store {
     int insertMobileMemberEvent(S0221A0030Vo.InsertMobileMemberEventVo insertMobileMemberEventVo);
     int updateMobileMember(S0221A0030Vo.UpdateMobileMemberVo updateMobileMemberVo);
     int updateMobileId(S0221A0030Vo.UpdateMobileIdVo updateMobileIdVo);
+    int updatePushToken(S0221A0030Vo.UpdateTokenVo updateToken);
 }

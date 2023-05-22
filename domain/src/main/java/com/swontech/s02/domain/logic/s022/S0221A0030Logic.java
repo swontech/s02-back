@@ -60,7 +60,7 @@ public class S0221A0030Logic implements S0221A0030Spec {
                         .orgId(orgId)
                         .memberName(memberName)
                         .hpNo(hpNo)
-                        .pushToken(pushToken)
+                        .pushToken(token)
                         .build();
                 s0221A0030Store.insertMobileMember(insertMobileMemberVo);
                 int newMemberId = insertMobileMemberVo.getMemberId();

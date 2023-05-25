@@ -86,6 +86,10 @@ project(":app") {
 
         // firebase
         implementation 'com.google.firebase:firebase-admin:9.1.1'
+
+        // https://mvnrepository.com/artifact/commons-io/commons-io
+        implementation group: 'commons-io', name: 'commons-io', version: '2.11.0'
+
     }
 }
 

@@ -1,4 +1,4 @@
-package com.swontech.s02.domain.common.util;
+package com.swontech.s02.domain.logic.comm;
 
 import com.google.firebase.messaging.*;
 import org.springframework.stereotype.Component;

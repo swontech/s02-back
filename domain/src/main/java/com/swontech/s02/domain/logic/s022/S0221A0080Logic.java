@@ -1,6 +1,6 @@
 package com.swontech.s02.domain.logic.s022;
 
-import com.swontech.s02.domain.common.util.PushNotificationLogic;
+import com.swontech.s02.domain.logic.comm.PushNotificationLogic;
 import com.swontech.s02.domain.dto.comm.CustomResponse;
 import com.swontech.s02.domain.dto.s022.S0221A0080Dto;
 import com.swontech.s02.domain.dto.s022.S0221A0090Dto;

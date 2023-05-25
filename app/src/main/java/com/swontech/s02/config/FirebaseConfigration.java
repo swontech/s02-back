@@ -25,7 +25,9 @@ public class FirebaseConfigration {
                     .setCredentials(GoogleCredentials.fromStream(serviceAccount))
 //                    .setDatabaseUrl("https://byapp-35c1e.firebaseio.com")
                     .build();
-            FirebaseApp.initializeApp(options);
+            if (FirebaseApp.getApps().isEmpty()) {
+                FirebaseApp.initializeApp(options);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

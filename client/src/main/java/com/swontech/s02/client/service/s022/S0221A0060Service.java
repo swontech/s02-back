@@ -1,6 +1,6 @@
 package com.swontech.s02.client.service.s022;
 
-import com.swontech.s02.domain.common.util.PushNotificationLogic;
+import com.swontech.s02.domain.logic.comm.PushNotificationLogic;
 import com.swontech.s02.domain.dto.comm.CustomResponse;
 import com.swontech.s02.domain.logic.s022.S0221A0060Logic;
 import com.swontech.s02.domain.spec.comm.S3BucketSpec;

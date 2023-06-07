@@ -38,6 +38,8 @@ public class S0221A0010Dto {
         private int defaultEventId;
         private String useRegFlag; /*2022.11.01 kjy add */
         private int eventHostId;    /*2022.11.28 kjy*/
+        private String company;     /*2023.06.07 kjy */
+        private String memberNo;   /*2023.06.07 kjy */
     }
 
     @Setter

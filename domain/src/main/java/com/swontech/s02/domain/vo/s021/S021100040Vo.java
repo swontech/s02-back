@@ -45,4 +45,12 @@ public class S021100040Vo {
         private String pwd;
         private int loginId; /*2022.10.27 kjy*/
     }
+
+    @Builder
+    public static class MemberOrgMultiFlagVO {
+        private int orgId;
+        private String firstHpNo;
+        private String middleHpNo;
+        private String lastHpNo;
+    }
 }

@@ -61,4 +61,11 @@
               , LAST_OBJECT_ID      = #{loginId}   /*2022.10.27 kjy 로그인 member_id*/
         WHERE   MEMBER_ID           = #{memberId}   			/*화면 사용자ID*/
     </update>
+    
+    <select id="MemberOrgMultiFlag" parameterType="com.swontech.s02.domain.vo.s021.S021100040Vo$MemberOrgMultiFlagVO" resultType="com.swontech.s02.domain.dto.s021.S021100040Dto$MemberOrgMultiFlagDto">
+        SELECT *
+        FROM 	tb_s020.tb_s020_member010  m010
+        where	m010.org_id = #{orgId}
+        and		m010.hp_no = CONCAT(#{firstHpNo}, '-', #{middleHpNo}, '-', #{lastHpNo})
+    </select>
 </mapper>

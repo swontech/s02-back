@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.List;
+
 public class S021100040Logic implements S021100040Spec {
     private final S021100040Store s021100040Store;
     private final CustomResponse response;
@@ -21,29 +23,43 @@ public class S021100040Logic implements S021100040Spec {
 
     @Override
     public ResponseEntity<?> registerMember(S021100040Dto.RegisterMemberDto reqDto) {
-        int result = s021100040Store.insertMember(
-                            S021100040Vo.InsertMemberVo
+        boolean flag;
+        List<S021100040Dto.MemberOrgMultiFlagDto> checkList = s021100040Store.selectCheckHpNo(
+                            S021100040Vo.MemberOrgMultiFlagVO
                                 .builder()
                                     .orgId(reqDto.getOrgId())
-                                    .memberName(reqDto.getMemberName())
-                                    .birth(reqDto.getBirth())
                                     .firstHpNo(reqDto.getFirstHpNo())
                                     .middleHpNo(reqDto.getMiddleHpNo())
                                     .lastHpNo(reqDto.getLastHpNo())
-                                    .zipCode(reqDto.getZipCode())
-                                    .address(reqDto.getAddress())
-                                    .detailAddress(reqDto.getDetailAddress())
-                                    .email(reqDto.getEmail())
-                                    .pwd(passwordEncoder.encode(reqDto.getPwd()))
-                                    .accountNo(reqDto.getAccountNo())
-                                    .bankNm(reqDto.getBankNm())
-                                    .loginId(reqDto.getLoginId()) /*2022.10.27 kjy*/
                                 .build()
-                    );
-        if(result > 0) {
-            return response.success("회원등록에 성공했습니다.");
+                        );
+        flag = checkList.size() == 0;
+        if (flag) {
+            int result = s021100040Store.insertMember(
+                                S021100040Vo.InsertMemberVo
+                                    .builder()
+                                        .orgId(reqDto.getOrgId())
+                                        .memberName(reqDto.getMemberName())
+                                        .birth(reqDto.getBirth())
+                                        .firstHpNo(reqDto.getFirstHpNo())
+                                        .middleHpNo(reqDto.getMiddleHpNo())
+                                        .lastHpNo(reqDto.getLastHpNo())
+                                        .zipCode(reqDto.getZipCode())
+                                        .address(reqDto.getAddress())
+                                        .detailAddress(reqDto.getDetailAddress())
+                                        .email(reqDto.getEmail())
+                                        .pwd(passwordEncoder.encode(reqDto.getPwd()))
+                                        .accountNo(reqDto.getAccountNo())
+                                        .bankNm(reqDto.getBankNm())
+                                        .loginId(reqDto.getLoginId()) /*2022.10.27 kjy*/
+                                    .build()
+                        );
+            if(result > 0) {
+                return response.success("회원등록에 성공했습니다.");
+            }
+            return response.fail("회원을 등록하는 중 오류가 발생했습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return response.fail("회원을 등록하는 중 오류가 발생했습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
+        return response.fail("이미 등록된 핸드폰 번호입니다.", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @Override

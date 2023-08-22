@@ -21,4 +21,17 @@ public class S0221A0030Dto {
         private String eventPayUserId;
         private String pushToken;
     }
+
+    @Getter
+    @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
+    public static class RetrieveToken {
+        private Integer certiNo;
+        private String pushToken;
+        private Integer memberNo;
+        private Integer orgId;
+        private String memberName;
+        private String hpNo;
+        private String pushTokenTab;
+        private String memberTp;
+    }
 }

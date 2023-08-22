@@ -45,4 +45,9 @@ public class S0221A0030Vo {
         private int memberId;
         private String pushToken;
     }
+
+    @Builder
+    public static class RetrieveTokenVo {
+        private String hpNo;
+    }
 }

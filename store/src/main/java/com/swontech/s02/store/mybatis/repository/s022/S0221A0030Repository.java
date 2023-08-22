@@ -43,5 +43,10 @@ public class S0221A0030Repository implements S0221A0030Store {
         return sqlSessionTemplate.update("S0221A0030.updateToken", updateTokenVo);
     }
 
+    @Override
+    public S0221A0030Dto.RetrieveToken selectToken(S0221A0030Vo.RetrieveTokenVo retrieveTokenVo) {
+        return sqlSessionTemplate.selectOne("S0221A0030.GetMemberInfoVO", retrieveTokenVo);
+    }
+
 
 }

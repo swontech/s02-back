@@ -11,4 +11,6 @@ public interface S0221A0030Store {
     int updateMobileMember(S0221A0030Vo.UpdateMobileMemberVo updateMobileMemberVo);
     int updateMobileId(S0221A0030Vo.UpdateMobileIdVo updateMobileIdVo);
     int updatePushToken(S0221A0030Vo.UpdateTokenVo updateToken);
+    S0221A0030Dto.RetrieveToken selectToken(S0221A0030Vo.RetrieveTokenVo retrieveTokenVo);
+
 }

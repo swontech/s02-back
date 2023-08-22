@@ -97,8 +97,28 @@
     </update>
 
     <update id="updateToken" parameterType="com.swontech.s02.domain.vo.s022.S0221A0030Vo$UpdateTokenVo">
-        UPDATE  tb_s020.tb_s020_member010
-        SET     PUSH_TOKEN = #{pushToken}
-        WHERE   MEMBER_ID = #{memberId}
+        UPDATE tb_s020.tb_s020_member010
+        SET	    LAST_OBJECT_ID = #{memberId},		-- 로그인 member_1d
+                UPDATE_TIMESTAMP = sysdate(),
+                UPDATE_PROGRAM_ID = 's041100020',
+                PUSH_TOKEN = #{pushToken},				-- 최초의 기계 단말기 값
+                CERTI_NO = null
+        WHERE MEMBER_ID = #{memberId}			-- 선택한 member_id
     </update>
+
+    <select id="GetMemberInfoVO" parameterType="com.swontech.s02.domain.vo.s022.S0221A0030Vo$RetrieveTokenVo" resultType="com.swontech.s02.domain.dto.s022.S0221A0030Dto$MobileMemberExistFlag">
+        select	m010.certi_no,				-- 인증번호
+                m010.push_token,			-- push_token
+                m010.member_no,				-- 회원번호
+                m010.org_id,				-- org_id
+                m010.member_name,			-- 회원명
+                m010.hp_no,					-- 핸드폰 번호
+                m010.PUSH_TOKEN_TAB,		-- 관리자용 push_token
+                m010.MEMBER_TP				-- 회원구분
+        from	tb_s020.tb_s020_member010  m010
+        inner join tb_s020.tb_s020_org010 as org010
+                on	org010.org_id = m010.org_id
+                and	org_code = 'AAC'
+        where	m010.hp_no = #{hpNo}
+    </select>
 </mapper>

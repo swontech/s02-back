@@ -114,23 +114,6 @@ public class S0221A0030Logic implements S0221A0030Spec {
                         .build());
             }
 
-            // 토큰 갱신
-            if (token != null) {
-                if (memberId != null && pushToken == null) {
-                    s0221A0030Store.updatePushToken(S0221A0030Vo.UpdateTokenVo
-                            .builder()
-                            .pushToken(token)
-                            .memberId(memberId)
-                            .build());
-                } else if (memberId != null && !pushToken.equals(token)) {
-                    s0221A0030Store.updatePushToken(S0221A0030Vo.UpdateTokenVo
-                            .builder()
-                            .pushToken(token)
-                            .memberId(memberId)
-                            .build());
-                }
-            }
-
             return response.success("정상적으로 처리되었습니다.");
         } catch (Exception e) {
             log.error(e.getMessage());

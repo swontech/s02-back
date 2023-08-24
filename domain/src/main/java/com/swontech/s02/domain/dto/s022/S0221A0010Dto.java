@@ -40,6 +40,7 @@ public class S0221A0010Dto {
         private int eventHostId;    /*2022.11.28 kjy*/
         private String company;     /*2023.06.07 kjy */
         private String memberNo;   /*2023.06.07 kjy */
+        private String systemFlag;   /*2023.08.24 jyb*/
     }
 
     @Setter

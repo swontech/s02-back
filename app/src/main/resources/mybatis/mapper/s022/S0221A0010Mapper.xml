@@ -64,6 +64,7 @@
                 m010.member_tp,
                 e010.event_nm,
                 org010.org_name,
+                m010.system_flag,
         (select	ifnull( concat(e020.event_pay_level, '차결제자'), ifnull(event_pay_role_cd, '일반회원'))
         from	tb_s020.tb_s020_event020  e020
         where	e020.event_id	=	e010.event_id
